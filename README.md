@@ -6,15 +6,20 @@ Focusses initially on Spack.
 
 # Spack
 
-Install Spack as suggested on https://spack.readthedocs.io 
+First get a copy of this repo.
 
-For example:
+```
+$ git clone https://github.com/green-br/buildit.git
+$ cd buildit
+```
+
+Install Spack as suggested on https://spack.readthedocs.io 
 
 ```
 $ git clone -c feature.manyFiles=true --depth=2 https://github.com/spack/spack.git
 ```
 
-Add to your shell, for example:
+Then add to your shell, for example:
 
 ```
 $ . spack/share/spack/setup-env.sh
@@ -23,8 +28,7 @@ $ . spack/share/spack/setup-env.sh
 As an example for osu-micro-benchmarks on Isambard-AI checkout this repository
 
 ```
-$ git clone https://github.com/green-br/buildit.git
-$ cd buildit/apps/osu-micro-benchmarks/i-ai
+$ cd apps/osu-micro-benchmarks/i-ai
 $ ./build.sh
 ```
 
