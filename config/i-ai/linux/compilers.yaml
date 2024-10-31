@@ -1,0 +1,27 @@
+compilers:
+- compiler:
+    spec: gcc@=12.3.0
+    paths:
+      cc: gcc-12
+      cxx: g++-12
+      f77: gfortran-12
+      fc: gfortran-12
+    flags: {}
+    operating_system: sles15
+    target: aarch64
+    modules:
+    - gcc-native/12.3
+    - craype-arm-grace
+    environment: {}
+    extra_rpaths: []
+- compiler:
+    spec: nvhpc@24.9
+    paths:
+      cc: /home/brics/tgreen.brics/tests/opt/nvidia/hpc_sdk/Linux_aarch64/24.9/compilers/bin/nvc
+      cxx: /home/brics/tgreen.brics/tests/opt/nvidia/hpc_sdk/Linux_aarch64/24.9/compilers/bin/nvc++
+      f77: /home/brics/tgreen.brics/tests/opt/nvidia/hpc_sdk/Linux_aarch64/24.9/compilers/bin/nvfortran
+      fc: /home/brics/tgreen.brics/tests/opt/nvidia/hpc_sdk/Linux_aarch64/24.9/compilers/bin/nvfortran
+    flags: {}
+    operating_system: sles15
+    target: any
+    modules: []
