@@ -6,6 +6,8 @@ packages:
       lapack: [cray-libsci, openblas]
       mpi: [cray-mpich, openmpi]
       pkgconfig: [pkg-config]
+    permissions:
+      write: group
   numactl:
     require:
     - "%gcc"
