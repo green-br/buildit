@@ -1,0 +1,79 @@
+compilers:
+- compiler:
+    spec: gcc@=12.3.0
+    paths:
+      cc: /opt/cray/pe/craype/default/bin/cc
+      cxx: /opt/cray/pe/craype/default/bin/CC
+      f77: /opt/cray/pe/craype/default/bin/ftn
+      fc: /opt/cray/pe/craype/default/bin/ftn
+    flags: {}
+    operating_system: sles15
+    target: aarch64
+    modules:
+    - craype-network-ofi
+    - gcc-native/12.3
+    - PrgEnv-gnu
+    - craype-arm-grace
+    environment: {}
+    extra_rpaths: []
+- compiler:
+    spec: gcc@=13.2.0
+    paths:
+      cc: /opt/cray/pe/craype/default/bin/cc
+      cxx: /opt/cray/pe/craype/default/bin/CC
+      f77: /opt/cray/pe/craype/default/bin/ftn
+      fc: /opt/cray/pe/craype/default/bin/ftn
+    flags: {}
+    operating_system: sles15
+    target: aarch64
+    modules:
+    - craype-network-ofi
+    - gcc-native/13.2
+    - PrgEnv-gnu
+    - craype-arm-grace
+    environment: {}
+    extra_rpaths: []
+
+- compiler:
+    spec: cce@=17.0.1
+    paths:
+      cc: /opt/cray/pe/craype/default/bin/cc
+      cxx: /opt/cray/pe/craype/default/bin/CC
+      f77: /opt/cray/pe/craype/default/bin/ftn
+      fc: /opt/cray/pe/craype/default/bin/ftn
+    flags: {}
+    operating_system: sles15
+    target: aarch64
+    modules:
+    - craype-network-ofi
+    - PrgEnv-cray
+    - craype-arm-grace
+    environment: {}
+    extra_rpaths: []
+- compiler:
+    spec: nvhpc@23.9
+    paths:
+      cc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc
+      cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc++
+      f77: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
+      fc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
+    flags: {}
+    operating_system: sles15
+    target: any
+    modules:
+    - nvhpc/23.9
+    - craype-arm-grace
+- compiler:
+    spec: gcc@=7.5.0
+    paths:
+      cc: /usr/bin/gcc
+      cxx: /usr/bin/g++
+      f77: /usr/bin/gfortran
+      fc: /usr/bin/gfortran
+    flags: {}
+    operating_system: sles15
+    target: aarch64
+    modules: []
+    environment: {}
+    extra_rpaths: []
+
