@@ -28,7 +28,7 @@ $ . spack/share/spack/setup-env.sh
 As an example for osu-micro-benchmarks on Isambard-AI checkout this repository
 
 ```
-$ cd apps/osu-micro-benchmarks/i-ai
+$ cd apps/osu-micro-benchmarks/aip1
 $ ./build.sh
 ```
 
