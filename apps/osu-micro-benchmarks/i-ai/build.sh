@@ -8,7 +8,7 @@ MYSELF=`readlink -f $0`
 MYDIR=`dirname $MYSELF`
 SYSTEM_NAME=`basename $(dirname $MYSELF)`
 SOFTWARE_NAME=`basename $(dirname $MYDIR)`
-CONFIG=`readlink -f $MYDIR/../../../config/$SYSTEM_NAME`
+CONFIG=`readlink -f $MYDIR/../../../config/$SYSTEM_NAME/develop`
 ENV_BASENAME=isambench_${SYSTEM_NAME}_${SOFTWARE_NAME}
 MY_SPACK=`readlink -f $MYDIR/../../../spack`
 
