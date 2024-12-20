@@ -31,6 +31,10 @@ packages:
     - spec: cray-libsci@os %cce@17.0.1
       modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/default/cray/17.0/aarch64
+    extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/lib64
   cray-mpich:
     buildable: false
     externals:
