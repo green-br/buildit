@@ -17,10 +17,8 @@ packages:
   openmpi:
     variants: fabrics=ofi
   cray-libsci:
-    buildable: true
     version: [24.03.0]
   cray-mpich:
-    buildable: true
     version: [8.1.29]
   cuda:
     buildable: false
