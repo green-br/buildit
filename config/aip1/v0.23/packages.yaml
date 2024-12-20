@@ -14,6 +14,10 @@ packages:
     variants: +cuda fabrics=ofi cuda_arch=90
   mpich:
     variants: +cuda+fortran pmi=pmix device=ch3 netmod=ofi cuda_arch=90
+  cray-libsci:
+    version: [23.12.5]
+  cray-mpich:
+    version: [8.1.28]
   cuda:
     buildable: false
     version: [12.2.0, 12.6.0]
