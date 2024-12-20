@@ -17,9 +17,35 @@ packages:
   openmpi:
     variants: fabrics=ofi
   cray-libsci:
-    version: [24.03.0]
+    buildable: false
+    externals:
+    - spec: cray-libsci@os %gcc@12.3
+      modules: [cray-libsci]
+      prefix: /opt/cray/pe/libsci/default/gnu/12.3/aarch64
+    - spec: cray-libsci@os %gcc@13.2
+      modules: [cray-libsci]
+      prefix: /opt/cray/pe/libsci/default/gnu/13.2/aarch64
+    - spec: cray-libsci@os %nvhpc@23.9
+      modules: [cray-libsci]
+      prefix: /opt/cray/pe/libsci/default/nvidia/23.3/aarch64
+    - spec: cray-libsci@os %cce@17.0.1
+      modules: [cray-libsci]
+      prefix: /opt/cray/pe/libsci/default/cray/17.0/aarch64
   cray-mpich:
-    version: [8.1.29]
+    buildable: false
+    externals:
+    - spec: cray-mpich@8.1.29 %gcc@12.3
+      prefix: /opt/cray/pe/mpich/8.1.29/ofi/gnu/12.3
+      modules: [cray-mpich/8.1.29]
+    - spec: cray-mpich@8.1.29 %gcc@13.2
+      prefix: /opt/cray/pe/mpic/8.1.29/ofi/gnu/13.2
+      modules: [cray-mpich/8.1.29]
+    - spec: cray-mpich@8.1.29 %nvhpc@23.9
+      prefix: /opt/cray/pe/mpich/8.1.29/ofi/nvidia/23.3
+      modules: [cray-mpich/8.1.29]
+    - spec: cray-mpich@8.1.29 %cce@17.0
+      prefix: /opt/cray/pe/mpich/8.1.29/ofi/cray/17.0
+      modules: [cray-mpich/8.1.29]
   cuda:
     buildable: false
     version: [12.2.0]

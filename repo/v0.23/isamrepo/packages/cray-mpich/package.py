@@ -17,9 +17,7 @@ class CrayMpich(Package):
     has_code = False  # Skip attempts to fetch source that is not available
 
     maintainers("haampie")
-    
-    version("8.1.29")
-    version("8.1.28")
+
     version("8.1.7")
     version("8.1.0")
     version("8.0.16")
