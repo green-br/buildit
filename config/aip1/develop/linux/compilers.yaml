@@ -2,25 +2,27 @@ compilers:
 - compiler:
     spec: gcc@=12.3.0
     paths:
-      cc: gcc-12
-      cxx: g++-12
-      f77: gfortran-12
-      fc: gfortran-12
+      cc: /opt/cray/pe/craype/default/bin/cc
+      cxx: /opt/cray/pe/craype/default/bin/CC
+      f77: /opt/cray/pe/craype/default/bin/ftn
+      fc: /opt/cray/pe/craype/default/bin/ftn
     flags: {}
     operating_system: sles15
     target: aarch64
     modules:
+    - craype-network-ofi
     - gcc-native/12.3
+    - PrgEnv-gnu
     - craype-arm-grace
     environment: {}
     extra_rpaths: []
 - compiler:
-    spec: nvhpc@24.9
+    spec: nvhpc@23.9
     paths:
-      cc: /home/brics/tgreen.brics/tests/opt/nvidia/hpc_sdk/Linux_aarch64/24.9/compilers/bin/nvc
-      cxx: /home/brics/tgreen.brics/tests/opt/nvidia/hpc_sdk/Linux_aarch64/24.9/compilers/bin/nvc++
-      f77: /home/brics/tgreen.brics/tests/opt/nvidia/hpc_sdk/Linux_aarch64/24.9/compilers/bin/nvfortran
-      fc: /home/brics/tgreen.brics/tests/opt/nvidia/hpc_sdk/Linux_aarch64/24.9/compilers/bin/nvfortran
+      cc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc
+      cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc++
+      f77: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
+      fc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
     flags: {}
     operating_system: sles15
     target: any

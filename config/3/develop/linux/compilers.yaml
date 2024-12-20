@@ -51,29 +51,16 @@ compilers:
     environment: {}
     extra_rpaths: []
 - compiler:
-    spec: nvhpc@23.9
+    spec: nvhpc@24.5
     paths:
-      cc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc
-      cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc++
-      f77: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
-      fc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
+      cc: /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/compilers/bin/nvc
+      cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/compilers/bin/nvc++
+      f77: /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/compilers/bin/nvfortran
+      fc: /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/compilers/bin/nvfortran
     flags: {}
     operating_system: sles15
     target: any
     modules:
-    - nvhpc/23.9
+    - nvhpc/24.5
     - craype-arm-grace
-- compiler:
-    spec: gcc@=7.5.0
-    paths:
-      cc: /usr/bin/gcc
-      cxx: /usr/bin/g++
-      f77: /usr/bin/gfortran
-      fc: /usr/bin/gfortran
-    flags: {}
-    operating_system: sles15
-    target: aarch64
-    modules: []
-    environment: {}
-    extra_rpaths: []
 

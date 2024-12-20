@@ -1,8 +1,8 @@
 packages:
   all:
-    compiler: [gcc@12.3.0, nvhpc@24.9]
+    compiler: [gcc@12.3.0, nvhpc@23.9]
     providers:
-      mpi: [openmpi, mpich]
+      mpi: [cray-mpich, openmpi, mpich]
     variants: +cuda cuda_arch=90
   numactl:
     require:
