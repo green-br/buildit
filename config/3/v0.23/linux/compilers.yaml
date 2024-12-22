@@ -15,7 +15,8 @@ compilers:
     - PrgEnv-gnu
     - craype-arm-grace
     environment: {}
-    extra_rpaths: []
+    extra_rpaths:
+    - /opt/cray/lib64
 - compiler:
     spec: gcc@=13.2.0
     paths:
@@ -32,8 +33,8 @@ compilers:
     - PrgEnv-gnu
     - craype-arm-grace
     environment: {}
-    extra_rpaths: []
-
+    extra_rpaths:
+    - /opt/cray/lib64
 - compiler:
     spec: cce@=17.0.1
     paths:
@@ -49,7 +50,8 @@ compilers:
     - PrgEnv-cray
     - craype-arm-grace
     environment: {}
-    extra_rpaths: []
+    extra_rpaths:
+    - /opt/cray/lib64
 - compiler:
     spec: nvhpc@24.5
     paths:
