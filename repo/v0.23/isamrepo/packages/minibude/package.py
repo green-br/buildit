@@ -17,7 +17,7 @@ class Minibude(CMakePackage):
 
     license("Apache-2.0", checked_by="green-br")
 
-    version("main",  branch="test-compiler-options")
+    version("main",  branch="main")
 
     variant(
         "model", default="serial", description="Implementation to build",
