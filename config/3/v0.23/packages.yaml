@@ -36,10 +36,6 @@ packages:
     externals:
     - spec: cray-mpich@8.1.29
       modules: [cray-mpich/8.1.29]
-      extra_attributes:
-        environment:
-          prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/lib64
   cuda:
     buildable: false
     version: [12.2.0]
