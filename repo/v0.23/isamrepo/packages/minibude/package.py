@@ -11,7 +11,6 @@ class Minibude(CMakePackage):
 
     homepage = "https://github.com/UoB-HPC/miniBUDE"
     git = "https://github.com/UoB-HPC/miniBUDE.git"
-    #git = "https://github.com/green-br/miniBUDE.git"
 
     maintainers("green-br")
 
@@ -33,3 +32,13 @@ class Minibude(CMakePackage):
             args.append("-DMODEL=omp")
 
         return args
+    
+    def install(self, spec, prefix):
+        with working_dir(self.build_directory):
+            make("install")
+
+        mkdirp(prefix.doc.tests)
+        # Copy some test data to install location. 
+        with working_dir(self.stage.source_path):
+            install_tree("data", prefix.doc.tests)
+
