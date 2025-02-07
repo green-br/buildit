@@ -1,6 +1,6 @@
 packages:
   all:
-    compiler: [gcc@12.3, gcc@13.2, nvhpc@23.9, cce@17.0.1]
+    compiler: [gcc@12.3, gcc@13.2, nvhpc@24.5, cce@18.0.0]
     providers:
       blas: [cray-libsci, blis]
       lapack: [cray-libsci, openblas]
@@ -18,48 +18,70 @@ packages:
     variants: fabrics=ofi
   cray-libsci:
     buildable: false
+    version: [24.07.0]
     externals:
-    - spec: cray-libsci@os %gcc@12.3
+    - spec: cray-libsci@24.07.0 %gcc@12.3
       modules: [cray-libsci]
-      prefix: /opt/cray/pe/libsci/default/gnu/12.3/aarch64
-    - spec: cray-libsci@os %gcc@13.2
+      prefix: /opt/cray/pe/libsci/24.07.0/gnu/12.3/aarch64
+    - spec: cray-libsci@24.07.0 %gcc@13.2
       modules: [cray-libsci]
-      prefix: /opt/cray/pe/libsci/default/gnu/13.2/aarch64
-    - spec: cray-libsci@os %nvhpc@23.9
+      prefix: /opt/cray/pe/libsci/24.07.0/gnu/13.2/aarch64
+    - spec: cray-libsci@24.07.0 %nvhpc@24.5
       modules: [cray-libsci]
-      prefix: /opt/cray/pe/libsci/default/nvidia/23.3/aarch64
-    - spec: cray-libsci@os %cce@17.0.1
+      prefix: /opt/cray/pe/libsci/24.07.0/nvidia/23.11/aarch64
+    - spec: cray-libsci@24.07.0 %cce@18.0.0
       modules: [cray-libsci]
-      prefix: /opt/cray/pe/libsci/default/cray/17.0/aarch64
+      prefix: /opt/cray/pe/libsci/24.07.0/cray/17.0/aarch64
   cray-mpich:
     buildable: false
+    version: [8.1.30]
     externals:
-    - spec: cray-mpich@8.1.29
-      modules: [cray-mpich/8.1.29]
+    - spec: cray-mpich@8.1.30 %gcc@12.3
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/gnu/12.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.30 %gcc@13.2
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/gnu/12.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.30 %cce@17.0.1
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/cray/17.0
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.30 %nvhpc@24.5
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/nvidia/23.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
   cuda:
     buildable: false
-    version: [12.2.0]
+    version: [12.3.0]
     externals:
-    - spec: cuda@12.2.0 %gcc
-      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/cuda/12.2
-      modules: [cudatoolkit/23.9_12.2, craype-accel-nvidia90]
-    - spec: cuda@12.2.0 %cce
-      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/cuda/12.2
-      modules: [cudatoolkit/23.9_12.2, craype-accel-nvidia90]
+    - spec: cuda@12.3.0 %gcc
+      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/cuda/12.3
+    - spec: cuda@12.3.0 %cce
+      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/cuda/12.3
   libfabric:
     buildable: false
-    version: [1.20.1]
+    version: [1.22.0]
     externals:
-    - spec: libfabric@1.20.1
-      prefix: /opt/cray
-      modules: [libfabric/1.20.1]
+    - spec: libfabric@1.22.0
+      prefix: /opt/cray/libfabric/1.22.0
+      modules: [libfabric/1.22.0]
   cray-pmi:
     buildable: false
-    version: [6.1.14]
+    version: [6.1.15]
     externals:
-    - spec: cray-pmi@6.1.14
-      prefix: /opt/cray/pe/pmi/6.1.14
-      modules: [cray-pmi/6.1.14]
+    - spec: cray-pmi@6.1.15
+      prefix: /opt/cray/pe/pmi/6.1.15
+      modules: [cray-pmi/6.1.15]
   m4:
     externals:
     - spec: m4@1.4.18
