@@ -48,7 +48,7 @@ packages:
         environment:
           prepend_path:
             LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
-    - spec: cray-mpich@8.1.30 %cce@17.0.1
+    - spec: cray-mpich@8.1.30 %cce@18.0.0
       prefix: /opt/cray/pe/mpich/8.1.30/ofi/cray/17.0
       extra_attributes:
         environment:

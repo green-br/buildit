@@ -2,18 +2,40 @@ compilers:
 - compiler:
     spec: gcc@=12.3.0
     paths:
-      cc: /opt/cray/pe/craype/default/bin/cc
-      cxx: /opt/cray/pe/craype/default/bin/CC
-      f77: /opt/cray/pe/craype/default/bin/ftn
-      fc: /opt/cray/pe/craype/default/bin/ftn
+      cc: /usr/bin/gcc-12
+      cxx: /usr/bin/g++-12
+      f77: /usr/bin/gfortran-12
+      fc: /usr/bin/gfortran-12
     flags: {}
     operating_system: sles15
     target: aarch64
-    modules:
-    - craype-network-ofi
-    - gcc-native/12.3
-    - PrgEnv-gnu
-    - craype-arm-grace
+    modules: []
+    environment: {}
+    extra_rpaths: []
+- compiler:
+    spec: gcc@=13.2.0
+    paths:
+      cc: /usr/bin/gcc-13
+      cxx: /usr/bin/g++-13
+      f77: /usr/bin/gfortran-13
+      fc: /usr/bin/gfortran-13
+    flags: {}
+    operating_system: sles15
+    target: aarch64
+    modules: []
+    environment: {}
+    extra_rpaths: []
+- compiler:
+    spec: cce@=18.0.0
+    paths:
+      cc: /opt/cray/pe/cce/18.0.0/bin/craycc
+      cxx: /opt/cray/pe/cce/18.0.0/bin/craycxx
+      f77: /opt/cray/pe/cce/18.0.0/bin/crayftn
+      fc: /opt/cray/pe/cce/18.0.0/bin/crayftn
+    flags: {}
+    operating_system: sles15
+    target: aarch64
+    modules: []
     environment: {}
     extra_rpaths: []
 - compiler:
@@ -27,3 +49,5 @@ compilers:
     operating_system: sles15
     target: any
     modules: []
+    extra_rpaths: []
+
