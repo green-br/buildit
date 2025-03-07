@@ -8,6 +8,10 @@ packages:
       pkgconfig: [pkg-config]
     permissions:
       write: group
+  chapel:
+    variants: comm=ofi host_platform=linux64 launcher=slurm-srun libfabric=spack
+    require:
+    - "%gcc"
   namd:
     require:
     - "^charmpp@8.0.0 backend=ofi pmi=cray-pmi"
@@ -75,7 +79,7 @@ packages:
     buildable: false
     version: [1.22.0]
     externals:
-    - spec: libfabric@1.22.0
+    - spec: libfabric@1.22.0 fabrics=cxi
       prefix: /opt/cray/libfabric/1.22.0
       modules: [libfabric/1.22.0]
   cray-pmi:
