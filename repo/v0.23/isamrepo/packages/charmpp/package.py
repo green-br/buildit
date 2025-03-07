@@ -68,7 +68,10 @@ class Charmpp(Package):
     patch("strictpass.patch", when="@:6.8.2")
 
     # Support Cray Shasta with ARM
-    patch("ofi-crayshasta-arm.patch", when="backend=ofi pmi=cray-pmi target=aarch64:")
+    #patch("ofi-crayshasta-arm.patch", when="backend=ofi pmi=cray-pmi target=aarch64:")
+
+    # Support OFI on non-CrayShasta with ARM
+    patch("ofi-linux-arm8.patch", when="@8: backend=ofi pmi=cray-pmi target=aarch64:")
 
     # Build targets
     # "target" is reserved, so we have to use something else.
@@ -253,8 +256,8 @@ class Charmpp(Package):
             if self.spec.satisfies("backend=ofi pmi=cray-pmi"):
                 versions.update(
                     {
-                        ("linux", "x86_64", "ofi"): "ofi-crayshasta",
-                        ("linux", "aarch64", "ofi"): "ofi-crayshasta",
+                        ("linux", "x86_64", "ofi"): "ofi-linux-x86_64",
+                        ("linux", "aarch64", "ofi"): "ofi-linux-arm8",
                     }
                 )
 
@@ -320,6 +323,9 @@ class Charmpp(Package):
 
         if "@:6.8.2 %aocc" not in spec:
             options.append(os.path.basename(self.compiler.fc))
+        
+        # Remove compiler since Spack sets CC and FC and dependencies are
+        # located correctly.
         options = []
         options.append("-j%d" % make_jobs)
         options.append("--destination=%s" % builddir)
@@ -331,6 +337,8 @@ class Charmpp(Package):
         if spec.satisfies("pmi=pmix"):
             options.append("ompipmix")
             options.extend(["--basedir=%s" % spec["openmpi"].prefix])
+        if spec.satisfies("pmi=cray-pmi"):
+            options.append("slurmpmi2cray")
 
         if spec.satisfies("backend=mpi"):
             # in intelmpi <prefix>/include and <prefix>/lib fails so --basedir
@@ -374,7 +382,13 @@ class Charmpp(Package):
         if spec.satisfies("+tracing"):
             options.append("--enable-tracing")
 
-        options.append("--verbose")
+        # charmpp build was failing with clang based compilers for -DNETWORK=mpi as discussed in
+        # https://github.com/charmplusplus/charm/issues/3645
+        # Fix was suggested in https://github.com/charmplusplus/charm/pull/3646 and the same has
+        # been implemented in v8.0.0
+        if self.spec.satisfies("@8.0.0: %aocc"):
+            options.append("--disable-fortran")
+
         # Call "make" via the build script
         # Note: This builds Charm++ in the "tmp" subdirectory of the
         # install directory. Maybe we could set up a symbolic link

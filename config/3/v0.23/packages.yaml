@@ -8,6 +8,9 @@ packages:
       pkgconfig: [pkg-config]
     permissions:
       write: group
+  namd:
+    require:
+    - "^charmpp@8.0.0 backend=ofi pmi=cray-pmi"
   numactl:
     require:
     - "%gcc"

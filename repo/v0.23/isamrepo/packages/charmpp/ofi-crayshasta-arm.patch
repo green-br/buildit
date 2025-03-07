@@ -1,9 +1,9 @@
-diff --git a/src/arch/ofi-crayshasta/conv-mach-cxi.h b/src/arch/ofi-crayshasta/conv-mach-cxi.h
-index 8267a8fdb..a91512676 100644
---- a/src/arch/ofi-crayshasta/conv-mach-cxi.h
-+++ b/src/arch/ofi-crayshasta/conv-mach-cxi.h
-@@ -79,7 +79,7 @@
- #define CMK_LBDB_ON                                       1
+diff --git a/src/arch/ofi-crayshasta/conv-mach.h b/src/arch/ofi-crayshasta/conv-mach.h
+index 61d295df3..9e15fd2a9 100644
+--- a/src/arch/ofi-crayshasta/conv-mach.h
++++ b/src/arch/ofi-crayshasta/conv-mach.h
+@@ -74,7 +74,7 @@
+ #define CMK_LBDB_ON					   1
  
  #define CMK_64BIT                      1
 -#define CMK_AMD64                      1
@@ -11,35 +11,3 @@ index 8267a8fdb..a91512676 100644
  
  /* Other possible definitions:
  
-diff --git a/src/arch/ofi-crayshasta/conv-mach-cxi.sh b/src/arch/ofi-crayshasta/conv-mach-cxi.sh
-index 3e6a6b5db..36171d579 100644
---- a/src/arch/ofi-crayshasta/conv-mach-cxi.sh
-+++ b/src/arch/ofi-crayshasta/conv-mach-cxi.sh
-@@ -11,11 +11,11 @@
- 
- if test -z "$USER_OPTS_LD"
- then
--    module load cray-libpals cray-pmi libfabric
-+    module load cray-pmi libfabric
-     CMK_LIBFABRIC_INC=`pkg-config --cflags libfabric`
-     CMK_LIBFABRIC_LIBS=`pkg-config --libs libfabric`
--    CMK_LIBPALS_LIBS=`pkg-config --libs libpals`
--    CMK_LIBPALS_LDPATH=`pkg-config libpals --variable=libdir`
-+    CMK_LIBPALS_LIBS=""
-+    CMK_LIBPALS_LDPATH=""
-     CMK_PMI_INC=`pkg-config --cflags cray-pmi`
-     CMK_PMI_LIBS=`pkg-config --libs cray-pmi`
-     CMK_LIBPMI_LDPATH=`pkg-config cray-pmi --variable=libdir`
-diff --git a/src/arch/ofi-crayshasta/conv-mach.h b/src/arch/ofi-crayshasta/conv-mach.h
-index bef80a949..b66673fe1 100644
---- a/src/arch/ofi-crayshasta/conv-mach.h
-+++ b/src/arch/ofi-crayshasta/conv-mach.h
-@@ -74,7 +74,7 @@
- #define CMK_LBDB_ON                                       1
- 
- #define CMK_64BIT                      1
--#define CMK_AMD64                      1
-+#define CMK_ARM                        1
- #ifdef CMK_HAS_GET_MYADDRESS
- #undef CMK_HAS_GET_MYADDRESS
- #define CMK_HAS_GET_MYADDRESS 0
