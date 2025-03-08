@@ -24,8 +24,8 @@ spack env create -d myenv
 spack env activate ./myenv
 
 # Initialise environment
-spack config add -f buildit/config/macs3/v0.23/linux/compilers.yaml
-spack config add -f buildit/config/macs3/v0.23/packages.yaml
+spack config add -f buildit/config/3/v0.23/linux/compilers.yaml
+spack config add -f buildit/config/3/v0.23/packages.yaml
 spack config add view:true
 spack config add concretizer:unify:true
 spack config add concretizer:reuse:false

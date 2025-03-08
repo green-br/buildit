@@ -2,12 +2,15 @@ packages:
   all:
     compiler: [gcc@12.3, gcc@13.2, nvhpc@24.5, cce@17.0.1]
     providers:
-      blas: [cray-libsci]
-      lapack: [cray-libsci]
+      blas: [cray-libsci, blis, openblas]
+      lapack: [cray-libsci, openblas]
       mpi: [cray-mpich, openmpi]
       pkgconfig: [pkg-config]
     permissions:
       write: group
+  et:
+    require:
+    - "^openblas +ilp64 ^libint tune=et"
   openmpi:
     variants: fabrics=ofi
   cray-libsci:

@@ -53,7 +53,7 @@ class Et(CMakePackage):
 
     def cmake_args(self):
         args = []
-        craysci = self.spec['blas'].libs + self.spec['lapack'].libs
+        mathlibs = self.spec['blas'].libs + self.spec['lapack'].libs
         args.extend(
             [
                 f"-DENABLE_64BIT_INTEGERS=ON",
@@ -70,7 +70,7 @@ class Et(CMakePackage):
                 f"-DLIBINT2_ROOT=" + self.spec["libint"].prefix,
                 f"-DENABLE_AUTO_BLAS=OFF",
                 f"-DENABLE_AUTO_LAPACK=OFF",
-                f"-DEXTRA_LINKER_FLAGS={craysci.ld_flags}",
+                f"-DEXTRA_LINKER_FLAGS={mathlibs.ld_flags}",
             ]
         )
 

@@ -2,7 +2,7 @@ packages:
   all:
     compiler: [gcc@12.3, gcc@13.2, nvhpc@24.5, cce@18.0.0]
     providers:
-      blas: [cray-libsci, blis]
+      blas: [cray-libsci, blis, openblas]
       lapack: [cray-libsci, openblas]
       mpi: [cray-mpich, openmpi]
       pkgconfig: [pkg-config]
@@ -12,6 +12,9 @@ packages:
     variants: comm=ofi host_platform=linux64 launcher=slurm-srun libfabric=spack
     require:
     - "%gcc"
+  et:
+    require:
+    - "^openblas +ilp64 ^libint tune=et"
   namd:
     require:
     - "^charmpp@8.0.0 backend=ofi pmi=cray-pmi"
