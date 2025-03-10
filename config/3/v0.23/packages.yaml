@@ -8,6 +8,9 @@ packages:
       pkgconfig: [pkg-config]
     permissions:
       write: group
+  castep:
+    require:
+    - "^openblas ^fftw"
   chapel:
     variants: comm=ofi host_platform=linux64 launcher=slurm-srun libfabric=spack
     require:
@@ -26,6 +29,12 @@ packages:
     - "%gcc"
   openmpi:
     variants: fabrics=ofi
+  cray-fftw:
+    buildable: false
+    version: [3.3.10.8]
+    externals:
+    - spec: cray-fftw@3.3.10.8
+      prefix: /opt/cray/pe/fftw/3.3.10.8/arm_grace
   cray-libsci:
     buildable: false
     version: [24.07.0]
