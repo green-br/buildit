@@ -18,7 +18,7 @@ packages:
   openmpi:
     variants: +cuda fabrics=ofi cuda_arch=90
   mpich:
-    variants: +cuda+fortran pmi=pmix device=ch3 netmod=ofi cuda_arch=90
+    variants: +cuda+fortran~hydra pmi=cray device=ch4 netmod=ofi cuda_arch=90
   cray-libsci:
     buildable: false
     version: [24.07.0]
