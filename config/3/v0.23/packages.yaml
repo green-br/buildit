@@ -12,7 +12,7 @@ packages:
     require:
     - "^openblas ^fftw"
   chapel:
-    variants: comm=ofi host_platform=linux64 launcher=slurm-srun libfabric=spack
+    variants: comm=ofi comm_ofi_oob=pmi2 host_platform=linux64 launcher=slurm-srun libfabric=spack
     require:
     - "%gcc"
   et:
@@ -101,6 +101,11 @@ packages:
     - spec: cray-pmi@6.1.15
       prefix: /opt/cray/pe/pmi/6.1.15
       modules: [cray-pmi/6.1.15]
+      extra_attributes:
+        environment:
+          prepend_path:
+            LIBRARY_PATH: /opt/cray/pe/pmi/6.1.15/lib
+
   autoconf:
     externals:
     - prefix: /usr
