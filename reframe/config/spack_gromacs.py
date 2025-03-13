@@ -70,6 +70,7 @@ class GromacsSpackCheck(rfm.RegressionTest):
             f'curl -LJO https://github.com/victorusu/GROMACS_Benchmark_Suite/raw/{self.benchmark_version}/{self.__bench}/benchmark.tpr'  # noqa: E501
         ]
         self.executable_opts += ['-nb', self.nb_impl, '-s benchmark.tpr']
+        self.num_tasks = self.num_nodes * self.num_tasks_per_node
 
     @run_after('setup')
     def set_environment(self):

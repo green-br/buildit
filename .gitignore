@@ -1,1 +1,6 @@
-spack/
+/reframe/spack/
+/reframe/venv/
+/reframe/stage/
+/**/__pycache__/
+/reframe/config/i3.py
+
