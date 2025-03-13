@@ -1,6 +1,6 @@
 packages:
   all:
-    compiler: [gcc@12.3, gcc@13.2, nvhpc@24.5, cce@18.0.0]
+    compiler: [gcc@12.3, gcc@13.2, nvhpc@24.3, cce@18.0.0]
     providers:
       blas: [cray-libsci, blis, openblas]
       lapack: [cray-libsci, openblas]
@@ -45,7 +45,7 @@ packages:
     - spec: cray-libsci@24.07.0 %gcc@13.2
       modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/24.07.0/gnu/13.2/aarch64
-    - spec: cray-libsci@24.07.0 %nvhpc@24.5
+    - spec: cray-libsci@24.07.0 %nvhpc@24.3
       modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/24.07.0/nvidia/23.11/aarch64
     - spec: cray-libsci@24.07.0 %cce@18.0.0
@@ -73,7 +73,7 @@ packages:
         environment:
           prepend_path:
             LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
-    - spec: cray-mpich@8.1.30 %nvhpc@24.5
+    - spec: cray-mpich@8.1.30 %nvhpc@24.3
       prefix: /opt/cray/pe/mpich/8.1.30/ofi/nvidia/23.3
       extra_attributes:
         environment:
@@ -83,9 +83,7 @@ packages:
     buildable: false
     version: [12.3.0]
     externals:
-    - spec: cuda@12.3.0 %gcc
-      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/cuda/12.3
-    - spec: cuda@12.3.0 %cce
+    - spec: cuda@12.3.0
       prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/cuda/12.3
   libfabric:
     buildable: false

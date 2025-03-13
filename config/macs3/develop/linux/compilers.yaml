@@ -2,78 +2,52 @@ compilers:
 - compiler:
     spec: gcc@=12.3.0
     paths:
-      cc: /opt/cray/pe/craype/default/bin/cc
-      cxx: /opt/cray/pe/craype/default/bin/CC
-      f77: /opt/cray/pe/craype/default/bin/ftn
-      fc: /opt/cray/pe/craype/default/bin/ftn
-    flags: {}
-    operating_system: sles15
-    target: x86_64
-    modules:
-    - craype-network-ofi
-    - gcc-native/12.3
-    - PrgEnv-gnu
-    - craype-x86-milan
-    environment: {}
-    extra_rpaths: []
-- compiler:
-    spec: gcc@=13.2.0
-    paths:
-      cc: /opt/cray/pe/craype/default/bin/cc
-      cxx: /opt/cray/pe/craype/default/bin/CC
-      f77: /opt/cray/pe/craype/default/bin/ftn
-      fc: /opt/cray/pe/craype/default/bin/ftn
-    flags: {}
-    operating_system: sles15
-    target: x86_64
-    modules:
-    - craype-network-ofi
-    - gcc-native/13.2
-    - PrgEnv-gnu
-    - craype-x86-milan
-    environment: {}
-    extra_rpaths: []
-
-- compiler:
-    spec: cce@=17.0.1
-    paths:
-      cc: /opt/cray/pe/craype/default/bin/cc
-      cxx: /opt/cray/pe/craype/default/bin/CC
-      f77: /opt/cray/pe/craype/default/bin/ftn
-      fc: /opt/cray/pe/craype/default/bin/ftn
-    flags: {}
-    operating_system: sles15
-    target: x86_64
-    modules:
-    - craype-network-ofi
-    - PrgEnv-cray
-    - craype-x86-milan
-    environment: {}
-    extra_rpaths: []
-- compiler:
-    spec: nvhpc@23.9
-    paths:
-      cc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc
-      cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc++
-      f77: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
-      fc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
-    flags: {}
-    operating_system: sles15
-    target: any
-    modules:
-    - nvhpc/24.5
-    - craype-x86-milan
-- compiler:
-    spec: gcc@=7.5.0
-    paths:
-      cc: /usr/bin/gcc
-      cxx: /usr/bin/g++
-      f77: /usr/bin/gfortran
-      fc: /usr/bin/gfortran
+      cc: /usr/bin/gcc-12
+      cxx: /usr/bin/g++-12
+      f77: /usr/bin/gfortran-12
+      fc: /usr/bin/gfortran-12
     flags: {}
     operating_system: sles15
     target: x86_64
     modules: []
     environment: {}
     extra_rpaths: []
+- compiler:
+    spec: gcc@=13.2.0
+    paths:
+      cc: /usr/bin/gcc-13
+      cxx: /usr/bin/g++-13
+      f77: /usr/bin/gfortran-13
+      fc: /usr/bin/gfortran-13
+    flags: {}
+    operating_system: sles15
+    target: x86_64
+    modules: []
+    environment: {}
+    extra_rpaths: []
+
+- compiler:
+    spec: cce@=17.0.1
+    paths:
+      cc: /opt/cray/pe/cce/17.0.1/bin/craycc
+      cxx: /opt/cray/pe/cce/17.0.1/bin/craycxx
+      f77: /opt/cray/pe/cce/17.0.1/bin/crayftn
+      fc: /opt/cray/pe/cce/17.0.1/bin/crayftn
+    flags: {}
+    operating_system: sles15
+    target: x86_64
+    modules: []
+    environment: {}
+    extra_rpaths: []
+- compiler:
+    spec: nvhpc@24.5
+    paths:
+      cc: /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/compilers/bin/nvc
+      cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/compilers/bin/nvc++
+      f77: /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/compilers/bin/nvfortran
+      fc: /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/compilers/bin/nvfortran
+    flags: {}
+    operating_system: sles15
+    target: any
+    modules: []
 
