@@ -2,9 +2,11 @@ import os
 import reframe as rfm
 import reframe.utility as util
 import reframe.utility.sanity as sn
+import reframe.utility.osext as osext
 from spack_base import SpackCompileOnlyBase
 
 class NamdSpackBuild(SpackCompileOnlyBase):
+    sourcefile = os.path.join(os.getenv('HOME'),'sources/namd/NAMD_3.0_Source.tar.gz')
     spackspec = 'namd@3.0'
 
 # RegressionTest is used so Spack uses existing environment.
@@ -20,12 +22,12 @@ class NamdSpackCheck(rfm.RegressionTest):
     #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
     valid_prog_environs = ['gcc-12']
     
-    num_nodes = parameter([2, 4])
-    num_threads = 1
+    num_nodes = parameter([1, 2, 4])
+    num_threads = 12
     exclusive_access = True
     extra_resources = {
-        'memory': {'size': '200000'}
-    }
+        'memory': {'size': '200000'},
+        }
 
     #: The version of the benchmark suite to use.
     #:
@@ -42,22 +44,38 @@ class NamdSpackCheck(rfm.RegressionTest):
     #: :type: `Tuple[str, float, float]`
     #: :values:
     benchmark_info = parameter([
-        ('apoa1'),
-        ('stmv')
+        ('apoa1',),
+        ('stmv',),
+        ('stmv_nve_cuda',)
     ], fmt=lambda x: x[0], loggable=True)
 
     executable = f"namd3"
 
     @run_after('init')
     def prepare_test(self):
-        self.__bench = self.benchmark_info[0]
+        self.__bench, = self.benchmark_info
         self.descr = f'NAMD {self.__bench} benchmark'
-        self.prerun_cmds = [
-            f'curl -LJO https://www.ks.uiuc.edu/Research/namd/utilities/{self.__bench}.tar.gz',
-            f'tar zxvf {self.__bench}.tar.gz --strip-components 1'
+        if self.__bench == 'stmv_nve_cuda':
+            self.prerun_cmds = [
+                f'curl -LJO https://www.ks.uiuc.edu/Research/namd/utilities/stmv.tar.gz',
+                f'curl -LJO http://www.ks.uiuc.edu/Research/namd/2.13/benchmarks/stmv_nve_cuda.namd'
+            ]
+        else:
+            self.prerun_cmds = [
+                f'curl -LJO https://www.ks.uiuc.edu/Research/namd/utilities/{self.__bench}.tar.gz',
+            ]
+        self.prerun_cmds.extend([
+            f'curl -LJO https://www.ks.uiuc.edu/Research/namd/utilities/ns_per_day.py',
+            f'chmod +x ns_per_day.py',
+            f'tar zxvf *.tar.gz --strip-components 1',
+            f'sed -i \'s|/usr/tmp/||\' *.namd'
+            ])
+        self.postrun_cmds = [
+            f'cat output.txt',
+            f'./ns_per_day.py output.txt'
         ]
-        self.executable_opts += ['']
     
+
     @run_after('setup')
     def set_environment(self):
         self.build_system.environment = os.path.join(self.namd_binary.stagedir, 'rfm_spack_env')
@@ -71,6 +89,12 @@ class NamdSpackCheck(rfm.RegressionTest):
             self.num_tasks_per_node = (proc.num_cores) // self.num_threads
             self.env_vars['OMP_NUM_THREADS'] = self.num_threads
         self.num_tasks = self.num_tasks_per_node * self.num_nodes
+        if self.num_nodes == 1:
+            self.extra_resources.update( {
+                'network': {'type': 'single_node_vni'},
+                }
+            )
+        self.executable_opts += [f'+ppn {self.num_threads-1} {self.__bench}.namd > output.txt']
 
     @loggable
     @property
@@ -84,11 +108,11 @@ class NamdSpackCheck(rfm.RegressionTest):
     
     @run_before('sanity')
     def set_sanity_patterns(self):
-        self.sanity_patterns = sn.assert_found(r'Info: Benchmark time:', self.stdout)
+        self.sanity_patterns = sn.assert_found(r'End of program', self.stdout)
 
-    #@run_before('performance')
-    #def set_perf_patterns(self):
-    #    self.perf_patterns = {
-    #        'Info: Benchmark time:':
-    #        sn.extractsingle(r'CP2K +([0-9]+) +([0-9.]+) +([0-9.]+) +([0-9.]+) +([0-9.]+) +([0-9.]+)', self.stdout, 6, float)
-    #    }
+    @run_before('performance')
+    def set_perf_patterns(self):
+        self.perf_patterns = {
+            'Nanoseconds per day:':
+            sn.extractsingle(r'Nanoseconds per day: +([0-9.]+)', self.stdout, 1, float)
+        }

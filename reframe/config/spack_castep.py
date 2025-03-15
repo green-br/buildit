@@ -2,31 +2,32 @@ import os
 import reframe as rfm
 import reframe.utility as util
 import reframe.utility.sanity as sn
+import reframe.utility.osext as osext
 from spack_base import SpackCompileOnlyBase
 
-class Cp2kSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'cp2k@2024.3'
-
+class CastepSpackBuild(SpackCompileOnlyBase):
+    sourcefile = os.path.join(os.getenv('HOME'),'sources/castep/CASTEP-25.11.tar.gz')
+    spackspec = 'castep@25.1.1'
 
 # RegressionTest is used so Spack uses existing environment.
 # This also uses same spec.
 @rfm.simple_test
-class Cp2kSpackCheck(rfm.RegressionTest):
+class CastepSpackCheck(rfm.RegressionTest):
     
-    cp2k_binary = fixture(Cp2kSpackBuild, scope='environment')
+    castep_binary = fixture(CastepSpackBuild, scope='environment')
     
-    descr = 'Cp2k test using Spack'
+    descr = 'Castep test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
     #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
     valid_prog_environs = ['gcc-12']
     
-    num_nodes = parameter([1, 2, 4])
-    num_threads = 1
+    num_nodes = parameter([2, 4, 8])
+    num_threads = 2
     exclusive_access = True
     extra_resources = {
-        'memory': {'size': '200000'}
-    }
+        'memory': {'size': '0'},
+        }
 
     #: The version of the benchmark suite to use.
     #:
@@ -43,29 +44,34 @@ class Cp2kSpackCheck(rfm.RegressionTest):
     #: :type: `Tuple[str, float, float]`
     #: :values:
     benchmark_info = parameter([
-        ('H2O-64')
-        #('HECBioSim/Glutamine-Binding-Protein', -724598.0, 0.001),
-        #('HECBioSim/hEGFRDimer', -3.32892e+06, 0.001),
-        #('HECBioSim/hEGFRDimerSmallerPL', -3.27080e+06, 0.001),
-        #('HECBioSim/hEGFRDimerPair', -1.20733e+07, 0.001),
-        #('HECBioSim/hEGFRtetramerPair', -2.09831e+07, 0.001)
+        ('al3x3','al3x3'),
+        ('DNA','polyA20-no-wat'),
+        ('crambin','crambin')
     ], fmt=lambda x: x[0], loggable=True)
 
-    executable = f"cp2k.psmp"
+    executable = f"castep.mpi"
+
 
     @run_after('init')
     def prepare_test(self):
-        self.__bench = self.benchmark_info
-        self.descr = f'CP2K {self.__bench} benchmark'
+        self.__bench, self.__benchparam = self.benchmark_info
+        self.descr = f'Castep {self.__bench} benchmark'
+        strip_dir = 1
+        if self.__bench == "al3x3":
+            strip_dir = 2
         self.prerun_cmds = [
-            f'curl -LJO https://raw.githubusercontent.com/cp2k/cp2k/refs/heads/master/benchmarks/QS/{self.__bench}.inp'
+            f'cp ~/sources/castep/{self.__bench}.tgz .',
+            f'tar zxvf *.tgz --strip-components {strip_dir}',
         ]
-        self.executable_opts += ['-i', 'H2O-64.inp']
+        self.postrun_cmds = [
+            f'cat {self.__benchparam}.castep',
+        ]
     
+
     @run_after('setup')
     def set_environment(self):
-        self.build_system.environment = os.path.join(self.cp2k_binary.stagedir, 'rfm_spack_env')
-        self.build_system.specs       = self.cp2k_binary.build_system.specs
+        self.build_system.environment = os.path.join(self.castep_binary.stagedir, 'rfm_spack_env')
+        self.build_system.specs       = self.castep_binary.build_system.specs
     
     @run_before('run')
     def set_job_size(self):
@@ -73,8 +79,11 @@ class Cp2kSpackCheck(rfm.RegressionTest):
         self.num_tasks_per_node = proc.num_cores
         if self.num_threads:
             self.num_tasks_per_node = (proc.num_cores) // self.num_threads
+            self.num_cpus_per_task = self.num_threads
             self.env_vars['OMP_NUM_THREADS'] = self.num_threads
+            self.env_vars['OMP_PLACES'] = 'cores'
         self.num_tasks = self.num_tasks_per_node * self.num_nodes
+        self.executable_opts += [f'{self.__benchparam}']
 
     @loggable
     @property
@@ -86,13 +95,10 @@ class Cp2kSpackCheck(rfm.RegressionTest):
 
         return self.__bench
     
-    @run_before('sanity')
-    def set_sanity_patterns(self):
-        self.sanity_patterns = sn.assert_found(r'T I M I N G', self.stdout)
+    @sanity_function
+    def parallel_efficiency(self):
+        return sn.assert_found(r'Overall parallel efficiency rating', self.stdout)
 
-    @run_before('performance')
-    def set_perf_patterns(self):
-        self.perf_patterns = {
-            'Maximum total time':
-            sn.extractsingle(r'CP2K +([0-9]+) +([0-9.]+) +([0-9.]+) +([0-9.]+) +([0-9.]+) +([0-9.]+)', self.stdout, 6, float)
-        }
+    @performance_function('s')
+    def total_time(self):
+        return sn.extractsingle(r'Total time += +([0-9.]+) s', self.stdout, 1, float)
