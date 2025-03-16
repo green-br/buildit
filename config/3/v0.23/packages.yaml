@@ -41,7 +41,7 @@ packages:
       prefix: /opt/arm/armpl-24.10.1_SLES-15_arm-linux-compiler
   armpl-gcc:
     buildable: false
-    version: [24.10]
+    version: ["24.10"]
     externals:
     - spec: armpl@24.10 %gcc
       prefix: /opt/arm/armpl-24.10.1_SLES-15_gcc
