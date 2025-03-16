@@ -50,4 +50,16 @@ compilers:
     target: any
     modules: []
     extra_rpaths: []
+- compiler:
+    spec: arm@24.10.1
+    paths:
+      cc:  /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armclang
+      cxx: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armclang++
+      f77: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armflang
+      fc: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armflang
+    flags: {}
+    operating_system: sles15
+    target: any
+    modules: []
+    extra_rpaths: []
 
