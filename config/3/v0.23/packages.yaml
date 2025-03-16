@@ -18,6 +18,9 @@ packages:
   et:
     require:
     - "^openblas +ilp64 ^libint tune=et"
+  mace-lammps:
+    require:
+    - "^py-torch@1.13.1~cuda~mpi~mkldnn~valgrind ^openblas"
   namd:
     require:
     - "^charmpp@8.0.0 backend=ofi pmi=cray-pmi"
