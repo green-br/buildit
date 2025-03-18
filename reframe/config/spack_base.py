@@ -7,6 +7,7 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
     sourcefile = None
     spec = None
     env_spackspec = {}
+
     #valid_systems = ['*']
     #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
 
@@ -29,6 +30,7 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
             os.getenv('MYCONFDIR'),
             self.current_environ.extras.get('mypackage')
         )
+
         myspackcomp = self.current_environ.extras.get('myspackcomp')
         if self.current_environ.name in self.env_spackspec:
             self.spackspec = f'{self.env_spackspec[self.current_environ.name]}'

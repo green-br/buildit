@@ -1,4 +1,5 @@
 site_configuration = {
+
     'general' : [
         {
             'remote_detect': True
@@ -22,6 +23,7 @@ site_configuration = {
         {
             'name': 'gcc-13',
             'extras' : {
+
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
                 'mypackage': 'buildit/config/3/v0.23/packages.yaml',
                 'mycompile': 'buildit/config/3/v0.23/linux/compilers.yaml',
@@ -81,9 +83,7 @@ site_configuration = {
                 'mycompile': 'buildit/config/macs3/v0.23/linux/compilers.yaml',
                 'myspackcomp': 'rocmcc@5.7.0'
             }
-        },
-
-
+        }
     ],
     'systems': [
         {
@@ -173,7 +173,6 @@ site_configuration = {
                             'name': 'network',
                             'options': ['--network={type}']
                         }
-
                     ]
                 }
             ]

@@ -1,48 +1,67 @@
 packages:
   all:
-    compiler: [gcc@12.3, gcc@13.2, nvhpc@23.9, cce@17.0.1]
+    compiler: [gcc@12.3, gcc@13.2, nvhpc@24.5, cce@17.0.1]
     providers:
-      blas: [cray-libsci]
-      lapack: [cray-libsci]
-      mpi: [cray-mpich]
+      blas: [cray-libsci, blis, openblas]
+      lapack: [cray-libsci, openblas]
+      mpi: [cray-mpich, openmpi]
       pkgconfig: [pkg-config]
+    permissions:
+      write: group
+  et:
+    require:
+    - "^openblas +ilp64 ^libint tune=et"
+  openmpi:
+    variants: fabrics=ofi
   cray-libsci:
     buildable: false
+    version: [24.03.0]
     externals:
-    - spec: cray-libsci@os %gcc@12.3
-      modules: [cray-libsci]
-      prefix: /opt/cray/pe/libsci/default/gnu/12.3/x86_64
-    - spec: cray-libsci@os %gcc@13.2
-      modules: [cray-libsci]
-      prefix: /opt/cray/pe/libsci/default/gnu/13.2/x86_64
-    - spec: cray-libsci@os %nvhpc@23.9
-      modules: [cray-libsci]
-      prefix: /opt/cray/pe/libsci/default/nvidia/23.3/x86_64
-    - spec: cray-libsci@os %cce@17.0.1
-      modules: [cray-libsci]
-      prefix: /opt/cray/pe/libsci/default/cray/17.0/x86_64
+    - spec: cray-libsci@24.03.0 %gcc@12.3
+      modules: [cray-libsci/24.03.0]
+      prefix: /opt/cray/pe/libsci/24.03.0/gnu/12.3/x86_64
+    - spec: cray-libsci@24.03.0 %gcc@13.2
+      modules: [cray-libsci/24.03.0]
+      prefix: /opt/cray/pe/libsci/24.03.0/gnu/12.3/x86_64
+    - spec: cray-libsci@24.03.0 %nvhpc@24.5
+      modules: [cray-libsci/24.03.0]
+      prefix: /opt/cray/pe/libsci/24.03.0/nvidia/23.3/x86_64
+    - spec: cray-libsci@24.03.0 %cce@17.0.1
+      modules: [cray-libsci/24.03.0]
+      prefix: /opt/cray/pe/libsci/24.03.0/cray/17.0/x86_64
   cray-mpich:
     buildable: false
+    version: [8.1.29]
     externals:
     - spec: cray-mpich@8.1.29 %gcc@12.3
       prefix: /opt/cray/pe/mpich/8.1.29/ofi/gnu/12.3
-      modules: [cray-mpich/8.1.29]
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/lib64/
     - spec: cray-mpich@8.1.29 %gcc@13.2
-      prefix: /opt/cray/pe/mpich/8.1.29/ofi/gnu/13.2
-      modules: [cray-mpich/8.1.29]
+      prefix: /opt/cray/pe/mpich/8.1.29/ofi/gnu/12.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/lib64/
     - spec: cray-mpich@8.1.29 %nvhpc@23.9
       prefix: /opt/cray/pe/mpich/8.1.29/ofi/nvidia/23.3
-      modules: [cray-mpich/8.1.29]
-    - spec: cray-mpich@8.1.29 %cce@17.0
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/lib64/
+    - spec: cray-mpich@8.1.29 %cce@17.0.1
       prefix: /opt/cray/pe/mpich/8.1.29/ofi/cray/17.0
-      modules: [cray-mpich/8.1.29]
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/lib64/
   cuda:
     buildable: false
     version: [12.4.0]
     externals:
-    - spec: cuda@12.2.0 %gcc
-      prefix: /opt/nvidia/hpc_sdk/Linux_x86_64/24.5/cuda/12.4
-    - spec: cuda@12.2.0 %cce
+    - spec: cuda@12.4.0
       prefix: /opt/nvidia/hpc_sdk/Linux_x86_64/24.5/cuda/12.4
   libfabric:
     buildable: false
@@ -51,101 +70,109 @@ packages:
     - spec: libfabric@1.20.1
       prefix: /opt/cray
       modules: [libfabric/1.20.1]
-  m4:
-    externals:
-    - spec: m4@1.4.18
-      prefix: /usr
-  tar:
-    externals:
-    - spec: tar@1.34
-      prefix: /usr
-  gawk:
-    externals:
-    - spec: gawk@4.2.1
-      prefix: /usr
-  groff:
-    externals:
-    - spec: groff@1.22.4
-      prefix: /usr
-  openssl:
-    externals:
-    - spec: openssl@1.1.1l-fips
-      prefix: /usr
-  coreutils:
-    externals:
-    - spec: coreutils@8.32
-      prefix: /usr
-  python:
-    externals:
-    - spec: python@3.6.15+bz2+crypt+ctypes~dbm+lzma+nis+pyexpat~pythoncmd+readline+sqlite3+ssl~tkinter+uuid+zlib
-      prefix: /usr
-  diffutils:
-    externals:
-    - spec: diffutils@3.6
-      prefix: /usr
-  bison:
-    externals:
-    - spec: bison@3.0.4
-      prefix: /usr
-  gmake:
-    externals:
-    - spec: gmake@4.2.1
-      prefix: /usr
-  automake:
-    externals:
-    - spec: automake@1.15.1
-      prefix: /usr
-  flex:
-    externals:
-    - spec: flex@2.6.4+lex
-      prefix: /usr
-  binutils:
-    externals:
-    - spec: binutils@2.40~gold~headers
-      prefix: /opt/cray/pe/cce/17.0.0/binutils/aarch64/aarch64-unknown-linux-gnu
-    - spec: binutils@2.41.0~gold~headers
-      prefix: /usr
-  gettext:
-    externals:
-    - spec: gettext@0.20.2
-      prefix: /usr
-  perl:
-    externals:
-    - spec: perl@5.26.1~cpanm+opcode+open+shared+threads
-      prefix: /usr
-  openssh:
-    externals:
-    - spec: openssh@8.4p1
-      prefix: /usr
-  findutils:
-    externals:
-    - spec: findutils@4.8.0
-      prefix: /usr
-  libtool:
-    externals:
-    - spec: libtool@2.4.6
-      prefix: /usr
-  curl:
-    externals:
-    - spec: curl@8.0.1+gssapi+ldap+nghttp2
-      prefix: /usr
-  pkg-config:
-    externals:
-    - spec: pkg-config@0.29.2
-      prefix: /usr
   autoconf:
     externals:
-    - spec: autoconf@2.69
-      prefix: /usr
+    - prefix: /usr
+      spec: autoconf@2.69
+  automake:
+    externals:
+    - prefix: /usr
+      spec: automake@1.15.1
+  binutils:
+    externals:
+    - prefix: /opt/cray/pe/cce/17.0.1/binutils/x86_64/x86_64-pc-linux-gnu
+      spec: binutils@2.40~gold~headers
+    - prefix: /usr
+      spec: binutils@2.41.0~gold~headers
+  bison:
+    externals:
+    - prefix: /usr
+      spec: bison@3.0.4
   cmake:
     externals:
-    - spec: cmake@3.20.4
-      prefix: /usr
+    - prefix: /usr
+      spec: cmake@3.20.4
+  coreutils:
+    externals:
+    - prefix: /usr
+      spec: coreutils@8.32
+  curl:
+    externals:
+    - prefix: /usr
+      spec: curl@8.0.1+gssapi+ldap+nghttp2
+  cvs:
+    externals:
+    - prefix: /usr
+      spec: cvs@1.12.13
+  diffutils:
+    externals:
+    - prefix: /usr
+      spec: diffutils@3.6
+  findutils:
+    externals:
+    - prefix: /usr
+      spec: findutils@4.8.0
+  flex:
+    externals:
+    - prefix: /usr
+      spec: flex@2.6.4+lex
+  gawk:
+    externals:
+    - prefix: /usr
+      spec: gawk@4.2.1
+  gettext:
+    externals:
+    - prefix: /usr
+      spec: gettext@0.20.2
   git:
     externals:
-    - spec: git@2.35.3~tcltk
-      prefix: /usr
+    - prefix: /usr
+      spec: git@2.35.3+tcltk
+  gmake:
+    externals:
+    - prefix: /usr
+      spec: gmake@4.2.1
+  groff:
+    externals:
+    - prefix: /usr
+      spec: groff@1.22.4
+  libtool:
+    externals:
+    - prefix: /usr
+      spec: libtool@2.4.6
+  m4:
+    externals:
+    - prefix: /usr
+      spec: m4@1.4.18
+  openssh:
+    externals:
+    - prefix: /usr
+      spec: openssh@8.4p1
+  openssl:
+    externals:
+    - prefix: /usr
+      spec: openssl@1.1.1l-fips
+  perl:
+    externals:
+    - prefix: /usr
+      spec: perl@5.26.1~cpanm+opcode+open+shared+threads
+  pkg-config:
+    externals:
+    - prefix: /usr
+      spec: pkg-config@0.29.2
   sed:
     externals:
-    - spec: sed@4.4
-      prefix: /usr
+    - prefix: /usr
+      spec: sed@4.4
+  subversion:
+    externals:
+    - prefix: /usr
+      spec: subversion@1.14.1
+  tar:
+    externals:
+    - prefix: /usr
+      spec: tar@1.34
+  zlib:
+    externals:
+    - prefix: /usr
+      spec: zlib@1.2.13
