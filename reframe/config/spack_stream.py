@@ -6,7 +6,7 @@ from spack_base import SpackCompileOnlyBase
 class StreamSpackBuild(SpackCompileOnlyBase):
     executable = 'stream_c.exe'
     spackspec = 'stream@5.10 +openmp stream_array_size=120000000 ntimes=200'
-
+    env_spackspec = { 'cce-17-macs':'stream@5.10 +openmp stream_array_size=120000000 ntimes=200 cflags=-mcmodel=medium' }
 
 @rfm.simple_test
 class StreamSpackCheck(rfm.RegressionTest):
@@ -16,9 +16,9 @@ class StreamSpackCheck(rfm.RegressionTest):
     descr = 'Stream test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
+    valid_prog_environs = ['*']
 
-    num_threads = parameter([1, 2, 4, 8])
+    num_percent = parameter([25, 50, 75, 100])
     thread_placement = parameter(['close', 'cores', 'spread'])
 
     exclusive_access = True
@@ -34,6 +34,10 @@ class StreamSpackCheck(rfm.RegressionTest):
 
     @run_before('run')
     def setup_threading(self):
+        proc = self.current_partition.processor
+        self.num_threads = int(proc.num_cores * self.num_percent ) // 100
+        self.num_cpus_per_task = proc.num_cores
+
         self.env_vars['OMP_NUM_THREADS'] = self.num_threads
         self.env_vars['OMP_PROC_BIND'] = self.thread_placement
 
