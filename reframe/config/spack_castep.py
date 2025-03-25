@@ -15,12 +15,12 @@ class CastepSpackBuild(SpackCompileOnlyBase):
 class CastepSpackCheck(rfm.RegressionTest):
     
     castep_binary = fixture(CastepSpackBuild, scope='environment')
-    
+    fullspackspec = variable(str)
+
     descr = 'Castep test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
-    valid_prog_environs = ['gcc-12']
+    valid_prog_environs = ['*']
     
     num_nodes = parameter([2, 4, 8])
     num_threads = 2
@@ -72,6 +72,7 @@ class CastepSpackCheck(rfm.RegressionTest):
     def set_environment(self):
         self.build_system.environment = os.path.join(self.castep_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.castep_binary.build_system.specs
+        self.fullspackspec            = ' '.join(self.castep_binary.build_system.specs)
     
     @run_before('run')
     def set_job_size(self):

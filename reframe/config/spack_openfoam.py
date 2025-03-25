@@ -14,12 +14,12 @@ class OpenfoamSpackBuild(SpackCompileOnlyBase):
 class OpenfoamSpackCheck(rfm.RegressionTest):
 
     openfoam_binary = fixture(OpenfoamSpackBuild, scope='environment')
+    fullspackspec   = variable(str)
 
     descr = 'Openfoam test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
-    valid_prog_environs = ['gcc-12']
+    valid_prog_environs = ['*']
 
     num_tasks = 144
     num_tasks_per_node = 144
@@ -69,6 +69,7 @@ class OpenfoamSpackCheck(rfm.RegressionTest):
     def set_environment(self):
         self.build_system.environment = os.path.join(self.openfoam_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.openfoam_binary.build_system.specs
+        self.fullspackspec            = ' '.join(self.openfoam_binary.build_system.specs)
 
     @loggable
     @property

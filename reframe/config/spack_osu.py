@@ -9,16 +9,15 @@ class OSUSpackBuild(SpackCompileOnlyBase):
 class OSUSpackCheckBase(rfm.RegressionTest):
 
     osu_binary = fixture(OSUSpackBuild, scope='environment')
+    fullspackspec = variable(str)
 
     descr = 'OSU test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
+    valid_prog_environs = ['*']
 
     benchmark = variable(str)
 
-    num_tasks = 2
-    num_tasks_per_node = 1
     exclusive_access = True
     extra_resources = {
         'memory': {'size': '4000'}
@@ -28,9 +27,18 @@ class OSUSpackCheckBase(rfm.RegressionTest):
     def set_environment(self):
         self.build_system.environment = os.path.join(self.osu_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.osu_binary.build_system.specs
+        self.fullspackspec            = ' '.join(self.osu_binary.build_system.specs)
 
     @run_before('run')
     def prepare_run(self):
+        self.num_tasks = 2
+        self.num_nodes = 2
+        self.num_tasks_per_node = 1
+        if self.metric == 'osu_allreduce':
+            proc = self.current_partition.processor
+            self.num_nodes = 2
+            self.num_tasks = proc.num_cores
+
         self.executable = self.benchmark
         self.executable_opts = ['-x', '100', '-i', '1000']
 

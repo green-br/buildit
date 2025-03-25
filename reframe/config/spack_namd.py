@@ -15,12 +15,12 @@ class NamdSpackBuild(SpackCompileOnlyBase):
 class NamdSpackCheck(rfm.RegressionTest):
     
     namd_binary = fixture(NamdSpackBuild, scope='environment')
-    
+    fullspackspec = variable(str)
+
     descr = 'NAMD test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
-    valid_prog_environs = ['gcc-12']
+    valid_prog_environs = ['*']
     
     num_nodes = parameter([1, 2, 4])
     num_threads = 12
@@ -80,6 +80,7 @@ class NamdSpackCheck(rfm.RegressionTest):
     def set_environment(self):
         self.build_system.environment = os.path.join(self.namd_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.namd_binary.build_system.specs
+        self.fullspackspec            = ' '.join(self.namd_binary.build_system.specs)
     
     @run_before('run')
     def set_job_size(self):

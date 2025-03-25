@@ -41,6 +41,17 @@ class Tealeaf(MakefilePackage):
             "--directory=TeaLeaf_ref",
             "MPI_COMPILER={0}".format(self.spec["mpi"].mpifc),
             "C_MPI_COMPILER={0}".format(self.spec["mpi"].mpicc),
+            "FLAGS_GNU=-O3 -funroll-loops -cpp -ffree-line-length-none",
+            "CFLAGS_GNU=-O3 -funroll-loops",
+            "OMP_CRAY=-fopenmp",
+            "FLAGS_CRAY=-O3 -e Z",
+            "CFLAGS_CRAY=-O3",
+            "OMP_ARM=-fopenmp",
+            "FLAGS_ARM=-O3 -cpp",
+            "CFLAGS_ARM=-O3",
+            "OMP_NVHPC=-fopenmp",
+            "FLAGS_NVHPC=-O3 -cpp",
+            "CFLAGS_NVHPC=-O3",
         ]
 
         if "%gcc" in self.spec:
@@ -53,6 +64,11 @@ class Tealeaf(MakefilePackage):
             targets.append("COMPILER=PGI")
         elif "%xl" in self.spec:
             targets.append("COMPILER=XL")
+        elif "%arm" in self.spec:
+            targets.append("COMPILER=ARM")
+        elif "%nvhpc" in self.spec:
+            targets.append("COMPILER=NVHPC")
+
 
         return targets
 

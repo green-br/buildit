@@ -2,10 +2,10 @@ packages:
   all:
     compiler: [gcc@12.3, gcc@13.2, nvhpc@24.3, cce@18.0.0, arm@24.10.1]
     providers:
-      blas: [cray-libsci, blis, openblas, acfl, armpl-gcc]
-      lapack: [cray-libsci, openblas, acfl, armpl-gcc]
-      fftw-api: [fftw, amdfftw, cray-fftw, acfl, armpl-gcc]
-      mpi: [cray-mpich, openmpi]
+      blas: [cray-libsci, blis, openblas, armpl-gcc]
+      lapack: [cray-libsci, openblas, armpl-gcc]
+      fftw-api: [fftw, amdfftw, cray-fftw, armpl-gcc]
+      mpi: [cray-mpich, openmpi, mpich]
       pkgconfig: [pkg-config]
     permissions:
       write: group
@@ -22,9 +22,14 @@ packages:
   mace-lammps:
     require:
     - "^py-torch@1.13.1~cuda~mpi~mkldnn~valgrind ^openblas"
+  mpich:
+    variants: +fortran~hydra pmi=cray device=ch4 netmod=ofi
   namd:
     require:
     - "^charmpp@8.0.0 backend=ofi pmi=cray-pmi"
+  ncurses:
+    require:
+    - "%gcc"
   numactl:
     require:
     - "%gcc"
@@ -33,17 +38,11 @@ packages:
     - "%gcc"
   openmpi:
     variants: fabrics=ofi
-  acfl:
-    buildable: false
-    version: [24.10.1]
-    externals:
-    - spec: acfl@24.10.1 %arm
-      prefix: /opt/arm/armpl-24.10.1_SLES-15_arm-linux-compiler
   armpl-gcc:
     buildable: false
     version: ["24.10"]
     externals:
-    - spec: armpl@24.10 %gcc
+    - spec: armpl-gcc@24.10 %gcc
       prefix: /opt/arm/armpl-24.10.1_SLES-15_gcc
   cray-fftw:
     buildable: false
@@ -208,6 +207,10 @@ packages:
     externals:
     - prefix: /usr
       spec: pkg-config@0.29.2
+  pmix:
+    externals:
+    - prefix: /usr
+      spec: pmix@4.2.9
   sed:
     externals:
     - prefix: /usr

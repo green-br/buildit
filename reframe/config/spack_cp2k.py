@@ -14,12 +14,12 @@ class Cp2kSpackBuild(SpackCompileOnlyBase):
 class Cp2kSpackCheck(rfm.RegressionTest):
     
     cp2k_binary = fixture(Cp2kSpackBuild, scope='environment')
-    
+    fullspackspec = variable(str)
+
     descr = 'Cp2k test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
-    valid_prog_environs = ['gcc-12']
+    valid_prog_environs = ['*']
     
     num_nodes = parameter([1, 2, 4])
     num_threads = 1
@@ -66,6 +66,7 @@ class Cp2kSpackCheck(rfm.RegressionTest):
     def set_environment(self):
         self.build_system.environment = os.path.join(self.cp2k_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.cp2k_binary.build_system.specs
+        self.fullspackspec            = ' '.join(self.cp2k_binary.build_system.specs)
     
     @run_before('run')
     def set_job_size(self):

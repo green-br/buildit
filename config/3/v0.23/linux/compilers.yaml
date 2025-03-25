@@ -39,7 +39,7 @@ compilers:
     environment: {}
     extra_rpaths: []
 - compiler:
-    spec: nvhpc@24.3
+    spec: nvhpc@=24.3
     paths:
       cc: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers/bin/nvc
       cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers/bin/nvc++
@@ -51,9 +51,9 @@ compilers:
     modules: []
     extra_rpaths: []
 - compiler:
-    spec: arm@24.10.1
+    spec: arm@=24.10.1
     paths:
-      cc:  /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armclang
+      cc: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armclang
       cxx: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armclang++
       f77: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armflang
       fc: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armflang
@@ -62,4 +62,3 @@ compilers:
     target: any
     modules: []
     extra_rpaths: []
-

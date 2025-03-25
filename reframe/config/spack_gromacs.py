@@ -14,12 +14,12 @@ class GromacsSpackBuild(SpackCompileOnlyBase):
 class GromacsSpackCheck(rfm.RegressionTest):
 
     gromacs_binary = fixture(GromacsSpackBuild, scope='environment')
-
+    fullspackspec  = variable(str)
+ 
     descr = 'Gromacs test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
-    valid_prog_environs = ['gcc-12']
+    valid_prog_environs = ['*']
 
     num_nodes = parameter([1, 2, 4])
     num_tasks_per_node = 144
@@ -76,6 +76,7 @@ class GromacsSpackCheck(rfm.RegressionTest):
     def set_environment(self):
         self.build_system.environment = os.path.join(self.gromacs_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.gromacs_binary.build_system.specs
+        self.fullspackspec            = ' '.join(self.gromacs_binary.build_system.specs)
 
 
 

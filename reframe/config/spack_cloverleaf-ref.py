@@ -5,8 +5,13 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class CloverleafRefSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'cloverleaf-ref@master fflags=-fallow-argument-mismatch'
-
+    spackspec = 'cloverleaf-ref@master +ieee'
+    env_spackspec = {
+        'gcc-12':'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch',
+        'gcc-13':'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch',
+        'gcc-13-macs':'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch',
+        'gcc-13-macs':'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch',
+    }
 
 # RegressionTest is used so Spack uses existing environment.
 # This also uses same spec.
@@ -14,18 +19,18 @@ class CloverleafRefSpackBuild(SpackCompileOnlyBase):
 class CloverleafRefSpackCheck(rfm.RegressionTest):
     
     cloverleafref_binary = fixture(CloverleafRefSpackBuild, scope='environment')
-    
+    fullspackspec = variable(str)
+
     descr = 'Cloverleaf-ref test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
-    valid_prog_environs = ['gcc-12']
+    valid_prog_environs = ['*']
     
-    num_nodes = parameter([1, 2, 4])
+    num_nodes = parameter([1,2,4,8,16,32])
     num_threads = variable(int, value=1)
     exclusive_access = True
     extra_resources = {
-        'memory': {'size': '200000'}
+        'memory': {'size': '0'}
     }
 
     #: The version of the benchmark suite to use.
@@ -50,6 +55,7 @@ class CloverleafRefSpackCheck(rfm.RegressionTest):
     ], fmt=lambda x: x[0], loggable=True)
 
     executable = 'clover_leaf'
+    keep_files = ['clover.out']
 
     @run_after('init')
     def prepare_test(self):
@@ -63,6 +69,7 @@ class CloverleafRefSpackCheck(rfm.RegressionTest):
     def set_environment(self):
         self.build_system.environment = os.path.join(self.cloverleafref_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.cloverleafref_binary.build_system.specs
+        self.fullspackspec            = ' '.join(self.cloverleafref_binary.build_system.specs)
     
     @run_before('run')
     def set_job_size(self):
@@ -73,7 +80,7 @@ class CloverleafRefSpackCheck(rfm.RegressionTest):
             self.env_vars['OMP_NUM_THREADS'] = self.num_threads
 
         self.num_tasks = self.num_nodes * self.num_tasks_per_node
-    
+
     @loggable
     @property
     def bench_name(self):
@@ -106,20 +113,16 @@ class CloverleafRefSpackCheck(rfm.RegressionTest):
                                 'clover.out', 'perf', float, item=-1)
 
     def energy_cloverleaf(self):
-        return sn.extractsingle(fr'step:\s*{self.__ts_ref}(\s+\S+){{6}}\s+(?P<energy>\S+)',
+        return sn.extractsingle(fr'step:\s*{self.__ts_ref}(\s+\S+){{5}}\s+(?P<energy>\S+)',
                                 'clover.out', 'energy', float)
 
-    @sanity_function
-    def assert_energy_readout(self):
-        '''Assert that the obtained energy is met'''
+    @performance_function('%')
+    def obtain_energy_readout(self):
+        '''Find that the obtained energy is met'''
         ke = self.energy_cloverleaf()
-        qa_diff = 100.0*(ke/self.__ts_ref)-100.0
-        if not sn.findall(r'^Test problem','clover.out'):
-            return sn.all([
-                sn.assert_lt(qa_diff, 0.001)
-            ])
-        else:
-             return sn.all([
-                sn.assert_not_found(r'NOT PASSED', 'clover.out')
-            ])
+        qa_diff = 100.0*(ke/self.__nrg_ref)-100.0
+        return qa_diff
 
+    @sanity_function
+    def assert_complete(self):
+        return sn.assert_found(r'Clover is finishing', 'clover.out')

@@ -96,8 +96,47 @@ class CloverleafRef(MakefilePackage):
             targets.append("COMPILER=GNU")
 
         elif self.spec.satisfies("%cce"):
+            if self.spec.satisfies("+ieee"):
+                targets.append("I3E_CRAY=")
+
             targets.append("COMPILER=CRAY")
             targets.append("OMP_CRAY=-fopenmp")
+            # logic for Debug build: no optimizatrion and debug symbols
+            if self.spec.satisfies("+debug"):
+                targets.append("FLAGS_CRAY=-O0 -g")
+                targets.append("CFLAGS_CRAY=-O0 -g")
+            else:
+                targets.append("FLAGS_CRAY=-O3")
+                targets.append("CFLAGS_CRAY=-O3")
+       
+        elif self.spec.satisfies("%nvhpc"):
+            if self.spec.satisfies("+ieee"):
+                targets.append("I3E_NVHPC=-Kieee")
+
+            targets.append("COMPILER=NVHPC")
+            targets.append("OMP_NVHPC=-mp")
+            # logic for Debug build: no optimizatrion and debug symbols
+            if self.spec.satisfies("+debug"):
+                targets.append("FLAGS_NVHPC=-O0 -g")
+                targets.append("CFLAGS_NVHPC=-O0 -g")
+            else:
+                targets.append("FLAGS_NVHPC=-O3")
+                targets.append("CFLAGS_NVHPC=-O3")
+        
+        elif self.spec.satisfies("%arm"):
+            if self.spec.satisfies("+ieee"):
+                targets.append("I3E_ARM=")
+
+            targets.append("COMPILER=ARM")
+            targets.append("OMP_ARM=-fopenmp")
+            # logic for Debug build: no optimizatrion and debug symbols
+            if self.spec.satisfies("+debug"):
+                targets.append("FLAGS_ARM=-O0 -g")
+                targets.append("CFLAGS_ARM=-O0 -g")
+            else:
+                targets.append("FLAGS_ARM=-O3")
+                targets.append("CFLAGS_ARM=-O3")
+
 
         elif self.spec.satisfies("%xl"):
             targets.append("COMPILER=XLF")

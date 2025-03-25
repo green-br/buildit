@@ -6,8 +6,13 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class SnapSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'snap@master +openmp fflags="-fallow-argument-mismatch -fopenmp"'
-
+    spackspec = 'snap@main +openmp'
+    env_spackspec = {
+        'gcc-12':'snap@main +openmp fflags="-fallow-argument-mismatch"',
+        'gcc-13':'snap@main +openmp fflags="-fallow-argument-mismatch"',
+        'gcc-12-macs':'snap@main +openmp fflags="-fallow-argument-mismatch"',
+        'gcc-13-macs':'snap@main +openmp fflags="-fallow-argument-mismatch"',
+    }
 
 # RegressionTest is used so Spack uses existing environment.
 # This also uses same spec.
@@ -15,15 +20,15 @@ class SnapSpackBuild(SpackCompileOnlyBase):
 class SnapSpackCheck(rfm.RegressionTest):
     
     snap_binary = fixture(SnapSpackBuild, scope='environment')
-    
+    fullspackspec = variable(str)
+
     descr = 'SNAP test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    #valid_prog_environs = ['gcc-12', 'gcc-13', 'cce-17']
-    valid_prog_environs = ['gcc-12']
+    valid_prog_environs = ['*']
     
-    #num_nodes = parameter([1, 2, 4])
-    num_nodes = 1
+    #num_nodes = parameter([1, 2, 4, 8, 16])
+    num_nodes = parameter([1])
     num_threads = variable(int, value=2)
     exclusive_access = True
     extra_resources = {
@@ -71,6 +76,7 @@ class SnapSpackCheck(rfm.RegressionTest):
     def set_environment(self):
         self.build_system.environment = os.path.join(self.snap_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.snap_binary.build_system.specs
+        self.fullspackspec            = ' '.join(self.snap_binary.build_system.specs)
     
     @run_before('run')
     def set_job_size(self):
@@ -79,8 +85,12 @@ class SnapSpackCheck(rfm.RegressionTest):
         if self.__bench == "qasnap":
             # Approx. 1GB per MPI task. So may need underpopulate.
             if self.num_threads:
+                self.num_cpus_per_task = self.num_threads
                 self.num_tasks_per_node = (proc.num_cores) // self.num_threads
                 self.env_vars['OMP_NUM_THREADS'] = self.num_threads
+                self.env_vars['OMP_PLACES'] = 'cores'
+                self.env_vars['OMP_PROC_BIND'] = 'close'
+
 
             max_tasks  = self.num_nodes * self.num_tasks_per_node
             root_tasks = math.floor(math.sqrt(max_tasks))
@@ -96,10 +106,14 @@ class SnapSpackCheck(rfm.RegressionTest):
         else:
             # NG value in input limits threads.
             self.num_threads          = min(32, proc.num_cores // proc.num_sockets)
+            self.num_cpus_per_task = self.num_threads
             self.num_tasks_per_node   = proc.num_sockets
             self.num_tasks            = self.num_nodes * self.num_tasks_per_node
 
             self.env_vars['OMP_NUM_THREADS'] = self.num_threads
+            self.env_vars['OMP_PLACES'] = 'cores'
+            self.env_vars['OMP_PROC_BIND'] = 'close'
+
 
             i=1
             yscale=1
