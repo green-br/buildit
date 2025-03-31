@@ -5,12 +5,12 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class CloverleafRefSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'cloverleaf-ref@master +ieee'
+    defspec = 'cloverleaf-ref@master +ieee'
     env_spackspec = {
-        'gcc-12':'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch',
-        'gcc-13':'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch',
-        'gcc-13-macs':'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch',
-        'gcc-13-macs':'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch',
+        'gcc-12': { 'spec': 'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch' },
+        'gcc-13': { 'spec': 'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch' },
+        'gcc-12-macs': { 'spec': 'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch' },
+        'gcc-13-macs': { 'spec': 'cloverleaf-ref@master +ieee fflags=-fallow-argument-mismatch' },
     }
 
 # RegressionTest is used so Spack uses existing environment.
@@ -67,12 +67,18 @@ class CloverleafRefSpackCheck(rfm.RegressionTest):
     
     @run_after('setup')
     def set_environment(self):
+        self.skip_if(
+            self.num_nodes > self.current_partition.extras.get('max_nodes',128),
+            'exceeded node limit'
+        )
         self.build_system.environment = os.path.join(self.cloverleafref_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.cloverleafref_binary.build_system.specs
         self.fullspackspec            = ' '.join(self.cloverleafref_binary.build_system.specs)
     
     @run_before('run')
     def set_job_size(self):
+        self.skip_if( self.build_only == 1, 'build only')
+
         proc = self.current_partition.processor
         self.num_tasks_per_node = proc.num_cores
         if self.num_threads:

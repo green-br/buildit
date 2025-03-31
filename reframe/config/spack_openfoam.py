@@ -5,7 +5,11 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class OpenfoamSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'openfoam@2312'
+    defspec = 'openfoam@2312'
+    defdeps = '^cgal@5'
+    env_spackspec = {
+        'cce-18': { 'spec': f'{defspec} ^cmake@3.28' },
+    }
 
 
 # RegressionTest is used so Spack uses existing environment.
@@ -19,13 +23,14 @@ class OpenfoamSpackCheck(rfm.RegressionTest):
     descr = 'Openfoam test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    valid_prog_environs = ['*']
+    valid_prog_environs = ['-no-openfoam']
 
-    num_tasks = 144
-    num_tasks_per_node = 144
+    build_only = variable(int, value=0)
+    num_nodes = parameter([1, 2, 4, 8, 16])
+    num_threads = variable(int, value=1)
     exclusive_access = True
     extra_resources = {
-        'memory': {'size': '200000'}
+        'memory': {'size': '0'}
     }
 
     #: The version of the benchmark suite to use.
@@ -48,6 +53,8 @@ class OpenfoamSpackCheck(rfm.RegressionTest):
     # Openfoam has its own launcher run in the prerun_cmds.
     executable = 'true'
 
+    keep_files = ['log.*', 'logs']
+
     @run_after('init')
     def prepare_test(self):
         self.__bench, self.__subdir = self.benchmark_info
@@ -55,21 +62,45 @@ class OpenfoamSpackCheck(rfm.RegressionTest):
         self.prerun_cmds = [
             f'git clone https://develop.openfoam.com/committees/hpc.git',
             f'cd {self.__subdir}',
-            f'sed -i "s/numberOfSubdomains.*/numberOfSubdomains {self.num_tasks};/g" system/decomposeParDict',
+            f'sed -i "s/numberOfSubdomains.*/numberOfSubdomains $SLURM_NTASKS;/g" system/decomposeParDict',
             f'sed -i "s/vector/normal/g" system/mirrorMeshDict',
             f'sed -i "s/^endTime.*/endTime         100;/" system/controlDict',
             f'sed -i "s/^writeInterval.*/writeInterval   1000;/" system/controlDict',
             f'curl -o system/fvSolution "https://develop.openfoam.com/Development/openfoam/-/raw/master/tutorials/incompressible/simpleFoam/motorBike/system/fvSolution?ref_type=heads"',
             f'chmod +x All*',
+            #f'cp $WM_PROJECT_DIR/bin/tools/RunFunctions ./',
+            #f"sed -i 's|\$WM_PROJECT_DIR/bin/tools/|./|g' Allrun",
+            #f"sed -i 's/local mpirun=.*/local mpirun=srun/' RunFunctions",
+            f"sed -i 's/local mpirun=.*/local mpirun=srun/' $WM_PROJECT_DIR/bin/tools/RunFunctions",
             f'./AllmeshL',
             f'./Allrun'
+        ]
+        self.postrun_cmds = [
+            f"cp log.* $SLURM_SUBMIT_DIR",
+            f"cp -r logs $SLURM_SUBMIT_DIR",
+            f"cat log.simpleFoam",
         ]
 
     @run_after('setup')
     def set_environment(self):
+        self.skip_if(
+            self.num_nodes > self.current_partition.extras.get('max_nodes',128),
+            'exceeded node limit'
+        )
         self.build_system.environment = os.path.join(self.openfoam_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.openfoam_binary.build_system.specs
         self.fullspackspec            = ' '.join(self.openfoam_binary.build_system.specs)
+
+    @run_before('run')
+    def set_job_size(self):
+        self.skip_if( self.build_only == 1, 'build only')
+
+        proc = self.current_partition.processor
+        self.num_tasks_per_node = proc.num_cores
+        if self.num_threads:
+            self.num_tasks_per_node = (proc.num_cores) // self.num_threads
+            self.env_vars['OMP_NUM_THREADS'] = self.num_threads
+        self.num_tasks = self.num_tasks_per_node * self.num_nodes
 
     @loggable
     @property
@@ -84,7 +115,7 @@ class OpenfoamSpackCheck(rfm.RegressionTest):
     @performance_function('s')
     def perf(self):
         return sn.extractsingle(r'ExecutionTime =\s+(?P<perf>\S+)',
-                                self.stdout, 'perf', float)
+                                self.stdout, 'perf', float, -1)
 
     @sanity_function
     def assert_finished(self):

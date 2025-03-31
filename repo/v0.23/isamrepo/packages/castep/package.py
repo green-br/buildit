@@ -83,6 +83,16 @@ class Castep(MakefilePackage):
                 archtype=f"{archtype}_gfortran10"
             else:
                 raise InstallError("Please add support for this version!")
+        elif spec.satisfies("%nvhpc"): 
+            if spec.satisfies("@25:"):
+                archtype=f"{archtype}_nvfortran"
+            else:
+                raise InstallError("Please add support for this version!")
+        elif spec.satisfies("%cce"):
+            if spec.satisfies("@19:"):
+                archtype=f"{archtype}_cray-XT"
+            else:
+                raise InstallError("Please add support for this version!")
         else:
             raise InstallError("Please add support for this compiler!")
         return archtype
@@ -106,7 +116,13 @@ class Castep(MakefilePackage):
                 dlmakefile.filter(r"MPIFLAGS = -DMPI", "MPIFLAGS = -fallow-argument-mismatch -DMPI")
 
                 platfile.filter(r"^\s*FFLAGS_E\s*=.*", "FFLAGS_E = -fallow-argument-mismatch ")
-        
+
+        if spec.satisfies("%nvhpc"):
+            platfile.filter(r"^FFLAGS_MODULES = ", "FFLAGS_MODULES = -Mbackslash ")
+        if spec.satisfies("^cray-libsci"):
+            platfile.filter(r"MATH_LIBS = \n", f"MATH_LIBS = {spec['cray-libsci'].libs.link_flags}\n")
+            platfile.filter(r"MATH_LIBS = -llapack -lblas", f"MATH_LIBS = {spec['cray-libsci'].libs.link_flags}")
+
         platfile.filter(r"^\s*OPT_CPU\s*=.*", "OPT_CPU = ")
 
     @property
@@ -114,9 +130,14 @@ class Castep(MakefilePackage):
         spec = self.spec
         targetlist = [f"PWD={self.stage.source_path}"]
         archtype = self.casteparch(spec)
-
+        
         if spec.satisfies("+mpi"):
             targetlist.append("COMMS_ARCH=mpi")
+            targetlist.append(f"F90={spec['mpi'].mpifc}")
+            targetlist.append(f"CC={spec['mpi'].mpicc}")
+        else:
+            targetlist.append(f"F90={spack_fc}")
+            targetlist.append(f"CC={spack_cc}")
 
         targetlist.append(f"FFTLIBDIR={spec['fftw-api'].prefix.lib}")
         targetlist.append(f"MATHLIBDIR={spec['blas'].prefix.lib}")
@@ -131,7 +152,13 @@ class Castep(MakefilePackage):
         if spec.satisfies("^openblas"):
             targetlist.append("MATHLIBS=openblas")
         elif spec.satisfies("^cray-libsci"):
-            targetlist.append("MATHLIBS=scilib")
+            if spec.satisfies("%cce"):
+                # Assumed only CCE
+                targetlist.append("MATHLIBS=scilib")
+            else:
+                # Default patched earlier.
+                targetlist.append("MATHLIBS=default")
+
 
         if spec.satisfies("^fftw"):
             targetlist.append("FFT=fftw3")

@@ -5,7 +5,7 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class GromacsSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'gromacs@2024.3'
+    defspec = 'gromacs@2024.3'
 
 
 # RegressionTest is used so Spack uses existing environment.
@@ -19,13 +19,14 @@ class GromacsSpackCheck(rfm.RegressionTest):
     descr = 'Gromacs test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    valid_prog_environs = ['*']
+    valid_prog_environs = ['-no-gromacs']
 
+    build_only = variable(int, value=0)
     num_nodes = parameter([1, 2, 4])
-    num_tasks_per_node = 144
+    num_threads = variable(int, value=1)
     exclusive_access = True
     extra_resources = {
-        'memory': {'size': '200000'}
+        'memory': {'size': '0'}
     }
 
     #: The version of the benchmark suite to use.
@@ -43,12 +44,14 @@ class GromacsSpackCheck(rfm.RegressionTest):
     #: :type: `Tuple[str, float, float]`
     #: :values:
     benchmark_info = parameter([
-        ('HECBioSim/Crambin', -204107.0, 0.001)
+        #('HECBioSim/Crambin', -204107.0, 0.001)
         #('HECBioSim/Glutamine-Binding-Protein', -724598.0, 0.001),
         #('HECBioSim/hEGFRDimer', -3.32892e+06, 0.001),
         #('HECBioSim/hEGFRDimerSmallerPL', -3.27080e+06, 0.001),
         #('HECBioSim/hEGFRDimerPair', -1.20733e+07, 0.001),
         #('HECBioSim/hEGFRtetramerPair', -2.09831e+07, 0.001)
+        ('GROMACS_TestCaseA', -1.50925e+06, 0.001),
+        ('GROMACS_TestCaseB', -3.06407e+07, 0.001),
     ], fmt=lambda x: x[0], loggable=True)
 
     #: Parameter encoding the implementation of the non-bonded calculations
@@ -66,18 +69,40 @@ class GromacsSpackCheck(rfm.RegressionTest):
     def prepare_test(self):
         self.__bench, self.__nrg_ref, self.__nrg_tol = self.benchmark_info
         self.descr = f'GROMACS {self.__bench} benchmark (NB: {self.nb_impl})'
-        self.prerun_cmds = [
-            f'curl -LJO https://github.com/victorusu/GROMACS_Benchmark_Suite/raw/{self.benchmark_version}/{self.__bench}/benchmark.tpr'  # noqa: E501
-        ]
-        self.executable_opts += ['-nb', self.nb_impl, '-s benchmark.tpr']
-        self.num_tasks = self.num_nodes * self.num_tasks_per_node
+        if self.__bench.startswith("HEC"):
+            self.prerun_cmds.extend([
+                f'curl -LJO https://github.com/victorusu/GROMACS_Benchmark_Suite/raw/{self.benchmark_version}/{self.__bench}/benchmark.tpr'  # noqa: E501
+            ])
+        else:
+            self.prerun_cmds.append([
+                f'curl -LJO https://repository.prace-ri.eu/ueabs/GROMACS/2.2/{self.__bench}.tar.xz',
+                f'tar xvf {self.__bench}.tar.xz --strip-components 1',
+            ])
+            self.executable_opts += ['-cpt', '1000', '-maxh', '1.0', '-nsteps', '50000' ] 
+
+         
+
+        self.executable_opts += ['-nb', self.nb_impl, '-s *.tpr']
 
     @run_after('setup')
     def set_environment(self):
+        self.skip_if(
+            self.num_nodes > self.current_partition.extras.get('max_nodes',128),
+            'exceeded node limit'
+        )
         self.build_system.environment = os.path.join(self.gromacs_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.gromacs_binary.build_system.specs
         self.fullspackspec            = ' '.join(self.gromacs_binary.build_system.specs)
 
+    @run_before('run')
+    def set_job_size(self):
+        self.skip_if( self.build_only == 1, 'build only')
+        proc = self.current_partition.processor
+        self.num_tasks_per_node = proc.num_cores
+        if self.num_threads:
+            self.num_tasks_per_node = (proc.num_cores) // self.num_threads
+            self.env_vars['OMP_NUM_THREADS'] = self.num_threads
+        self.num_tasks = self.num_tasks_per_node * self.num_nodes
 
 
     @loggable
@@ -156,6 +181,24 @@ class GromacsSpackCheck(rfm.RegressionTest):
         return sn.extractsingle(r'\s+Potential\s+Kinetic En\.\s+Total Energy'
                                 r'\s+Conserved En\.\s+Temperature\n'
                                 r'(\s+\S+){2}\s+(?P<energy>\S+)(\s+\S+){2}\n'
+                                r'\s+Pressure \(bar\)\s+Constr\. rmsd',
+                                'md.log', 'energy', float, item=-1)
+    
+    @deferrable
+    def energy_gromacs_testcasea(self):
+        return sn.extractsingle(r'\s+Coul\. recip\.\s+Potential\s+Kinetic En\.\s+Total Energy'
+                                r'\s+Conserved En\.\n'
+                                r'(\s+\S+){3}\s+(?P<energy>\S+)(\s+\S+){1}\n'
+                                r'\sTemperature\s+Pres\. DC \(bar\)\s+Pressure \(bar\)\s+Constr\. rmsd',
+                                'md.log', 'energy', float, item=-1)
+
+    
+    @deferrable
+    def energy_gromacs_testcaseb(self):
+        return sn.extractsingle(r'\s+LJ \(SR\)\s+Coulomb \(SR\)\s+Potential'
+                                r'\s+Kinetic En\.\s+Total Energy\n'
+                                r'(\s+\S+){4}\s+(?P<energy>\S+)\n'
+                                r'\s+Conserved En\.\s+Temperature'
                                 r'\s+Pressure \(bar\)\s+Constr\. rmsd',
                                 'md.log', 'energy', float, item=-1)
 

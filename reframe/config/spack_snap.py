@@ -6,12 +6,12 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class SnapSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'snap@main +openmp'
+    defspec = 'snap@main +openmp'
     env_spackspec = {
-        'gcc-12':'snap@main +openmp fflags="-fallow-argument-mismatch"',
-        'gcc-13':'snap@main +openmp fflags="-fallow-argument-mismatch"',
-        'gcc-12-macs':'snap@main +openmp fflags="-fallow-argument-mismatch"',
-        'gcc-13-macs':'snap@main +openmp fflags="-fallow-argument-mismatch"',
+        'gcc-12': { 'spec': 'snap@main +openmp fflags="-fallow-argument-mismatch"' },
+        'gcc-13': { 'spec': 'snap@main +openmp fflags="-fallow-argument-mismatch"' },
+        'gcc-12-macs': { 'spec':'snap@main +openmp fflags="-fallow-argument-mismatch"' },
+        'gcc-13-macs': { 'spec': 'snap@main +openmp fflags="-fallow-argument-mismatch"' },
     }
 
 # RegressionTest is used so Spack uses existing environment.
@@ -27,12 +27,11 @@ class SnapSpackCheck(rfm.RegressionTest):
     valid_systems = ['*']
     valid_prog_environs = ['*']
     
-    #num_nodes = parameter([1, 2, 4, 8, 16])
-    num_nodes = parameter([1])
+    num_nodes = parameter([1, 2, 4, 8, 16])
     num_threads = variable(int, value=2)
     exclusive_access = True
     extra_resources = {
-        'memory': {'size': '200000'}
+        'memory': {'size': '0'}
     }
 
     #: The version of the benchmark suite to use.
@@ -74,6 +73,10 @@ class SnapSpackCheck(rfm.RegressionTest):
     
     @run_after('setup')
     def set_environment(self):
+        self.skip_if(
+            self.num_nodes > self.current_partition.extras.get('max_nodes',128),
+            'exceeded node limit'
+        )
         self.build_system.environment = os.path.join(self.snap_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.snap_binary.build_system.specs
         self.fullspackspec            = ' '.join(self.snap_binary.build_system.specs)

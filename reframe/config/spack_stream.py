@@ -7,11 +7,13 @@ class StreamSpackBuild(SpackCompileOnlyBase):
     executable = 'stream_c.exe'
     needsmpi = False
     # stream_array_size is calculated as 2.7GB per Grace CPU
-    spackspec = 'stream@5.10 +openmp stream_array_size=240000000 ntimes=200'
+    defspec = 'stream@5.10 +openmp stream_array_size=240000000 ntimes=200'
     env_spackspec = { 
-        'cce-17-macs':'stream@5.10 +openmp stream_array_size=240000000 ntimes=200 cflags=-mcmodel=medium',
-        'arm-24':'stream@5.10 +openmp stream_array_size=240000000 ntimes=200 cflags="-mcmodel=large -no-pie -fno-pic" fflags="-mcmodel=large -no-pie -fno-pic"',
-        'cce-18':'stream@5.10 +openmp stream_array_size=240000000 ntimes=200 cflags="-mcmodel=large -no-pie -fno-pic -mcpu=neoverse-v1"',
+        'cce-17-macs': { 'spec': f'{defspec} cflags=-mcmodel=medium' },
+        'gcc-12-macs': { 'spec': f'{defspec} cflags=-mcmodel=medium' },
+        'gcc-13-macs': { 'spec': f'{defspec} cflags=-mcmodel=medium' },
+        'arm-24': { 'spec': f"{defspec} cflags='-mcmodel=large -no-pie -fno-pic' fflags='-mcmodel=large -no-pie -fno-pic'" },
+        'cce-18': { 'spec': f"{defspec} cflags='-mcmodel=large -no-pie -fno-pic -mcpu=neoverse-v1'",
     }
 
 @rfm.simple_test

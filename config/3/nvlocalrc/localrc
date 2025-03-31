@@ -1,0 +1,23 @@
+set LFC=-lgfortran;
+set LDSO=/lib/ld-linux-aarch64.so.1;
+set GCCDIR=/usr/lib64/gcc/aarch64-suse-linux/12/;
+set G77DIR=/usr/lib64/gcc/aarch64-suse-linux/12/;
+set OEM_INFO=linuxarm64 target on aarch64 Linux $INFOTPVAL;
+set GNUATOMIC=-latomic;
+set GCCINC=/usr/lib64/gcc/aarch64-suse-linux/12/include /usr/local/include /usr/lib64/gcc/aarch64-suse-linux/12/include-fixed /usr/lib64/gcc/aarch64-suse-linux/12/../../../../aarch64-suse-linux/include /usr/include;
+set GPPDIR=/usr/include/c++/12 /usr/include/c++/12/aarch64-suse-linux /usr/include/c++/12/backward /usr/lib64/gcc/aarch64-suse-linux/12/include /usr/local/include /usr/lib64/gcc/aarch64-suse-linux/12/include-fixed /usr/lib64/gcc/aarch64-suse-linux/12/../../../../aarch64-suse-linux/include /usr/include;
+set LOCALRC=YES;
+set EXTENSION=__extension__=;
+set COMPGLIBLFDIR=;
+set LC=$if(-Bstatic,-lgcc -lgcc_eh -lc, -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed);
+set DEFLIBDIR=/usr/lib64;
+set DEFSTDOBJDIR=/usr/lib64;
+set DEFCUDAVERSION=12.3;
+set DEFSTDPARCOMPUTECAP=;
+# GLIBC version 2.31
+# GCC version 12.3.0
+set GCCVERSION=120300;
+set GCCNAME=gcc-12;
+set LOCALDEFS=__STDC_HOSTED__;
+export PGI=$COMPBASE;
+# makelocalrc executed by tgreen.brics Fri Mar 28 20:18:49 UTC 2025

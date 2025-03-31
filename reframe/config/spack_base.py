@@ -5,7 +5,8 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
     descr = 'Base class to build from Spack'
     build_system = 'Spack'
     sourcefile = None
-    spackspec = variable(str)
+    defspec = variable(str)
+    defdeps = variable(str, value="")
     needsmpi  = variable(bool, value=True)
     env_spackspec = {}
 
@@ -28,21 +29,35 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
             os.getenv('MYCONFDIR'),
             self.current_environ.extras.get('mypackage')
         )
+        mylocalrc = None
+        if self.current_environ.extras.get('mynvlocalrc', None):
+            mynvlocalrc = os.path.join(
+                os.getenv('MYCONFDIR'),
+                self.current_environ.extras.get('mynvlocalrc')
+            )
 
-        mympidep = ''
+
+        mpidep = ''
+        spec   = self.defspec
+        deps   = self.defdeps
+
         myspackcomp = self.current_environ.extras.get('myspackcomp')
         if ( 'no-cray-mpich' in self.current_environ.features
             and self.needsmpi):
-            mympidep = f'^mpich@4.3.0 % {myspackcomp}'
+            mpidep = f'^mpich@4.3.0 % {myspackcomp}'
         if self.current_environ.name in self.env_spackspec:
-            self.spackspec = f'{self.env_spackspec[self.current_environ.name]}'
-        self.build_system.install_tree = os.getenv('HOME') + '/.reframe/opt/spack'
+            spec = f"{self.env_spackspec[self.current_environ.name]['spec']}"
+            deps = f"{self.env_spackspec[self.current_environ.name].get('deps','')}"
+        self.build_system.install_tree = os.getenv('HOME') + f'/.reframe/opt/spack/'
         self.build_system.config_opts = [f'repos:[{myrepos}]',
                                          f'view:true',
                                          f'concretizer:unify:true',
                                          f'concretizer:reuse:false']
-        self.build_system.specs = [f'{self.spackspec} % {myspackcomp} {mympidep}']
+        self.build_system.specs = [f'{spec} % {myspackcomp} {mpidep} {deps}']
         self.build_system.preinstall_cmds = ['export SPACK_DISABLE_LOCAL_CONFIG=true',
                                              f'spack -e rfm_spack_env config add -f "{mycompile}"',
-                                             f'spack -e rfm_spack_env config add -f "{mypackage}"']
+                                             f'spack -e rfm_spack_env config add -f "{mypackage}"',
+                                             f'spack -e rfm_spack_env concretize -f']
+        if nvlocalrc:
+            self.build_system.preinstall_cmds.append(f'export NVLOCALRC={nvlocalrc}')
 

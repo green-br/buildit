@@ -4,7 +4,7 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class OSUSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'osu-micro-benchmarks@7.5'
+    defspec = 'osu-micro-benchmarks@7.5'
 
 class OSUSpackCheckBase(rfm.RegressionTest):
 

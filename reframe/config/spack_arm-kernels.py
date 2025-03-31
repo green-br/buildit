@@ -5,7 +5,7 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class ArmKernelsSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'arm-kernels@main'
+    defspec = 'arm-kernels@main'
     needsmpi = False
 
 class ArmKernelsSpackCheckBase(rfm.RegressionTest):

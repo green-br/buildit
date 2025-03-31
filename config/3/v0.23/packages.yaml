@@ -10,7 +10,7 @@ packages:
     permissions:
       write: group
   castep:
-    require:
+    prefer:
     - "^openblas ^fftw"
   chapel:
     variants: comm=ofi comm_ofi_oob=pmi2 host_platform=linux64 launcher=slurm-srun libfabric=spack
@@ -19,6 +19,15 @@ packages:
   et:
     require:
     - "^openblas +ilp64 ^libint tune=et"
+  gmp:
+    require:
+    - "%gcc"
+  mpfr:
+    require:
+    - "%gcc"
+  hwloc:
+    require:
+    - "%gcc"
   mace-lammps:
     require:
     - "^py-torch@1.13.1~cuda~mpi~mkldnn~valgrind ^openblas"
@@ -59,7 +68,7 @@ packages:
       prefix: /opt/cray/pe/libsci/24.07.0/gnu/12.3/aarch64
     - spec: cray-libsci@24.07.0 %gcc@13.2
       modules: [cray-libsci]
-      prefix: /opt/cray/pe/libsci/24.07.0/gnu/13.2/aarch64
+      prefix: /opt/cray/pe/libsci/24.07.0/gnu/12.3/aarch64
     - spec: cray-libsci@24.07.0 %nvhpc@24.3
       modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/24.07.0/nvidia/23.11/aarch64
@@ -136,6 +145,8 @@ packages:
     - prefix: /usr
       spec: bison@3.0.4
   cmake:
+    require:
+    - "%gcc"
     externals:
     - prefix: /usr
       spec: cmake@3.20.4

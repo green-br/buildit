@@ -6,12 +6,12 @@ from reframe.core.backends import getlauncher
 from spack_base import SpackCompileOnlyBase
 
 class TeaLeafRefSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'tealeaf@master'
+    defspec = 'tealeaf@master'
     env_spackspec = { 
-        'gcc-12':'tealeaf@master fflags=-fallow-argument-mismatch',
-        'gcc-13':'tealeaf@master fflags=-fallow-argument-mismatch',
-        'gcc-13-macs':'tealeaf@master fflags=-fallow-argument-mismatch',
-        'gcc-13-macs':'tealeaf@master fflags=-fallow-argument-mismatch',
+        'gcc-12': { 'spec': f'{defspec} fflags=-fallow-argument-mismatch' },
+        'gcc-13': { 'spec': f'{defspec} fflags=-fallow-argument-mismatch' },
+        'gcc-12-macs': { 'spec': f'{defspec} fflags=-fallow-argument-mismatch' },
+        'gcc-13-macs': { 'spec': f'{defspec} fflags=-fallow-argument-mismatch' },
     }
 
 
@@ -73,6 +73,10 @@ class TeaLeafRefSpackCheck(rfm.RegressionTest):
     
     @run_after('setup')
     def set_environment(self):
+        self.skip_if(
+            self.num_nodes > self.current_partition.extras.get('max_nodes',128),
+            'exceeded node limit'
+        )
         self.build_system.environment = os.path.join(self.tealeafref_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.tealeafref_binary.build_system.specs
         self.fullspackspec            = ' '.join(self.tealeafref_binary.build_system.specs)

@@ -7,7 +7,7 @@ from spack_base import SpackCompileOnlyBase
 
 class NamdSpackBuild(SpackCompileOnlyBase):
     sourcefile = os.path.join(os.getenv('HOME'),'sources/namd/NAMD_3.0_Source.tar.gz')
-    spackspec = 'namd@3.0'
+    defspec = 'namd@3.0'
 
 # RegressionTest is used so Spack uses existing environment.
 # This also uses same spec.
@@ -20,13 +20,15 @@ class NamdSpackCheck(rfm.RegressionTest):
     descr = 'NAMD test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    valid_prog_environs = ['*']
+    valid_prog_environs = ['-no-namd']
     
-    num_nodes = parameter([1, 2, 4])
-    num_threads = 12
+    build_only = variable(int, value=0)
+    num_nodes = parameter([1, 2, 4, 8, 16])
+    num_percent = parameter([0,25,50,100])
+    num_threads = variable(int, value=0)
     exclusive_access = True
     extra_resources = {
-        'memory': {'size': '200000'},
+        'memory': {'size': '0'},
         }
 
     #: The version of the benchmark suite to use.
@@ -78,17 +80,31 @@ class NamdSpackCheck(rfm.RegressionTest):
 
     @run_after('setup')
     def set_environment(self):
+        self.skip_if(
+            self.num_nodes > self.current_partition.extras.get('max_nodes',128),
+            'exceeded node limit'
+        )
+        self.skip_if(
+            self.num_nodes > 1 and self.num_threads > 12,
+            'different threads on single node only'
+        )
         self.build_system.environment = os.path.join(self.namd_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.namd_binary.build_system.specs
         self.fullspackspec            = ' '.join(self.namd_binary.build_system.specs)
     
     @run_before('run')
     def set_job_size(self):
+        self.skip_if( self.build_only == 1, 'build only')
+        
         proc = self.current_partition.processor
-        self.num_tasks_per_node = proc.num_cores
-        if self.num_threads:
+        self.num_tasks_per_node = proc.num_cores // 2
+        self.num_threads = 2
+
+        if self.num_percent > 0:
+            self.num_threads = int(proc.num_cores * self.num_percent ) // 100
             self.num_tasks_per_node = (proc.num_cores) // self.num_threads
             self.env_vars['OMP_NUM_THREADS'] = self.num_threads
+
         self.num_tasks = self.num_tasks_per_node * self.num_nodes
         if self.num_nodes == 1:
             self.extra_resources.update( {

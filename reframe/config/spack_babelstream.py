@@ -6,7 +6,7 @@ from spack_base import SpackCompileOnlyBase
 class BabelStreamSpackBuild(SpackCompileOnlyBase):
     executable = 'omp-stream'
     # stream_array_size is calculated as 2.7GB per Grace CPU
-    spackspec = 'babelstream@5.0 +omp'
+    defspec = 'babelstream@5.0 +omp'
     needsmpi = False
 
 @rfm.simple_test

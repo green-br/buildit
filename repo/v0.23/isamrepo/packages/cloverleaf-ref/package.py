@@ -16,17 +16,11 @@ class CloverleafRef(MakefilePackage):
 
     homepage = "https://github.com/UK-MAC/CloverLeaf_ref"
     url = "https://github.com/UK-MAC/CloverLeaf_ref/archive/refs/tags/v1.3.tar.gz"
-    git = "https://github.com/UK-MAC/CloverLeaf_ref.git"
+    git = "https://github.com/green-br/CloverLeaf_ref.git"
 
     maintainers("amd-toolchain-support")
 
-    version("master", branch="master")
-    version(
-        "1.3", sha256="fdff193286a00672bb931baa50d424a2cc19fb5817b62436804eced637e12430"
-    )  # commit "0ddf495"
-    version(
-        "1.1", sha256="0ac87accf81d85b959e5da839e6b0659afb3a2840a13f5da113a1c34eeb87942"
-    )  # commit "5667c3a"
+    version("master", branch="spack")
 
     depends_on("c", type="build")  # generated
     depends_on("fortran", type="build")  # generated
@@ -37,6 +31,8 @@ class CloverleafRef(MakefilePackage):
     variant("debug", default=False, description="Build with DEBUG flags")
 
     depends_on("mpi")
+
+    parallel = False
 
     # Cloverleaf_ref Makefile contains some but not all required options for each compiler.
     # This package.py inserts what is needed for Intel, AOCC, and LLVM compilers.

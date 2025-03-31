@@ -5,7 +5,7 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class Cp2kSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'cp2k@2024.3'
+    defspec = 'cp2k@2024.3'
 
 
 # RegressionTest is used so Spack uses existing environment.
@@ -19,13 +19,14 @@ class Cp2kSpackCheck(rfm.RegressionTest):
     descr = 'Cp2k test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    valid_prog_environs = ['*']
-    
-    num_nodes = parameter([1, 2, 4])
+    valid_prog_environs = ['-no-cp2k']
+
+    build_only = variable(int, value=0)
+    num_nodes = parameter([1, 2, 4, 8, 16])
     num_threads = 1
     exclusive_access = True
     extra_resources = {
-        'memory': {'size': '200000'}
+        'memory': {'size': '0'}
     }
 
     #: The version of the benchmark suite to use.
@@ -64,12 +65,18 @@ class Cp2kSpackCheck(rfm.RegressionTest):
     
     @run_after('setup')
     def set_environment(self):
+        self.skip_if(
+            self.num_nodes > self.current_partition.extras.get('max_nodes',128),
+            'exceeded node limit'
+        )
         self.build_system.environment = os.path.join(self.cp2k_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.cp2k_binary.build_system.specs
         self.fullspackspec            = ' '.join(self.cp2k_binary.build_system.specs)
     
     @run_before('run')
     def set_job_size(self):
+        self.skip_if( self.build_only == 1, 'build only')
+
         proc = self.current_partition.processor
         self.num_tasks_per_node = proc.num_cores
         if self.num_threads:

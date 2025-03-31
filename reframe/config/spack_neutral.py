@@ -5,7 +5,7 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class NeutralSpackBuild(SpackCompileOnlyBase):
-    spackspec = 'neutral@master'
+    defspec = 'neutral@master'
 
 # RegressionTest is used so Spack uses existing environment.
 # This also uses same spec.

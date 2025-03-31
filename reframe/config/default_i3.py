@@ -80,6 +80,11 @@ site_configuration = {
         {
             'name': 'cce-18',
             'features': [
+                'no-castep',
+                'no-cp2k',
+                'no-gromacs',
+                'no-openfoam',
+                'no-namd',
             ],
             'extras' : {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
@@ -92,6 +97,10 @@ site_configuration = {
             'name': 'arm-24',
             'features': [
                 'no-cray-mpich',
+                'no-castep',
+                'no-cp2k',
+                'no-openfoam',
+                'no-namd',
             ],
             'extras' : {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
@@ -102,10 +111,17 @@ site_configuration = {
         },
         {
             'name': 'nvhpc-24',
+            'features': [
+                'no-castep',
+                'no-cp2k',
+                'no-openfoam',
+                'no-namd',
+            ],
             'extras' : {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
                 'mypackage': 'buildit/config/3/v0.23/packages.yaml',
                 'mycompile': 'buildit/config/3/v0.23/linux/compilers.yaml',
+                'nvlocalrc': 'buildit/config/3/nvlocalrc/localrc',
                 'myspackcomp': 'nvhpc@24.3'
             }
         },
@@ -129,6 +145,12 @@ site_configuration = {
         },
         {
             'name': 'cce-17-macs',
+            'features': [
+                'no-castep',
+                'no-cp2k',
+                'no-gromacs',
+                'no-openfoam',
+            ],
             'extras' : {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
                 'mypackage': 'buildit/config/macs3/v0.23/packages.yaml',
@@ -138,6 +160,14 @@ site_configuration = {
         },
         {
             'name': 'rocm-5-macs',
+            'features': [
+                'no-cray-mpich',
+                'no-castep',
+                'no-cp2k',
+                'no-gromacs',
+                'no-namd',
+                'no-openfoam',
+            ],            
             'extras' : {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
                 'mypackage': 'buildit/config/macs3/v0.23/packages.yaml',
@@ -169,7 +199,7 @@ site_configuration = {
                     'launcher': 'srun',
                     'access': [
                         '-p milan',
-                        '-t 01:00:00'
+                        '-t 02:00:00',
                     ],
                     'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
                     'resources': [
@@ -182,7 +212,35 @@ site_configuration = {
                             'options': ['--network={type}']
                         }
 
-                    ]
+                    ],
+                    'extras': {
+                        'max_nodes': 4,
+                    },
+                },
+                {
+                    'name': 'genoa',
+                    'descr': 'Genoa nodes',
+                    'scheduler': 'slurm',
+                    'launcher': 'srun',
+                    'access': [
+                        '-p genoa',
+                        '-t 02:00:00',
+                    ],
+                    'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
+                    'resources': [
+                        {
+                            'name': 'memory',
+                            'options': ['--mem={size}']
+                        },
+                        {
+                            'name': 'network',
+                            'options': ['--network={type}']
+                        }
+
+                    ],
+                    'extras': {
+                        'max_nodes': 2,
+                    },
                 },
                 {
                     'name': 'berg',
@@ -191,7 +249,7 @@ site_configuration = {
                     'launcher': 'srun',
                     'access': [
                         '-p berg',
-                        '-t 01:00:00'
+                        '-t 02:00:00',
                     ],
                     'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
                     'resources': [
@@ -204,9 +262,61 @@ site_configuration = {
                             'options': ['--network={type}']
                         }
 
-                    ]
-                }
+                    ],
+                    'extras': {
+                        'max_nodes': 2,
+                    },
+                },
+                {
+                    'name': 'spr',
+                    'descr': 'Sapphire Rapids nodes',
+                    'scheduler': 'slurm',
+                    'launcher': 'srun',
+                    'access': [
+                        '-p spr',
+                        '-t 02:00:00',
+                    ],
+                    'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
+                    'resources': [
+                        {
+                            'name': 'memory',
+                            'options': ['--mem={size}']
+                        },
+                        {
+                            'name': 'network',
+                            'options': ['--network={type}']
+                        }
 
+                    ],
+                    'extras': {
+                        'max_nodes': 2,
+                    },
+                },
+                {
+                    'name': 'sprhbm',
+                    'descr': 'Sapphire Rapids HBM nodes',
+                    'scheduler': 'slurm',
+                    'launcher': 'srun',
+                    'access': [
+                        '-p sprhbm',
+                        '-t 02:00:00',
+                    ],
+                    'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
+                    'resources': [
+                        {
+                            'name': 'memory',
+                            'options': ['--mem={size}']
+                        },
+                        {
+                            'name': 'network',
+                            'options': ['--network={type}']
+                        }
+
+                    ],
+                    'extras': {
+                        'max_nodes': 2,
+                    },
+                }
             ]
         },
         {
@@ -234,7 +344,7 @@ site_configuration = {
                     'launcher': 'srun',
                     'access': [
                         '-p grace',
-                        '-t 01:00:00'
+                        '-t 02:00:00'
                     ],
                     'environs': ['gcc-12','gcc-13','cce-18','arm-24','nvhpc-24'],
                     'resources': [

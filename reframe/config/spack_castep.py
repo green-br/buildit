@@ -7,7 +7,12 @@ from spack_base import SpackCompileOnlyBase
 
 class CastepSpackBuild(SpackCompileOnlyBase):
     sourcefile = os.path.join(os.getenv('HOME'),'sources/castep/CASTEP-25.11.tar.gz')
-    spackspec = 'castep@25.1.1'
+    defspec = 'castep@25.1.1'
+    defdeps = ''
+    env_spackspec = {
+        'cce-18': { 'spec': 'castep@25.1.1', 'deps': '^cray-libsci ^cray-fftw'},
+        'nvhpc-24': { 'spec': 'castep@25.1.1', 'deps': '^cray-libsci ^cray-fftw'},
+    }
 
 # RegressionTest is used so Spack uses existing environment.
 # This also uses same spec.
@@ -20,10 +25,11 @@ class CastepSpackCheck(rfm.RegressionTest):
     descr = 'Castep test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
-    valid_prog_environs = ['*']
+    valid_prog_environs = ['-no-castep']
     
-    num_nodes = parameter([2, 4, 8])
-    num_threads = 2
+    build_only = variable(int, value=0)
+    num_nodes = parameter([2, 4, 8, 16, 32])
+    num_threads = parameter([1,4])
     exclusive_access = True
     extra_resources = {
         'memory': {'size': '0'},
@@ -45,7 +51,7 @@ class CastepSpackCheck(rfm.RegressionTest):
     #: :values:
     benchmark_info = parameter([
         ('al3x3','al3x3'),
-        ('DNA','polyA20-no-wat'),
+        #('DNA','polyA20-no-wat'),
         ('crambin','crambin')
     ], fmt=lambda x: x[0], loggable=True)
 
@@ -70,12 +76,18 @@ class CastepSpackCheck(rfm.RegressionTest):
 
     @run_after('setup')
     def set_environment(self):
+        self.skip_if(
+            self.num_nodes > self.current_partition.extras.get('max_nodes',128),
+            'exceeded node limit'
+        )
         self.build_system.environment = os.path.join(self.castep_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.castep_binary.build_system.specs
         self.fullspackspec            = ' '.join(self.castep_binary.build_system.specs)
     
     @run_before('run')
     def set_job_size(self):
+        self.skip_if( self.build_only == 1, 'build only')
+
         proc = self.current_partition.processor
         self.num_tasks_per_node = proc.num_cores
         if self.num_threads:
@@ -83,6 +95,7 @@ class CastepSpackCheck(rfm.RegressionTest):
             self.num_cpus_per_task = self.num_threads
             self.env_vars['OMP_NUM_THREADS'] = self.num_threads
             self.env_vars['OMP_PLACES'] = 'cores'
+            self.env_vars['OMP_PROC_BIND'] = 'close'
         self.num_tasks = self.num_tasks_per_node * self.num_nodes
         self.executable_opts += [f'{self.__benchparam}']
 
