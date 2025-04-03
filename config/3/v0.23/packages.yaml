@@ -18,7 +18,7 @@ packages:
     - "%gcc"
   et:
     require:
-    - "^openblas +ilp64 ^libint tune=et"
+    - "^openblas +ilp64 threads=openmp ^libint tune=et"
   gmp:
     require:
     - "%gcc"
