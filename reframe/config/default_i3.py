@@ -121,12 +121,16 @@ site_configuration = {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
                 'mypackage': 'buildit/config/3/v0.23/packages.yaml',
                 'mycompile': 'buildit/config/3/v0.23/linux/compilers.yaml',
-                'nvlocalrc': 'buildit/config/3/nvlocalrc/localrc',
+                'mynvlocalrc': 'buildit/config/3/nvlocalrc/localrc',
                 'myspackcomp': 'nvhpc@24.3'
             }
         },
         {
             'name': 'gcc-12-macs',
+            'features': [
+                'no-namd',
+            ],
+
             'extras' : {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
                 'mypackage': 'buildit/config/macs3/v0.23/packages.yaml',
@@ -150,6 +154,7 @@ site_configuration = {
                 'no-cp2k',
                 'no-gromacs',
                 'no-openfoam',
+                'no-namd',
             ],
             'extras' : {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',

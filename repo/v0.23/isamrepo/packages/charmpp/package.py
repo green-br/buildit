@@ -164,6 +164,13 @@ class Charmpp(Package):
     conflicts("@:6", when="platform=darwin %apple-clang@7:")
     conflicts("@:6", when="platform=darwin %clang@7:")
 
+    def patch(self):
+        filter_file(
+            "module load cray-libpals",
+            'module load',
+            "src/arch/ofi-linux-x86_64/conv-mach-cxi.sh",
+        )
+
     @property
     def charmarch(self):
         plat = sys.platform

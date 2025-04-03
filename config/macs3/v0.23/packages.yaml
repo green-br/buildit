@@ -14,6 +14,9 @@ packages:
   et:
     require:
     - "^openblas +ilp64 ^libint tune=et"
+  namd:
+    require:
+    - "^charmpp@8.0.0 backend=ofi pmi=cray-pmi"
   openmpi:
     variants: fabrics=ofi
   cray-libsci:
@@ -60,6 +63,17 @@ packages:
         environment:
           prepend_path:
             LD_LIBRARY_PATH: /opt/cray/lib64/
+  cray-pmi:
+    buildable: false
+    version: [6.1.14]
+    externals:
+    - spec: cray-pmi@6.1.14
+      prefix: /opt/cray/pe/pmi/6.1.14
+      modules: [cray-pmi/6.1.14]
+      extra_attributes:
+        environment:
+          prepend_path:
+            LIBRARY_PATH: /opt/cray/pe/pmi/6.1.14/lib 
   cuda:
     buildable: false
     version: [12.4.0]

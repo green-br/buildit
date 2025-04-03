@@ -9,9 +9,20 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
     defdeps = variable(str, value="")
     needsmpi  = variable(bool, value=True)
     env_spackspec = {}
+    extra_resources = {
+        'memory': {'size': '0'}
+    }
 
     @run_before('compile')
     def setup_build_system(self):
+        if self.build_locally == 0:
+            self.skip_if( self.current_partition.scheduler.is_local,
+                'ingore local if building locally on scheduler'
+            )
+        # Quick fix to build more on MACS
+
+        self.build_job.options = ['-c 16']
+
         if self.sourcefile is not None:
             targetfile = os.path.join(self.stagedir, 
                                       os.path.basename(self.sourcefile))
@@ -29,7 +40,7 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
             os.getenv('MYCONFDIR'),
             self.current_environ.extras.get('mypackage')
         )
-        mylocalrc = None
+        mynvlocalrc = None
         if self.current_environ.extras.get('mynvlocalrc', None):
             mynvlocalrc = os.path.join(
                 os.getenv('MYCONFDIR'),
@@ -58,6 +69,6 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
                                              f'spack -e rfm_spack_env config add -f "{mycompile}"',
                                              f'spack -e rfm_spack_env config add -f "{mypackage}"',
                                              f'spack -e rfm_spack_env concretize -f']
-        if nvlocalrc:
-            self.build_system.preinstall_cmds.append(f'export NVLOCALRC={nvlocalrc}')
+        if mynvlocalrc:
+            self.build_system.preinstall_cmds.append(f'export NVLOCALRC={mynvlocalrc}')
 

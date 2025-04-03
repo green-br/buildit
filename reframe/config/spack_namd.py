@@ -26,6 +26,7 @@ class NamdSpackCheck(rfm.RegressionTest):
     num_nodes = parameter([1, 2, 4, 8, 16])
     num_percent = parameter([0,25,50,100])
     num_threads = variable(int, value=0)
+    skip_large_percent = variable(int, value=0)
     exclusive_access = True
     extra_resources = {
         'memory': {'size': '0'},
@@ -70,7 +71,8 @@ class NamdSpackCheck(rfm.RegressionTest):
             f'curl -LJO https://www.ks.uiuc.edu/Research/namd/utilities/ns_per_day.py',
             f'chmod +x ns_per_day.py',
             f'tar zxvf *.tar.gz --strip-components 1',
-            f'sed -i \'s|/usr/tmp/||\' *.namd'
+            f'sed -i \'s|/usr/tmp/||\' *.namd',
+            f'export SLURM_HINT=nomultithread',
             ])
         self.postrun_cmds = [
             f'cat output.txt',
@@ -88,6 +90,13 @@ class NamdSpackCheck(rfm.RegressionTest):
             self.num_nodes > 1 and self.num_threads > 12,
             'different threads on single node only'
         )
+
+        if (self.skip_large_percent == 1):
+            self.skip_if(
+                self.num_percent > 25,
+                'issues at large thread count/percent'
+            )
+
         self.build_system.environment = os.path.join(self.namd_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.namd_binary.build_system.specs
         self.fullspackspec            = ' '.join(self.namd_binary.build_system.specs)
@@ -99,6 +108,7 @@ class NamdSpackCheck(rfm.RegressionTest):
         proc = self.current_partition.processor
         self.num_tasks_per_node = proc.num_cores // 2
         self.num_threads = 2
+        self.use_multithreading = False
 
         if self.num_percent > 0:
             self.num_threads = int(proc.num_cores * self.num_percent ) // 100
@@ -111,7 +121,7 @@ class NamdSpackCheck(rfm.RegressionTest):
                 'network': {'type': 'single_node_vni'},
                 }
             )
-        self.executable_opts += [f'+ppn {self.num_threads-1} {self.__bench}.namd > output.txt']
+        self.executable_opts += [f'+setcpuaffinity +ppn {self.num_threads-1} {self.__bench}.namd > output.txt']
 
     @loggable
     @property
