@@ -13,7 +13,7 @@ packages:
     - "^openblas ^fftw"
   et:
     require:
-    - "^openblas +ilp64 ^libint tune=et"
+    - "^openblas +ilp64 threads=openmp ^libint tune=et"
   namd:
     require:
     - "^charmpp@8.0.0 backend=ofi pmi=cray-pmi"
