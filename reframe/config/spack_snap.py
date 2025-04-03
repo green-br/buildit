@@ -6,6 +6,7 @@ import reframe.utility.sanity as sn
 from spack_base import SpackCompileOnlyBase
 
 class SnapSpackBuild(SpackCompileOnlyBase):
+
     defspec = 'snap@main +openmp'
     env_spackspec = {
         'gcc-12': { 'spec': 'snap@main +openmp fflags="-fallow-argument-mismatch"' },
@@ -27,7 +28,9 @@ class SnapSpackCheck(rfm.RegressionTest):
     valid_systems = ['*']
     valid_prog_environs = ['*']
     
+
     num_nodes = parameter([1, 2, 4, 8, 16])
+
     num_threads = variable(int, value=2)
     exclusive_access = True
     extra_resources = {

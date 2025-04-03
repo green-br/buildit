@@ -6,6 +6,7 @@ from reframe.core.backends import getlauncher
 from spack_base import SpackCompileOnlyBase
 
 class TeaLeafRefSpackBuild(SpackCompileOnlyBase):
+
     defspec = 'tealeaf@master'
     env_spackspec = { 
         'gcc-12': { 'spec': f'{defspec} fflags=-fallow-argument-mismatch' },

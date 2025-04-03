@@ -7,6 +7,7 @@ class StreamSpackBuild(SpackCompileOnlyBase):
     executable = 'stream_c.exe'
     needsmpi = False
     # stream_array_size is calculated as 2.7GB per Grace CPU
+
     defspec = 'stream@5.10 +openmp stream_array_size=240000000 ntimes=200'
     env_spackspec = { 
         'cce-17-macs': { 'spec': f'{defspec} cflags=-mcmodel=medium' },

@@ -23,6 +23,7 @@ class Cp2kSpackCheck(rfm.RegressionTest):
 
     build_only = variable(int, value=0)
     num_nodes = parameter([1, 2, 4, 8, 16])
+
     num_threads = 1
     exclusive_access = True
     extra_resources = {

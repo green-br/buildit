@@ -97,6 +97,27 @@ site_configuration = {
             'name': 'arm-24',
             'features': [
                 'no-cray-mpich',
+            ],
+            'extras' : {
+                'myrepos': 'buildit/repo/v0.23/isamrepo',
+                'mypackage': 'buildit/config/3/v0.23/packages.yaml',
+                'mycompile': 'buildit/config/3/v0.23/linux/compilers.yaml',
+                'myspackcomp': 'arm@24.10.1'
+            }
+        },
+        {
+            'name': 'nvhpc-24',
+            'extras' : {
+                'myrepos': 'buildit/repo/v0.23/isamrepo',
+                'mypackage': 'buildit/config/3/v0.23/packages.yaml',
+                'mycompile': 'buildit/config/3/v0.23/linux/compilers.yaml',
+                'myspackcomp': 'cce@18.0.0'
+            }
+        },
+        {
+            'name': 'arm-24',
+            'features': [
+                'no-cray-mpich',
                 'no-castep',
                 'no-cp2k',
                 'no-openfoam',
@@ -127,10 +148,10 @@ site_configuration = {
         },
         {
             'name': 'gcc-12-macs',
+
             'features': [
                 'no-namd',
             ],
-
             'extras' : {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
                 'mypackage': 'buildit/config/macs3/v0.23/packages.yaml',
@@ -216,7 +237,6 @@ site_configuration = {
                             'name': 'network',
                             'options': ['--network={type}']
                         }
-
                     ],
                     'extras': {
                         'max_nodes': 4,
@@ -266,7 +286,6 @@ site_configuration = {
                             'name': 'network',
                             'options': ['--network={type}']
                         }
-
                     ],
                     'extras': {
                         'max_nodes': 2,
@@ -349,7 +368,7 @@ site_configuration = {
                     'launcher': 'srun',
                     'access': [
                         '-p grace',
-                        '-t 02:00:00'
+                        '-t 02:00:00',
                     ],
                     'environs': ['gcc-12','gcc-13','cce-18','arm-24','nvhpc-24'],
                     'resources': [

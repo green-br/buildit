@@ -26,6 +26,7 @@ class CastepSpackCheck(rfm.RegressionTest):
     build_system = 'Spack'
     valid_systems = ['*']
     valid_prog_environs = ['-no-castep']
+
     
     build_only = variable(int, value=0)
     num_nodes = parameter([2, 4, 8, 16, 32])

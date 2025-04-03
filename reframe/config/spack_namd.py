@@ -20,6 +20,7 @@ class NamdSpackCheck(rfm.RegressionTest):
     descr = 'NAMD test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
+
     valid_prog_environs = ['-no-namd']
     
     build_only = variable(int, value=0)

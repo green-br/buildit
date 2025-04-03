@@ -19,6 +19,7 @@ class GromacsSpackCheck(rfm.RegressionTest):
     descr = 'Gromacs test using Spack'
     build_system = 'Spack'
     valid_systems = ['*']
+
     valid_prog_environs = ['-no-gromacs']
 
     build_only = variable(int, value=0)

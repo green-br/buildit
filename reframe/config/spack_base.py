@@ -40,6 +40,7 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
             os.getenv('MYCONFDIR'),
             self.current_environ.extras.get('mypackage')
         )
+
         mynvlocalrc = None
         if self.current_environ.extras.get('mynvlocalrc', None):
             mynvlocalrc = os.path.join(
@@ -60,11 +61,14 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
             spec = f"{self.env_spackspec[self.current_environ.name]['spec']}"
             deps = f"{self.env_spackspec[self.current_environ.name].get('deps','')}"
         self.build_system.install_tree = os.getenv('HOME') + f'/.reframe/opt/spack/'
+
         self.build_system.config_opts = [f'repos:[{myrepos}]',
                                          f'view:true',
                                          f'concretizer:unify:true',
                                          f'concretizer:reuse:false']
+
         self.build_system.specs = [f'{spec} % {myspackcomp} {mpidep} {deps}']
+
         self.build_system.preinstall_cmds = ['export SPACK_DISABLE_LOCAL_CONFIG=true',
                                              f'spack -e rfm_spack_env config add -f "{mycompile}"',
                                              f'spack -e rfm_spack_env config add -f "{mypackage}"',
