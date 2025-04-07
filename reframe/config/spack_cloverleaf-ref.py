@@ -78,7 +78,6 @@ class CloverleafRefSpackCheck(rfm.RegressionTest):
     
     @run_before('run')
     def set_job_size(self):
-        self.skip_if( self.build_only == 1, 'build only')
 
         proc = self.current_partition.processor
         self.num_tasks_per_node = proc.num_cores

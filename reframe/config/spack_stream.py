@@ -14,7 +14,7 @@ class StreamSpackBuild(SpackCompileOnlyBase):
         'gcc-12-macs': { 'spec': f'{defspec} cflags=-mcmodel=medium' },
         'gcc-13-macs': { 'spec': f'{defspec} cflags=-mcmodel=medium' },
         'arm-24': { 'spec': f"{defspec} cflags='-mcmodel=large -no-pie -fno-pic' fflags='-mcmodel=large -no-pie -fno-pic'" },
-        'cce-18': { 'spec': f"{defspec} cflags='-mcmodel=large -no-pie -fno-pic -mcpu=neoverse-v1'",
+        'cce-18': { 'spec': f"{defspec} cflags='-mcmodel=large -no-pie -fno-pic -mcpu=neoverse-v1'"},
     }
 
 @rfm.simple_test
@@ -46,6 +46,7 @@ class StreamSpackCheck(rfm.RegressionTest):
     @run_before('run')
     def setup_threading(self):
         proc = self.current_partition.processor
+        self.use_multithreading = False
         self.num_threads = int(proc.num_cores * self.num_percent ) // 100
         self.num_cpus_per_task = proc.num_cores
 

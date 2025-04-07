@@ -23,7 +23,7 @@ class GromacsSpackCheck(rfm.RegressionTest):
     valid_prog_environs = ['-no-gromacs']
 
     build_only = variable(int, value=0)
-    num_nodes = parameter([1, 2, 4])
+    num_nodes = parameter([1, 2, 4, 8, 16])
     num_threads = variable(int, value=1)
     exclusive_access = True
     extra_resources = {
@@ -190,7 +190,7 @@ class GromacsSpackCheck(rfm.RegressionTest):
         return sn.extractsingle(r'\s+Coul\. recip\.\s+Potential\s+Kinetic En\.\s+Total Energy'
                                 r'\s+Conserved En\.\n'
                                 r'(\s+\S+){3}\s+(?P<energy>\S+)(\s+\S+){1}\n'
-                                r'\sTemperature\s+Pres\. DC \(bar\)\s+Pressure \(bar\)\s+Constr\. rmsd',
+                                r'\s+Temperature\s+Pres\. DC \(bar\)\s+Pressure \(bar\)\s+Constr\. rmsd',
                                 'md.log', 'energy', float, item=-1)
 
     

@@ -66,6 +66,7 @@ class NeutralSpackCheck(rfm.RegressionTest):
     @run_before('run')
     def set_job_size(self):
         proc = self.current_partition.processor
+        self.use_multithreading = False
         self.num_tasks_per_node = 1
         self.num_threads = proc.num_cores
         if self.num_threads:

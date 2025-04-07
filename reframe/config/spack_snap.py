@@ -58,6 +58,8 @@ class SnapSpackCheck(rfm.RegressionTest):
 
     executable = 'gsnap'
 
+    keep_files = ['out']
+
     @run_after('init')
     def prepare_test(self):
         self.__bench, self.__ts_ref = self.benchmark_info
@@ -87,6 +89,7 @@ class SnapSpackCheck(rfm.RegressionTest):
     @run_before('run')
     def set_job_size(self):
         proc = self.current_partition.processor
+        self.use_multithreading = False
         self.num_tasks_per_node = proc.num_cores
         if self.__bench == "qasnap":
             # Approx. 1GB per MPI task. So may need underpopulate.
@@ -112,7 +115,8 @@ class SnapSpackCheck(rfm.RegressionTest):
         else:
             # NG value in input limits threads.
             self.num_threads          = min(32, proc.num_cores // proc.num_sockets)
-            self.num_cpus_per_task = self.num_threads
+            self.num_tasks_per_socket = 1
+            self.num_cpus_per_task    = self.num_threads
             self.num_tasks_per_node   = proc.num_sockets
             self.num_tasks            = self.num_nodes * self.num_tasks_per_node
 

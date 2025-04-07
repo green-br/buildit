@@ -97,27 +97,6 @@ site_configuration = {
             'name': 'arm-24',
             'features': [
                 'no-cray-mpich',
-            ],
-            'extras' : {
-                'myrepos': 'buildit/repo/v0.23/isamrepo',
-                'mypackage': 'buildit/config/3/v0.23/packages.yaml',
-                'mycompile': 'buildit/config/3/v0.23/linux/compilers.yaml',
-                'myspackcomp': 'arm@24.10.1'
-            }
-        },
-        {
-            'name': 'nvhpc-24',
-            'extras' : {
-                'myrepos': 'buildit/repo/v0.23/isamrepo',
-                'mypackage': 'buildit/config/3/v0.23/packages.yaml',
-                'mycompile': 'buildit/config/3/v0.23/linux/compilers.yaml',
-                'myspackcomp': 'cce@18.0.0'
-            }
-        },
-        {
-            'name': 'arm-24',
-            'features': [
-                'no-cray-mpich',
                 'no-castep',
                 'no-cp2k',
                 'no-openfoam',

@@ -90,6 +90,7 @@ class CastepSpackCheck(rfm.RegressionTest):
         self.skip_if( self.build_only == 1, 'build only')
 
         proc = self.current_partition.processor
+        self.use_multithreading = False
         self.num_tasks_per_node = proc.num_cores
         if self.num_threads:
             self.num_tasks_per_node = (proc.num_cores) // self.num_threads

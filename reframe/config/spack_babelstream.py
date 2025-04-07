@@ -39,6 +39,7 @@ class BabelStreamSpackCheck(rfm.RegressionTest):
     @run_before('run')
     def setup_threading(self):
         proc = self.current_partition.processor
+        self.use_multithreading = False
         self.num_threads = int(proc.num_cores * self.num_percent ) // 100
         self.num_cpus_per_task = proc.num_cores
 
