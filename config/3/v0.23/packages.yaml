@@ -46,7 +46,7 @@ packages:
     require:
     - "%gcc"
   openmpi:
-    variants: fabrics=ofi
+    variants: fabrics=ofi schedulers=slurm
   armpl-gcc:
     buildable: false
     version: ["24.10"]
@@ -226,6 +226,10 @@ packages:
     externals:
     - prefix: /usr
       spec: sed@4.4
+  slurm:
+    externals:
+    - prefix: /usr
+      spec: slurm@23.02.7
   subversion:
     externals:
     - prefix: /usr
