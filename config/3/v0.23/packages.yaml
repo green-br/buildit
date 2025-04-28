@@ -13,7 +13,7 @@ packages:
     prefer:
     - "^openblas ^fftw"
   chapel:
-    variants: comm=ofi comm_ofi_oob=pmi2 host_platform=linux64 launcher=slurm-srun libfabric=spack
+    variants: comm=ofi comm_ofi_oob=pmi2 host_platform=linux64 launcher=slurm-srun libfabric=spack hwloc=spack
     require:
     - "%gcc"
   et:

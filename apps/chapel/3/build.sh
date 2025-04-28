@@ -26,6 +26,7 @@ spack env activate ./myenv
 # Initialise environment
 spack config add -f buildit/config/3/v0.23/linux/compilers.yaml
 spack config add -f buildit/config/3/v0.23/packages.yaml
+spack config add config:build_jobs:8
 spack config add view:true
 spack config add concretizer:unify:true
 spack config add concretizer:reuse:false
