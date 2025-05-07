@@ -127,10 +127,6 @@ site_configuration = {
         },
         {
             'name': 'gcc-12-macs',
-
-            'features': [
-                'no-namd',
-            ],
             'extras' : {
                 'myrepos': 'buildit/repo/v0.23/isamrepo',
                 'mypackage': 'buildit/config/macs3/v0.23/packages.yaml',
