@@ -9,6 +9,11 @@ class NamdSpackBuild(SpackCompileOnlyBase):
     sourcefile = os.path.join(os.getenv('HOME'),'sources/namd/NAMD_3.0_Source.tar.gz')
     defspec = 'namd@3.0'
 
+    @run_after('setup')
+    def setup_avxtiles(self):
+        if "avx512" in self.current_partition.features:
+            self.defspec = 'namd@3.0 +avxtiles'
+
 # RegressionTest is used so Spack uses existing environment.
 # This also uses same spec.
 @rfm.simple_test
@@ -25,9 +30,8 @@ class NamdSpackCheck(rfm.RegressionTest):
     
     build_only = variable(int, value=0)
     num_nodes = parameter([1, 2, 4, 8, 16])
-    num_percent = parameter([0,25,50,100])
-    num_threads = variable(int, value=0)
-    skip_large_percent = variable(int, value=0)
+    num_threads = parameter([2])
+    
     exclusive_access = True
     extra_resources = {
         'memory': {'size': '0'},
@@ -88,15 +92,9 @@ class NamdSpackCheck(rfm.RegressionTest):
             'exceeded node limit'
         )
         self.skip_if(
-            self.num_nodes > 1 and self.num_threads > 12,
-            'different threads on single node only'
+            self.num_threads > 12,
+            'large threads encounter issues.'
         )
-
-        if (self.skip_large_percent == 1):
-            self.skip_if(
-                self.num_percent > 25,
-                'issues at large thread count/percent'
-            )
 
         self.build_system.environment = os.path.join(self.namd_binary.stagedir, 'rfm_spack_env')
         self.build_system.specs       = self.namd_binary.build_system.specs
@@ -107,14 +105,10 @@ class NamdSpackCheck(rfm.RegressionTest):
         self.skip_if( self.build_only == 1, 'build only')
         
         proc = self.current_partition.processor
-        self.num_tasks_per_node = proc.num_cores // 2
-        self.num_threads = 2
+        self.num_tasks_per_node = proc.num_cores // self.num_threads
         self.use_multithreading = False
 
-        if self.num_percent > 0:
-            self.num_threads = int(proc.num_cores * self.num_percent ) // 100
-            self.num_tasks_per_node = (proc.num_cores) // self.num_threads
-            self.env_vars['OMP_NUM_THREADS'] = self.num_threads
+        self.env_vars['OMP_NUM_THREADS'] = self.num_threads
 
         self.num_tasks = self.num_tasks_per_node * self.num_nodes
         if self.num_nodes == 1:
@@ -122,7 +116,10 @@ class NamdSpackCheck(rfm.RegressionTest):
                 'network': {'type': 'single_node_vni'},
                 }
             )
-        self.executable_opts += [f'+setcpuaffinity +ppn {self.num_threads-1} {self.__bench}.namd > output.txt']
+        self.executable_opts += [f'+setcpuaffinity +ppn {self.num_threads-1} +commap 0-{proc.num_cores-1}:{self.num_threads}'
+                                 f' +pemap 1-{proc.num_cores-1}:{self.num_threads}.{self.num_threads-1} {self.__bench}.namd > output.txt']
+        # Following is the more basic example
+        #self.executable_opts += [f'+setcpuaffinity +ppn {self.num_threads-1} {self.__bench}.namd > output.txt']
 
     @loggable
     @property
