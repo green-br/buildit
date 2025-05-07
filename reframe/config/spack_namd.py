@@ -31,6 +31,9 @@ class NamdSpackCheck(rfm.RegressionTest):
     build_only = variable(int, value=0)
     num_nodes = parameter([1, 2, 4, 8, 16])
     num_threads = parameter([2])
+    # Following not used but to keep option in if this changes.
+    num_percent = variable(int, value=0)
+    
     
     exclusive_access = True
     extra_resources = {
