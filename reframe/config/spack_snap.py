@@ -102,7 +102,7 @@ class SnapSpackCheck(rfm.RegressionTest):
 
 
             max_tasks  = self.num_nodes * self.num_tasks_per_node
-            root_tasks = math.floor(math.sqrt(max_tasks))
+            root_tasks = (math.floor(math.sqrt(max_tasks)) // 2) * 2
             self.num_tasks = root_tasks*root_tasks
             self.num_tasks_per_node = self.num_tasks // self.num_nodes
             self.prerun_cmds.extend([
