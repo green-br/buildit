@@ -1,13 +1,67 @@
 packages:
   all:
-    compiler: [gcc@12.3, gcc@13.2, nvhpc@24.3, cce@18.0.0]
     providers:
+      c: [gcc@12.3.0, gcc@13.2.0, nvhpc@24.3, cce@18.0.0, acfl@24.10.1]
+      cxx: [gcc@12.3.0, gcc@13.2.0, nvhpc@24.3, cce@18.0.0, acfl@24.10.1]
+      fortran: [gcc@12.3.0, gcc@13.2.0, nvhpc@24.3, cce@18.0.0, acfl@24.10.1]
       blas: [cray-libsci, blis, openblas]
       lapack: [cray-libsci, openblas]
       mpi: [cray-mpich, openmpi]
       pkgconfig: [pkg-config]
     permissions:
       write: group
+  gcc:
+    externals:
+    - spec: gcc@12.3.0 languages='c,c++,fortran'
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/gcc-12
+          cxx: /usr/bin/g++-12
+          fortran: /usr/bin/gfortran-12
+        flags: {}
+    - spec: gcc@13.2.0 languages='c,c++,fortran'
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/gcc-13
+          cxx: /usr/bin/g++-13
+          fortran: /usr/bin/gfortran-13
+        flags: {}
+  cce:
+    externals:
+    - spec: cce@18.0.0
+      prefix: /opt/cray/pe/cce/18.0.0
+      extra_attributes:
+        compilers:
+          c: /opt/cray/pe/cce/18.0.0/bin/craycc
+          cxx: /opt/cray/pe/cce/18.0.0/bin/craycxx
+          fortran: /opt/cray/pe/cce/18.0.0/bin/crayftn
+        flags: {}
+  nvhpc:
+    externals:
+    - spec: nvhpc@24.3
+      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers
+      extra_attributes:
+        compilers:
+          c: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers/bin/nvc
+          cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers/bin/nvc++
+          fortran: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers/bin/nvfortran
+        flags:
+          cflags: --gcc-toolchain=/usr/bin/gcc-13 
+          cxxflags: --gcc-toolchain=/usr/bin/gcc-13
+  acfl:
+    externals:
+    - spec: acfl@24.10.1
+      prefix: /opt/arm/arm-linux-compiler-24.10.1_SLES-15
+      extra_attributes:
+        compilers:
+          c: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armclang
+          cxx: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armclang++
+          fortran: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armflang
+        flags:
+          cflags: --gcc-toolchain=/usr/bin/gcc-13
+          cxxflags: --gcc-toolchain=/usr/bin/gcc-13
   castep:
     require:
     - "^openblas ^fftw"
@@ -99,6 +153,13 @@ packages:
     - spec: cray-pmi@6.1.15
       prefix: /opt/cray/pe/pmi/6.1.15
       modules: [cray-pmi/6.1.15]
+  python:
+    buildable: false
+    version: [3.11.7]
+    externals:
+    - spec: python@3.11.7
+      prefix: /opt/cray/pe/python/3.11.7
+      modules: [cray-python/3.11.7]
   autoconf:
     externals:
     - prefix: /usr
@@ -203,3 +264,4 @@ packages:
     externals:
     - prefix: /usr
       spec: zlib@1.2.13
+
