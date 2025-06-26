@@ -1,0 +1,201 @@
+packages:
+  all:
+    compiler: [gcc@12.3, gcc@13.3, gcc@14.2, nvhpc@24.11, cce@18.0.0, cce@19.0.0]
+    providers:
+      blas: [cray-libsci, blis]
+      lapack: [cray-libsci, openblas]
+      mpi: [cray-mpich, openmpi]
+      pkgconfig: [pkg-config]
+    variants: +cuda cuda_arch=90
+    permissions:
+      write: group
+  numactl:
+    require:
+    - "%gcc"
+  xz:
+    require:
+    - "%gcc"
+  openmpi:
+    variants: +cuda fabrics=ofi cuda_arch=90
+  mpich:
+    variants: +cuda+fortran~hydra pmi=cray device=ch4 netmod=ofi cuda_arch=90
+  cray-libsci:
+    buildable: false
+    version: [24.07.0, 25.03.0]
+    externals:
+    - spec: cray-libsci@24.07.0 %gcc@12.3
+      prefix: /opt/cray/pe/libsci/24.07.0/gnu/12.3/aarch64
+    - spec: cray-libsci@24.07.0 %gcc@13.2
+      prefix: /opt/cray/pe/libsci/24.07.0/gnu/12.3/aarch64
+    - spec: cray-libsci@24.07.0 %nvhpc@24.11
+      prefix: /opt/cray/pe/libsci/24.07.0/nvidia/23.11/aarch64
+    - spec: cray-libsci@24.07.0 %cce@18.0.0
+      prefix: /opt/cray/pe/libsci/24.07.0/cray/17.0/aarch64
+    - spec: cray-libsci@25.03.0 %gcc@12.3
+      prefix: /opt/cray/pe/libsci/25.03.0/gnu/12.3/aarch64
+    - spec: cray-libsci@25.03.0 %gcc@13.3
+      prefix: /opt/cray/pe/libsci/25.03.0/gnu/12.3/aarch64
+    - spec: cray-libsci@25.03.0 %nvhpc@24.11
+      prefix: /opt/cray/pe/libsci/25.03.0/nvidia/23.11/aarch64
+    - spec: cray-libsci@25.03.0 %cce@18.0.0
+      prefix: /opt/cray/pe/libsci/25.03.0/cray/17.0/aarch64
+
+  cray-mpich:
+    buildable: false
+    version: [8.1.30, 8.1.32]
+    externals:
+    - spec: cray-mpich@8.1.30 %gcc
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/gnu/12.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.30 %cce
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/cray/17.0
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.30 %nvhpc@24.11
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/nvidia/23.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.32 %gcc
+      prefix: /opt/cray/pe/mpich/8.1.32/ofi/gnu/12.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.32 %cce
+      prefix: /opt/cray/pe/mpich/8.1.32/ofi/cray/17.0
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.32 %nvhpc@24.11
+      prefix: /opt/cray/pe/mpich/8.1.32/ofi/nvidia/23.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+
+  cuda:
+    buildable: false
+    version: [12.6.0]
+    externals:
+    - spec: cuda@12.6.0 %gcc
+      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/24.11/cuda/12.6
+    - spec: cuda@12.6.0 %cce
+      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/24.11/cuda/12.6
+  libfabric:
+    buildable: false
+    version: [1.22.0]
+    externals:
+    - spec: libfabric@1.22.0
+      prefix: /opt/cray/libfabric/1.22.0
+      modules: [libfabric/1.22.0]
+  cray-pmi:
+    buildable: false
+    version: [6.1.15]
+    externals:
+    - spec: cray-pmi@6.1.15
+      prefix: /opt/cray/pe/pmi/6.1.15
+      modules: [cray-pmi/6.1.15]
+  autoconf:
+    externals:
+    - prefix: /usr
+      spec: autoconf@2.69
+  automake:
+    externals:
+    - prefix: /usr
+      spec: automake@1.15.1
+  binutils:
+    externals:
+    - prefix: /usr
+      spec: binutils@2.43.1~gold~headers
+  bison:
+    externals:
+    - prefix: /usr
+      spec: bison@3.0.4
+  cmake:
+    externals:
+    - prefix: /usr
+      spec: cmake@3.28.3
+  coreutils:
+    externals:
+    - prefix: /usr
+      spec: coreutils@8.32
+  curl:
+    externals:
+    - prefix: /usr
+      spec: curl@8.6.0+gssapi+ldap+nghttp2
+  diffutils:
+    externals:
+    - prefix: /usr
+      spec: diffutils@3.6
+  findutils:
+    externals:
+    - prefix: /usr
+      spec: findutils@4.8.0
+  flex:
+    externals:
+    - prefix: /usr
+      spec: flex@2.6.4+lex
+  gawk:
+    externals:
+    - prefix: /usr
+      spec: gawk@4.2.1
+  gettext:
+    externals:
+    - prefix: /usr
+      spec: gettext@0.21.1
+  git:
+    externals:
+    - prefix: /usr
+      spec: git@2.43.0~tcltk
+  gmake:
+    externals:
+    - prefix: /usr
+      spec: gmake@4.2.1
+  groff:
+    externals:
+    - prefix: /usr
+      spec: groff@1.22.4
+  libtool:
+    externals:
+    - prefix: /usr
+      spec: libtool@2.4.6
+  m4:
+    externals:
+    - prefix: /usr
+      spec: m4@1.4.18
+  openssh:
+    externals:
+    - prefix: /usr
+      spec: openssh@9.6p1
+  openssl:
+    externals:
+    - prefix: /usr
+      spec: openssl@3.1.4
+  perl:
+    externals:
+    - prefix: /usr
+      spec: perl@5.26.1~cpanm+opcode+open+shared+threads
+  pkg-config:
+    externals:
+    - prefix: /usr
+      spec: pkg-config@0.29.2
+  sed:
+    externals:
+    - prefix: /usr
+      spec: sed@4.9
+  tar:
+    externals:
+    - prefix: /usr
+      spec: tar@1.34
+  zlib:
+    externals:
+    - prefix: /usr
+      spec: zlib@1.2.13
