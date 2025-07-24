@@ -4,7 +4,7 @@
 set -eu
 
 # Clone Spack version
-git clone --depth=2 --branch=releases/v0.23 https://github.com/spack/spack.git
+git clone --depth=2 --branch releases/v1.0 https://github.com/spack/spack.git
 
 # Souce environment
 . spack/share/spack/setup-env.sh
@@ -12,7 +12,7 @@ git clone --depth=2 --branch=releases/v0.23 https://github.com/spack/spack.git
 # Clone Buildit configuration
 #git clone https://github.com/i/buildit.git
 # Use local copy
-ln -s ../../../ ./buildit
+ln -sf ../../../ ./buildit
 
 # Disable local config
 export SPACK_DISABLE_LOCAL_CONFIG=true
@@ -24,20 +24,20 @@ spack env create -d myenv
 spack env activate ./myenv
 
 # Initialise environment
-spack config add -f buildit/config/3/v0.23/linux/compilers.yaml
-spack config add -f buildit/config/3/v0.23/packages.yaml
+spack config add -f buildit/config/3/v1.0/packages.yaml
+spack config add config:build_jobs:8
 spack config add view:true
 spack config add concretizer:unify:true
-spack config add concretizer:reuse:false
+spack config add concretizer:reuse:true
 
 # Add local repo to environment
-spack repo add ./buildit/repo/v0.23/isamrepo
+spack repo add ./buildit/repo/v1.0/spack_repo/isamrepo
 
 # Add application
 spack add orca
 
 # Check dependencies
-spack concretize -f
+spack concretize
 
 # Install application
 spack install
@@ -47,3 +47,7 @@ spack env deactivate && spack env activate ./myenv
 
 # Check application is found
 which orca
+
+# Deactivate environment
+spack env deactivate
+

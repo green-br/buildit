@@ -1,0 +1,274 @@
+packages:
+  all:
+    providers:
+      c: [gcc, nvhpc, cce, acfl]
+      cxx: [gcc, nvhpc, cce, acfl]
+      fortran: [gcc, nvhpc, cce, acfl]
+      fftw-api: [cray-fftw, fftw, armpl-gcc, nvpl-fft]
+      blas: [cray-libsci, blis, openblas, armpl-gcc]
+      lapack: [cray-libsci, openblas, armpl-gcc]
+      mpi: [cray-mpich, openmpi]
+      pkgconfig: [pkg-config]
+    permissions:
+      write: group
+  gcc:
+    externals:
+    - spec: gcc@12.3.0 languages='c,c++,fortran'
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/gcc-12
+          cxx: /usr/bin/g++-12
+          fortran: /usr/bin/gfortran-12
+        flags: {}
+    - spec: gcc@13.2.0 languages='c,c++,fortran'
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/gcc-13
+          cxx: /usr/bin/g++-13
+          fortran: /usr/bin/gfortran-13
+        flags: {}
+  cce:
+    externals:
+    - spec: cce@18.0.0
+      prefix: /opt/cray/pe/cce/18.0.0
+      extra_attributes:
+        compilers:
+          c: /opt/cray/pe/cce/18.0.0/bin/craycc
+          cxx: /opt/cray/pe/cce/18.0.0/bin/craycxx
+          fortran: /opt/cray/pe/cce/18.0.0/bin/crayftn
+        flags: {}
+  nvhpc:
+    externals:
+    - spec: nvhpc@24.3
+      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers
+      extra_attributes:
+        compilers:
+          c: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers/bin/nvc
+          cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers/bin/nvc++
+          fortran: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/compilers/bin/nvfortran
+        flags:
+          cflags: --gcc-toolchain=/usr/bin/gcc-13 
+          cxxflags: --gcc-toolchain=/usr/bin/gcc-13
+  acfl:
+    externals:
+    - spec: acfl@24.10.1
+      prefix: /opt/arm
+      extra_attributes:
+        compilers:
+          c: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armclang
+          cxx: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armclang++
+          fortran: /opt/arm/arm-linux-compiler-24.10.1_SLES-15/bin/armflang
+        flags:
+          cflags: --gcc-toolchain=/opt/arm/gcc-14.2.0_SLES-15
+          cxxflags: --gcc-toolchain=/opt/arm/gcc-14.2.0_SLES-15
+  castep:
+    prefer:
+    - "^openblas ^fftw"
+  chapel:
+    variants: comm=ofi host_platform=linux64 launcher=slurm-srun libfabric=spack comm_ofi_oob=pmi2
+    prefer:
+    - "%gcc"
+    - "^cray-pmi"
+  et:
+    require:
+    - "^openblas +ilp64 ^libint mytune=et"
+  mace-lammps:
+    prefer:
+    - "^py-torch@1.13.1~cuda~mpi~mkldnn~valgrind ^openblas"
+  namd:
+    require:
+    - "^charmpp@8.0.0 backend=ofi pmi=cray-pmi"
+  numactl:
+    require:
+    - "%gcc"
+  xz:
+    require:
+    - "%gcc"
+  openmpi:
+    variants: fabrics=ofi
+  cray-fftw:
+    buildable: false
+    version: [3.3.10.8]
+    externals:
+    - spec: cray-fftw@3.3.10.8
+      prefix: /opt/cray/pe/fftw/3.3.10.8/arm_grace
+  cray-libsci:
+    buildable: false
+    version: [24.07.0]
+    externals:
+    - spec: cray-libsci@24.07.0 %gcc@12.3
+      modules: [cray-libsci]
+      prefix: /opt/cray/pe/libsci/24.07.0/GNU/12.3/aarch64
+    - spec: cray-libsci@24.07.0 %gcc@13.2
+      modules: [cray-libsci]
+      prefix: /opt/cray/pe/libsci/24.07.0/GNU/12.3/aarch64
+    - spec: cray-libsci@24.07.0 %nvhpc@24.3
+      modules: [cray-libsci]
+      prefix: /opt/cray/pe/libsci/24.07.0/NVIDIA/23.11/aarch64
+    - spec: cray-libsci@24.07.0 %cce@18.0.0
+      modules: [cray-libsci]
+      prefix: /opt/cray/pe/libsci/24.07.0/CRAY/17.0/aarch64
+  cray-mpich:
+    buildable: false
+    version: [8.1.30]
+    externals:
+    - spec: cray-mpich@8.1.30 %gcc@12.3
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/gnu/12.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.30 %gcc@13.2
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/gnu/12.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.30 %cce@18.0.0
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/cray/17.0
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+    - spec: cray-mpich@8.1.30 %nvhpc@24.3
+      prefix: /opt/cray/pe/mpich/8.1.30/ofi/nvidia/23.3
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
+  cuda:
+    buildable: false
+    version: [12.3.0]
+    externals:
+    - spec: cuda@12.3.0
+      prefix: /opt/nvidia/hpc_sdk/Linux_aarch64/24.3/cuda/12.3
+  libfabric:
+    buildable: false
+    version: [1.22.0]
+    externals:
+    - spec: libfabric@1.22.0 fabrics=cxi
+      prefix: /opt/cray/libfabric/1.22.0
+      modules: [libfabric/1.22.0]
+  cray-pmi:
+    buildable: false
+    version: [6.1.15]
+    externals:
+    - spec: cray-pmi@6.1.15
+      prefix: /opt/cray/pe/pmi/6.1.15
+      modules: [cray-pmi/6.1.15]
+  python:
+    externals:
+    - spec: python@3.11.7
+      prefix: /opt/cray/pe/python/3.11.7
+      modules: [cray-python/3.11.7]
+  autoconf:
+    externals:
+    - prefix: /usr
+      spec: autoconf@2.69
+  automake:
+    externals:
+    - prefix: /usr
+      spec: automake@1.15.1
+  binutils:
+    externals:
+    - prefix: /usr
+      spec: binutils@2.41.0~gold~headers
+  bison:
+    externals:
+    - prefix: /usr
+      spec: bison@3.0.4
+  cmake:
+    externals:
+    - prefix: /usr
+      spec: cmake@3.20.4
+  coreutils:
+    externals:
+    - prefix: /usr
+      spec: coreutils@8.32
+  curl:
+    externals:
+    - prefix: /usr
+      spec: curl@8.0.1+gssapi+ldap+nghttp2
+  cvs:
+    externals:
+    - prefix: /usr
+      spec: cvs@1.12.13
+  diffutils:
+    externals:
+    - prefix: /usr
+      spec: diffutils@3.6
+  findutils:
+    externals:
+    - prefix: /usr
+      spec: findutils@4.8.0
+  flex:
+    externals:
+    - prefix: /usr
+      spec: flex@2.6.4+lex
+  gawk:
+    externals:
+    - prefix: /usr
+      spec: gawk@4.2.1
+  gettext:
+    externals:
+    - prefix: /usr
+      spec: gettext@0.20.2
+  git:
+    externals:
+    - prefix: /usr
+      spec: git@2.35.3+tcltk
+  gmake:
+    externals:
+    - prefix: /usr
+      spec: gmake@4.2.1
+  groff:
+    externals:
+    - prefix: /usr
+      spec: groff@1.22.4
+  libtool:
+    externals:
+    - prefix: /usr
+      spec: libtool@2.4.6
+  m4:
+    externals:
+    - prefix: /usr
+      spec: m4@1.4.18
+  openssh:
+    externals:
+    - prefix: /usr
+      spec: openssh@8.4p1
+  openssl:
+    externals:
+    - prefix: /usr
+      spec: openssl@1.1.1l-fips
+  perl:
+    externals:
+    - prefix: /usr
+      spec: perl@5.26.1~cpanm+opcode+open+shared+threads
+  pkg-config:
+    externals:
+    - prefix: /usr
+      spec: pkg-config@0.29.2
+  rsync:
+    externals:
+    - prefix: /usr
+      spec: rsync@3.2.3
+  sed:
+    externals:
+    - prefix: /usr
+      spec: sed@4.4
+  subversion:
+    externals:
+    - prefix: /usr
+      spec: subversion@1.14.1
+  tar:
+    externals:
+    - prefix: /usr
+      spec: tar@1.34
+  zlib:
+    externals:
+    - prefix: /usr
+      spec: zlib@1.2.13
+
