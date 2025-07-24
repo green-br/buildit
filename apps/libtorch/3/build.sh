@@ -34,10 +34,10 @@ spack config add concretizer:reuse:false
 spack repo add ./buildit/repo/v1.0/spack_repo/isamrepo
 
 # Add application
-spack add mpich
+spack add libtorch
 
 # Check dependencies
-spack concretize -f
+spack concretize
 
 # Install application
 spack install
@@ -46,7 +46,7 @@ spack install
 spack env deactivate && spack env activate ./myenv
 
 # Check application is found
-which mpicc
+which python3
 
 # Deactivate env
 spack env deactivate

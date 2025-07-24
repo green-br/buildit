@@ -4,15 +4,13 @@
 set -eu
 
 # Clone Spack version
-git clone --depth=2 --branch releases/v1.0 https://github.com/spack/spack.git
+git clone --depth=2 --branch=releases/v1.0 https://github.com/spack/spack.git
 
 # Souce environment
 . spack/share/spack/setup-env.sh
 
-# Clone Buildit configuration
-#git clone https://github.com/i/buildit.git
 # Use local copy
-ln -s ../../../ ./buildit
+ln -sf ../../../ ./buildit
 
 # Disable local config
 export SPACK_DISABLE_LOCAL_CONFIG=true
@@ -34,10 +32,10 @@ spack config add concretizer:reuse:false
 spack repo add ./buildit/repo/v1.0/spack_repo/isamrepo
 
 # Add application
-spack add mpich
+spack add arm-kernels
 
 # Check dependencies
-spack concretize -f
+spack concretize
 
 # Install application
 spack install
@@ -46,7 +44,8 @@ spack install
 spack env deactivate && spack env activate ./myenv
 
 # Check application is found
-which mpicc
+which fp64_neon_fmla.x
 
-# Deactivate env
+# Deactivate environment
 spack env deactivate
+
