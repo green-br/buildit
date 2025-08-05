@@ -46,7 +46,7 @@ spack install
 spack env deactivate && spack env activate ./myenv
 
 # Check application is found
-which charmcc
+which charmrun
 
 # Deactivate environment
 spack env deactivate
