@@ -38,7 +38,11 @@ packages:
           c: /opt/cray/pe/cce/18.0.0/bin/craycc
           cxx: /opt/cray/pe/cce/18.0.0/bin/craycxx
           fortran: /opt/cray/pe/cce/18.0.0/bin/crayftn
-        flags: {}
+        # Not supported in archspec so specify here.
+        flags:
+          cflags: -target-cpu=arm-grace
+          cxxflags: -target-cpu=arm-grace
+          fflags: -target-cpu=arm-grace
   nvhpc:
     externals:
     - spec: nvhpc@24.3
