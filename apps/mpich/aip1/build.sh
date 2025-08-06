@@ -37,7 +37,7 @@ spack repo add ./buildit/repo/v1.0/spack_repo/isamrepo
 spack add mpich
 
 # Check dependencies
-spack concretize -f
+spack concretize
 
 # Install application
 spack install
