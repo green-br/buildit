@@ -22,7 +22,7 @@ packages:
           cxx: /usr/bin/g++-12
           fortran: /usr/bin/gfortran-12
         flags: {}
-    - spec: gcc@13.2.0 languages='c,c++,fortran'
+    - spec: gcc@13.2.1 languages='c,c++,fortran'
       prefix: /usr
       extra_attributes:
         compilers:
