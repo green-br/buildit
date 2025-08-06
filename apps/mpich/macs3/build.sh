@@ -4,7 +4,7 @@
 set -eu
 
 # Clone Spack version
-git clone --depth=2 --branch=releases/v1.0 https://github.com/spack/spack.git
+git clone --depth=2 --branch releases/v1.0 https://github.com/spack/spack.git
 
 # Souce environment
 . spack/share/spack/setup-env.sh
@@ -34,10 +34,10 @@ spack config add concretizer:reuse:false
 spack repo add ./buildit/repo/v1.0/spack_repo/isamrepo
 
 # Add application
-spack add et
+spack add mpich
 
 # Check dependencies
-spack concretize -f
+spack concretize
 
 # Install application
 spack install
@@ -46,7 +46,7 @@ spack install
 spack env deactivate && spack env activate ./myenv
 
 # Check application is found
-which eT_launch.py
+which mpicc
 
-# Deactivate
+# Deactivate env
 spack env deactivate
