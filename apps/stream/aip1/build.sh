@@ -34,7 +34,7 @@ spack config add concretizer:reuse:true
 spack repo add ./buildit/repo/v1.0/spack_repo/isamrepo
 
 # Add application
-spack add osu-micro-benchmarks
+spack add stream
 
 # Check dependencies
 spack concretize
@@ -46,7 +46,7 @@ spack install
 spack env deactivate && spack env activate ./myenv
 
 # Check application is found
-which osu_latency
+which stream_f.exe
 
 # Deactivate environment
 spack env deactivate

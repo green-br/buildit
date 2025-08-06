@@ -4,13 +4,11 @@
 set -eu
 
 # Clone Spack version
-git clone --depth=2 --branch releases/v1.0 https://github.com/spack/spack.git
+git clone --depth=2 --branch=releases/v1.0 https://github.com/spack/spack.git
 
 # Souce environment
 . spack/share/spack/setup-env.sh
 
-# Clone Buildit configuration
-#git clone https://github.com/i/buildit.git
 # Use local copy
 ln -sf ../../../ ./buildit
 
@@ -28,13 +26,13 @@ spack config add -f buildit/config/aip1/v1.0/packages.yaml
 spack config add config:build_jobs:8
 spack config add view:true
 spack config add concretizer:unify:true
-spack config add concretizer:reuse:true
+spack config add concretizer:reuse:false
 
 # Add local repo to environment
 spack repo add ./buildit/repo/v1.0/spack_repo/isamrepo
 
 # Add application
-spack add osu-micro-benchmarks
+spack add arm-kernels
 
 # Check dependencies
 spack concretize
@@ -46,7 +44,7 @@ spack install
 spack env deactivate && spack env activate ./myenv
 
 # Check application is found
-which osu_latency
+which fp64_neon_fmla.x
 
 # Deactivate environment
 spack env deactivate
