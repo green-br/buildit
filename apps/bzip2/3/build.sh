@@ -4,7 +4,7 @@
 set -eu
 
 # Clone Spack version
-git clone --depth=2 https://github.com/spack/spack.git
+git clone --depth=2 --branch=releases/v1.0 https://github.com/spack/spack.git
 
 # Souce environment
 . spack/share/spack/setup-env.sh

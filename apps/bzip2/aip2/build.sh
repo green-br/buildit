@@ -24,7 +24,7 @@ spack env create -d myenv
 spack env activate ./myenv
 
 # Initialise environment
-spack config add -f buildit/config/aip1/v1.0/packages.yaml
+spack config add -f buildit/config/aip2/v1.0/packages.yaml
 spack config add config:build_jobs:8
 spack config add view:true
 spack config add concretizer:unify:true
