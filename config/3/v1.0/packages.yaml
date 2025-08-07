@@ -4,10 +4,10 @@ packages:
       c: [gcc, nvhpc, cce, acfl]
       cxx: [gcc, nvhpc, cce, acfl]
       fortran: [gcc, nvhpc, cce, acfl]
-      fftw-api: [cray-fftw, fftw, armpl-gcc, nvpl-fft]
-      blas: [cray-libsci, blis, openblas, armpl-gcc]
-      lapack: [cray-libsci, openblas, armpl-gcc]
-      mpi: [cray-mpich, openmpi]
+      fftw-api: [cray-fftw, fftw, armpl-gcc, nvpl-fft, acfl]
+      blas: [cray-libsci, blis, openblas, armpl-gcc, acfl]
+      lapack: [cray-libsci, openblas, armpl-gcc, acfl]
+      mpi: [cray-mpich, openmpi, mpich]
       pkgconfig: [pkg-config]
     permissions:
       write: group
@@ -90,6 +90,8 @@ packages:
   xz:
     require:
     - "%gcc"
+  mpich:
+    variants: +fortran~hydra pmi=cray device=ch4 netmod=ofi
   openmpi:
     variants: fabrics=ofi
   cray-fftw:
