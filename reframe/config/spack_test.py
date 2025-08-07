@@ -5,7 +5,7 @@ from spack_base import SpackCompileOnlyBase
 
 class BZip2SpackBuild(SpackCompileOnlyBase):
     executable = 'bzip2'
-    spackspec = 'bzip2@1.0.6'
+    defspec = 'bzip2@1.0.6'
     needsmpi = False
 
 @rfm.simple_test
