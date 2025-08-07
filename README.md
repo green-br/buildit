@@ -42,15 +42,22 @@ $ python3 -m venv venv
 $ . venv/bin/activate
 $ pip install -U pip
 $ pip install reframe-hpc
-$ git clone --depth=2 --branch=releases/v0.23 https://github.com/spack/spack.git
+$ git clone --depth=2 --branch=releases/v1.0 https://github.com/spack/spack.git
 $ . spack/share/spack-env.sh
 ```
  
-Modify `config/i3.py` to point to where buildit repository was cloned.
+Modify `config/default_i3.py` to point to where buildit repository was cloned.
 
 Isambard 3 configuration is currently provided, an example of building bzip2 is provided as a sanity check.
 
 ```bash
-$ reframe -C config/i3.py -c config/spack_test.py -r
+$ reframe -C config/default_i3.py -c config/spack_test.py -r
 ```
+
+Or a more complicated run can focus on particular partition of a cluster and an environment.
+
+```bash
+$ reframe -C config/default_i3.py -c config/spack_cp2k.py --system=i3:grace -S valid_prog_environs=gcc-12 -r
+```
+
 
