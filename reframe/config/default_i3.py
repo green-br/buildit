@@ -77,6 +77,7 @@ site_configuration = {
         {
             'name': 'cce-18',
             'features': [
+                'no-castep',
                 'no-cp2k',
                 'no-gromacs',
                 'no-openfoam',
@@ -93,6 +94,7 @@ site_configuration = {
             'features': [
                 'no-cray-mpich',
                 'no-castep',
+                'no-cp2k',
                 'no-openfoam',
                 'no-namd',
             ],
@@ -105,6 +107,7 @@ site_configuration = {
         {
             'name': 'nvhpc-24',
             'features': [
+                'no-castep',
                 'no-cp2k',
                 'no-openfoam',
                 'no-namd',
