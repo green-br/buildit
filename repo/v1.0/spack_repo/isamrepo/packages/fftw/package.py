@@ -227,6 +227,9 @@ class FftwBase(AutotoolsPackage):
         for precision in self.selected_precisions:
             with working_dir(precision):
                 make(*targets)
+                if "install" in targets:
+                    copy_tree('tests', join_path(prefix.libexec, "tests", precision))
+                
 
     def build(self, spec, prefix):
         self.for_each_precision_make()
@@ -249,10 +252,11 @@ class Fftw(FftwBase):
     homepage = "https://www.fftw.org"
     url = "https://www.fftw.org/fftw-3.3.4.tar.gz"
     list_url = "https://www.fftw.org/download.html"
+    git = "https://github.com/FFTW/fftw3.git"
 
     license("GPL-2.0-or-later")
 
-    version("master", git="https://github.com/FFTW/fftw3.git", branch="master")
+    version("master", branch="master")
     version("3.3.10", sha256="56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467")
     version("3.3.9", sha256="bf2c7ce40b04ae811af714deb512510cc2c17b9ab9d6ddcf49fe4487eea7af3d")
     version("3.3.8", sha256="6113262f6e92c5bd474f2875fa1b01054c4ad5040f6b0da7c03c98821d9ae303")

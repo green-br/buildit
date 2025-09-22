@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-from spack_repo.builtin.build_systems.opam import OpamPackage
+from spack_repo.isamrepo.build_systems.opam import OpamPackage
 
 from spack.package import *
 
