@@ -34,7 +34,7 @@ spack config add concretizer:reuse:false
 spack repo add ./buildit/repo/v1.0/spack_repo/isamrepo
 
 # Add application
-spack add fftw@master
+spack add fftw@3~mpi
 
 # Check dependencies
 spack concretize

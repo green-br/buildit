@@ -78,20 +78,54 @@ class FftwBase(AutotoolsPackage):
         
         if self.spec.satisfies("@master"):
             filter_file(
+                r"mpirun",
+                r"srun",
+                "configure.ac"
+            )
+
+            filter_file(
+                r" -np ",
+                r" -n ",
+                "mpi/Makefile.am",
+            )
+
+            filter_file(
                 r"-classic-display -libs unix,nums",
                 r"-classic-display -pkg num -libs unix",
                 "genfft/Makefile.am",
             )
+
             filter_file(
                 r'grep -v "Generated automatically" \$\(srcdir\)\/fftw3.f03.in',
                 r'grep -v "Generated automatically" $<',
                 "api/Makefile.am",
             )
+
             filter_file(
                 r'\$\(srcdir\)\/fftw3(l)?-mpi.f03.in',
                 r'$<',
                 "mpi/Makefile.am",
             )
+        else:
+            filter_file(
+                r"mpirun",
+                r"srun",
+                "configure"
+            )
+            filter_file(
+                r" -np ",
+                r" -n ",
+                "mpi/Makefile.in",
+            )
+
+            filter_file(
+                r" -np ",
+                r" -n ",
+                "mpi/Makefile.am",
+            )
+
+
+
 
     def autoreconf(self, spec, prefix):
         
@@ -124,6 +158,11 @@ class FftwBase(AutotoolsPackage):
             env.append_flags("LIBS", self.spec["mpi"].libs.ld_flags)
 
     def configure(self, spec, prefix):
+        # Flags
+        cflags = [""]
+        cxxflags = [""]
+        fflags = [""]
+
         # Base options
         options = ["--prefix={0}".format(prefix), "--enable-threads"]
         options.extend(self.enable_or_disable("shared"))
@@ -143,18 +182,33 @@ class FftwBase(AutotoolsPackage):
             if spec.satisfies("@:2"):
                 # TODO: libtool strips CFLAGS, so 2.x libxfftw_threads
                 #       isn't linked to the openmp library. Patch Makefile?
-                options.insert(0, "CFLAGS=" + self.compiler.openmp_flag)
+                cflags.append(self.compiler.openmp_flag)
         if spec.satisfies("+mpi"):
             options.append("--enable-mpi")
 
+        # Enable improved timer for armv8 - use sve as proxy.
+        if "sve" in spec.target:
+            options.append("--enable-armv8-cntvct-el0")
+
+        # Add default flags to stop configure inserting them
+        options.insert(0,'CFLAGS=' + " ".join(cflags))
+        options.insert(0,'CXXFLAGS=' + " ".join(cxxflags))
+        options.insert(0,'FFLAGS=' + " ".join(fflags))
+
         # Specific SIMD support.
         # all precisions
-        simd_features = ["sse2", "avx", "avx2", "avx512", "avx-128-fma", "kcvi", "vsx", "sve"]
+        # asimd is armv8 handling of neon.
+        simd_features = ["sse2", "avx", "avx2", "avx512", "avx-128-fma", "kcvi", "vsx", "asimd", "sve"]
         # float only
+        # neon started as float in armv7
         float_simd_features = ["altivec", "sse", "neon"]
-        
+
+        # if we have asimd we can remove neon as float only
+        if "asimd" in spec.target:
+            float_simd_features.remove("neon")
+
         # sve only available for master
-        if not spec.satisfies("@master"):
+        if not (spec.satisfies("@master") or spec.satisfies("@develop")):
             simd_features.remove("sve")
 
         # Workaround NVIDIA/PGI compiler bug when avx512 is enabled
@@ -175,7 +229,10 @@ class FftwBase(AutotoolsPackage):
         simd_options = []
         for feature in simd_features:
             msg = "--enable-{0}" if feature in spec.target else "--disable-{0}"
-            simd_options.append(msg.format(feature))
+            feature_opt = feature
+            if feature == "asimd":
+                feature_opt = "neon"
+            simd_options.append(msg.format(feature_opt))
 
         # If no features are found, enable the generic ones
         if not any(f in spec.target for f in simd_features + float_simd_features):
@@ -183,7 +240,7 @@ class FftwBase(AutotoolsPackage):
             if not spec.satisfies("%nvhpc"):
                 simd_options += ["--enable-generic-simd128", "--enable-generic-simd256"]
 
-        simd_options += ["--enable-fma" if "fma" in spec.target else "--disable-fma"]
+        simd_options += ["--enable-fma" if "fma" in spec.target or 'sve' in spec.target else "--disable-fma"]
 
         # Double is the default precision, for all the others we need
         # to enable the corresponding option.
@@ -235,10 +292,13 @@ class FftwBase(AutotoolsPackage):
         self.for_each_precision_make()
 
     def check(self):
-        self.for_each_precision_make("check")
+        pass
 
     def install(self, spec, prefix):
         self.for_each_precision_make("install")
+    
+    def installcheck(self):
+        self.for_each_precision_make("check")
 
 
 class Fftw(FftwBase):
@@ -257,6 +317,9 @@ class Fftw(FftwBase):
     license("GPL-2.0-or-later")
 
     version("master", branch="master")
+    version("develop",
+            url="https://github.com/rdolbeau/fftw3/releases/download/sve-test-release-003/fftw-3.3.10+sve.tar.gz", 
+            sha256="d23cbc5bd9e4562132a7f95c31d22c45f97cea4aff3c145cc67e520305adf6a5")
     version("3.3.10", sha256="56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467")
     version("3.3.9", sha256="bf2c7ce40b04ae811af714deb512510cc2c17b9ab9d6ddcf49fe4487eea7af3d")
     version("3.3.8", sha256="6113262f6e92c5bd474f2875fa1b01054c4ad5040f6b0da7c03c98821d9ae303")
