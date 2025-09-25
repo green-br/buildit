@@ -23,7 +23,7 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
             )
         # Quick fix to build more on MACS
 
-        self.build_job.options = ['-c 16', '--reservation=podman']
+        self.build_job.options = ['-c 16']
 
         if self.sourcefile is not None:
             targetfile = os.path.join(self.stagedir, 
