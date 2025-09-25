@@ -6,7 +6,7 @@ from spack_base import SpackCompileOnlyBase
 
 class OpenfoamSpackBuild(SpackCompileOnlyBase):
     defspec = 'openfoam@2312'
-    defdeps = '^cgal@5'
+    defdeps = parameter(['^cgal@5'])
     env_spackspec = {
         'cce-18': { 'spec': f'{defspec} ^cmake@3.28' },
     }

@@ -8,7 +8,6 @@ from spack_base import SpackCompileOnlyBase
 class CastepSpackBuild(SpackCompileOnlyBase):
     sourcefile = os.path.join(os.getenv('HOME'),'sources/castep/CASTEP-25.11.tar.gz')
     defspec = 'castep@25.1.1'
-    defdeps = ''
     env_spackspec = {
         'cce-18': { 'spec': 'castep@25.1.1', 'deps': '^cray-libsci ^cray-fftw'},
         'nvhpc-24': { 'spec': 'castep@25.1.1', 'deps': '^cray-libsci ^cray-fftw'},
