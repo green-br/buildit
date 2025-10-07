@@ -22,7 +22,7 @@ packages:
           cxx: /usr/bin/g++-12
           fortran: /usr/bin/gfortran-12
         flags: {}
-    - spec: gcc@13.3.0 languages='c,c++,fortran'
+    - spec: gcc@13.3.1 languages='c,c++,fortran'
       prefix: /usr
       extra_attributes:
         compilers:
@@ -152,6 +152,10 @@ packages:
     - spec: python@3.11.7
       prefix: /opt/cray/pe/python/3.11.7
       modules: [cray-python/3.11.7]
+  slurm:
+    externals:
+    - spec: slurm@24.11.5
+      prefix: /usr
   autoconf:
     externals:
     - prefix: /usr
