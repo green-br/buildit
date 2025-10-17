@@ -109,11 +109,6 @@ packages:
     - spec: python@3.11.7
       prefix: /opt/cray/pe/python/3.11.7
       modules: [cray-python/3.11.7]
-  slurm:
-    version: [24.11.5]
-    externals:
-    - spec: slurm@24.11.5
-      prefix: /usr
   autoconf:
     externals:
     - spec: autoconf@2.69
