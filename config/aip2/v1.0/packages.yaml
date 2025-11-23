@@ -93,11 +93,11 @@ packages:
     version: [25.03.0]
     externals:
     - spec: cray-libsci@25.03.0 %gcc
-      prefix: /opt/cray/pe/libsci/25.03.0/gnu/12.3/aarch64
+      prefix: /opt/cray/pe/libsci/25.03.0/GNU/12.3/aarch64
     - spec: cray-libsci@25.03.0 %nvhpc
-      prefix: /opt/cray/pe/libsci/25.03.0/nvidia/23.11/aarch64
+      prefix: /opt/cray/pe/libsci/25.03.0/NVIDIA/23.11/aarch64
     - spec: cray-libsci@25.03.0 %cce
-      prefix: /opt/cray/pe/libsci/25.03.0/cray/17.0/aarch64
+      prefix: /opt/cray/pe/libsci/25.03.0/CRAY/17.0/aarch64
 
   cray-mpich:
     buildable: false
