@@ -4,7 +4,7 @@
 set -eu
 
 # Clone Spack version
-git clone --depth=2 --branch=releases/v1.0 https://github.com/spack/spack.git
+git clone --depth=2 --branch=releases/v1.1 https://github.com/spack/spack.git
 
 # Souce environment
 . spack/share/spack/setup-env.sh
@@ -24,14 +24,14 @@ spack env create -d myenv
 spack env activate ./myenv
 
 # Initialise environment
-spack config add -f buildit/config/macs3/v1.0/packages.yaml
+spack config add -f buildit/config/macs3/v1.1/packages.yaml
 spack config add config:build_jobs:8
 spack config add view:true
 spack config add concretizer:unify:true
 spack config add concretizer:reuse:true
 
 # Add local repo to environment
-spack repo add ./buildit/repo/v1.0/spack_repo/isamrepo
+spack repo add ./buildit/repo/v1.1/spack_repo/isamrepo
 
 # Add application
 spack add bzip2
