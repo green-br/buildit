@@ -1,6 +1,24 @@
 import reframe as rfm
 import os
 
+class SpackBootstrap(rfm.RunOnlyRegressionTest):
+    descr = 'Bootstrap Spack'
+    executable = 'spack'
+    executable_opts = [
+        f'bootstrap', 'now'
+    ]
+    local = True
+
+    @run_before('run')
+    def set_bootstrap_vars(self):
+         user_cache_path = os.getenv('HOME') + f'/.reframe/opt/spack-cache-1.1'
+         self.env_vars['SPACK_CACHE_PATH'] = user_cache_path
+         self.env_vars['SPACK_DISABLE_LOCAL_CONFIG'] = "true"
+
+    @sanity_function
+    def validate(self):
+        return True
+
 class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
     descr = 'Base class to build from Spack'
     build_system = 'Spack'
@@ -10,6 +28,7 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
     mpidep  = variable(str, value="")
     needsmpi  = variable(bool, value=True)
     spacktest = variable(bool, value=False)
+    spackbootstrap = fixture(SpackBootstrap, scope='session')
     env_spackspec = {}
     extra_resources = {
         'memory': {'size': '0'}
@@ -60,7 +79,9 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
         if self.current_environ.name in self.env_spackspec:
             spec = f"{self.env_spackspec[self.current_environ.name]['spec']}"
             deps = f"{self.env_spackspec[self.current_environ.name].get('deps','')}"
-        self.build_system.install_tree = os.getenv('HOME') + f'/.reframe/opt/spack-1.0/'
+
+        user_cache_path = os.getenv('HOME') + f'/.reframe/opt/spack-cache-1.1'
+        self.build_system.install_tree = os.getenv('HOME') + f'/.reframe/opt/spack-1.1/'
 
         self.build_system.config_opts = [f'repos:[{myrepos}]',
                                          f'config:build_jobs:8',
@@ -71,6 +92,7 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
         self.build_system.specs = [f'{spec} % {myspackcomp} {deps}']
 
         self.build_system.preinstall_cmds = ['export SPACK_DISABLE_LOCAL_CONFIG=true',
+                                             f'export SPACK_USER_CACHE_PATH="{user_cache_path}"',
                                              f'spack -e rfm_spack_env config add -f "{mypackage}"',
                                              f'spack -e rfm_spack_env concretize -f']
         if mynvlocalrc:
