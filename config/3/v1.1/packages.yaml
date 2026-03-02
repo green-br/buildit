@@ -11,6 +11,15 @@ packages:
       pkgconfig: [pkg-config]
     permissions:
       write: group
+  c:
+    prefer:
+    - gcc@13.2.0
+  cxx:
+    prefer:
+    - gcc@13.2.0
+  fortran:
+    prefer:
+    - gcc@13.2.0
   gcc:
     externals:
     - spec: gcc@12.3.0 languages='c,c++,fortran'
@@ -120,30 +129,14 @@ packages:
     buildable: false
     version: [8.1.30]
     externals:
-    - spec: cray-mpich@8.1.30 %gcc@12.3
+    - spec: cray-mpich@8.1.30 %gcc@12.3 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.30/ofi/gnu/12.3
-      extra_attributes:
-        environment:
-          prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
-    - spec: cray-mpich@8.1.30 %gcc@13.2
+    - spec: cray-mpich@8.1.30 %gcc@13.2 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.30/ofi/gnu/12.3
-      extra_attributes:
-        environment:
-          prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
-    - spec: cray-mpich@8.1.30 %cce@18.0.0
+    - spec: cray-mpich@8.1.30 %cce@18.0.0 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.30/ofi/cray/17.0
-      extra_attributes:
-        environment:
-          prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
-    - spec: cray-mpich@8.1.30 %nvhpc@24.3
+    - spec: cray-mpich@8.1.30 %nvhpc@24.3 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.30/ofi/nvidia/23.3
-      extra_attributes:
-        environment:
-          prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64/
   cuda:
     buildable: false
     version: [12.3.0]
@@ -157,6 +150,10 @@ packages:
     - spec: libfabric@1.22.0 fabrics=cxi
       prefix: /opt/cray/libfabric/1.22.0
       modules: [libfabric/1.22.0]
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/1.22.0/lib64
   cray-pmi:
     buildable: false
     version: [6.1.15]

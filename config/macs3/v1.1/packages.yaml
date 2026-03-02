@@ -11,6 +11,15 @@ packages:
       pkgconfig: [pkg-config]
     permissions:
       write: group
+  c:
+    prefer:
+    - gcc@13.2.1
+  cxx:
+    prefer:
+    - gcc@13.2.1
+  fortran:
+    prefer:
+    - gcc@13.2.1
   gcc:
     externals:
     - spec: gcc@12.3.0 languages='c,c++,fortran'
@@ -93,30 +102,14 @@ packages:
     buildable: false
     version: [8.1.29]
     externals:
-    - spec: cray-mpich@8.1.29 %gcc@12.3
+    - spec: cray-mpich@8.1.29 %gcc@12.3 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.29/ofi/gnu/12.3
-      extra_attributes:
-        environment:
-          prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/lib64/
-    - spec: cray-mpich@8.1.29 %gcc@13.2
+    - spec: cray-mpich@8.1.29 %gcc@13.2 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.29/ofi/gnu/12.3
-      extra_attributes:
-        environment:
-          prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/lib64/
-    - spec: cray-mpich@8.1.29 %nvhpc@23.9
+    - spec: cray-mpich@8.1.29 %nvhpc@24.5 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.29/ofi/nvidia/23.3
-      extra_attributes:
-        environment:
-          prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/lib64/
-    - spec: cray-mpich@8.1.29 %cce@17.0.1
+    - spec: cray-mpich@8.1.29 %cce@17.0.1 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.29/ofi/cray/17.0
-      extra_attributes:
-        environment:
-          prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/lib64/
   cray-pmi:
     buildable: false
     version: [6.1.14]
@@ -141,6 +134,10 @@ packages:
     - spec: libfabric@1.20.1
       prefix: /opt/cray
       modules: [libfabric/1.20.1]
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/lib64/
   python:
     version: [3.11.7]
     externals:
