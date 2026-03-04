@@ -1,4 +1,5 @@
 import reframe as rfm
+import reframe.utility.sanity as sn
 import os
 
 class SpackBootstrap(rfm.RunOnlyRegressionTest):
@@ -11,13 +12,14 @@ class SpackBootstrap(rfm.RunOnlyRegressionTest):
 
     @run_before('run')
     def set_bootstrap_vars(self):
-         user_cache_path = os.getenv('HOME') + f'/.reframe/opt/spack-cache-1.1'
-         self.env_vars['SPACK_CACHE_PATH'] = user_cache_path
-         self.env_vars['SPACK_DISABLE_LOCAL_CONFIG'] = "true"
+        user_cache_path = os.getenv('HOME') + f'/.reframe/opt/spack-cache-1.1'
+        os.makedirs(user_cache_path, exist_ok=True)
+        self.env_vars['SPACK_CACHE_PATH'] = user_cache_path
+        self.env_vars['SPACK_DISABLE_LOCAL_CONFIG'] = "true"
 
     @sanity_function
     def validate(self):
-        return True
+        return sn.assert_not_found(r'==> Error', self.stdout)
 
 class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
     descr = 'Base class to build from Spack'
@@ -81,6 +83,8 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
             deps = f"{self.env_spackspec[self.current_environ.name].get('deps','')}"
 
         user_cache_path = os.getenv('HOME') + f'/.reframe/opt/spack-cache-1.1'
+        self.prebuild_cmds = ['export SPACK_DISABLE_LOCAL_CONFIG=true',
+                              f'export SPACK_USER_CACHE_PATH="{user_cache_path}"']
         self.build_system.install_tree = os.getenv('HOME') + f'/.reframe/opt/spack-1.1/'
 
         self.build_system.config_opts = [f'repos:[{myrepos}]',
@@ -91,10 +95,8 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
 
         self.build_system.specs = [f'{spec} % {myspackcomp} {deps}']
 
-        self.build_system.preinstall_cmds = ['export SPACK_DISABLE_LOCAL_CONFIG=true',
-                                             f'export SPACK_USER_CACHE_PATH="{user_cache_path}"',
-                                             f'spack -e rfm_spack_env config add -f "{mypackage}"',
-                                             f'spack -e rfm_spack_env concretize -f']
+        self.build_system.preinstall_cmds = [f'spack -e rfm_spack_env config add -f "{mypackage}"',
+                                             f'spack -d -e rfm_spack_env concretize -f']
         if mynvlocalrc:
             self.build_system.preinstall_cmds.append(f'export NVLOCALRC={mynvlocalrc}')
         if self.spacktest:

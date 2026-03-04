@@ -11,15 +11,6 @@ packages:
       pkgconfig: [pkg-config]
     permissions:
       write: group
-  c:
-    prefer:
-    - gcc@13.2.0
-  cxx:
-    prefer:
-    - gcc@13.2.0
-  fortran:
-    prefer:
-    - gcc@13.2.0
   gcc:
     externals:
     - spec: gcc@12.3.0 languages='c,c++,fortran'

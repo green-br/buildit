@@ -12,15 +12,6 @@ packages:
     variants: +cuda cuda_arch=90
     permissions:
       write: group
-  c:
-    prefer:
-    - gcc@14.2.0
-  cxx:
-    prefer:
-    - gcc@14.2.0
-  fortran:
-    prefer:
-    - gcc@14.2.0
   gcc:
     externals:
     - spec: gcc@12.3.0 languages='c,c++,fortran'

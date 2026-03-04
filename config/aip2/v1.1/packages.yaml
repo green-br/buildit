@@ -12,15 +12,6 @@ packages:
     variants: +cuda cuda_arch=90
     permissions:
       write: group
-  c:
-    prefer:
-    - gcc@13.3.1
-  cxx:
-    prefer:
-    - gcc@13.3.1
-  fortran:
-    prefer:
-    - gcc@13.3.1
   gcc:
     externals:
     - spec: gcc@12.3.0 languages='c,c++,fortran'
@@ -100,11 +91,11 @@ packages:
     buildable: false
     version: [25.03.0]
     externals:
-    - spec: cray-libsci@25.03.0 %gcc@12.3
+    - spec: cray-libsci@25.03.0 %gcc@12.3.0
       prefix: /opt/cray/pe/libsci/25.03.0/GNU/12.3/aarch64
-    - spec: cray-libsci@25.03.0 %gcc@13.3
+    - spec: cray-libsci@25.03.0 %gcc@13.3.1
       prefix: /opt/cray/pe/libsci/25.03.0/GNU/12.3/aarch64
-    - spec: cray-libsci@25.03.0 %gcc@14.2
+    - spec: cray-libsci@25.03.0 %gcc@14.2.0
       prefix: /opt/cray/pe/libsci/25.03.0/GNU/12.3/aarch64
     - spec: cray-libsci@25.03.0 %nvhpc@24.11
       prefix: /opt/cray/pe/libsci/25.03.0/NVIDIA/23.11/aarch64
@@ -116,11 +107,11 @@ packages:
     buildable: false
     version: [8.1.32]
     externals:
-    - spec: cray-mpich@8.1.32 %gcc@12.3 %libfabric
+    - spec: cray-mpich@8.1.32 %gcc@12.3.0 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.32/ofi/gnu/12.3
-    - spec: cray-mpich@8.1.32 %gcc@13.3 %libfabric
+    - spec: cray-mpich@8.1.32 %gcc@13.3.1 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.32/ofi/GNU/12.3
-    - spec: cray-mpich@8.1.32 %gcc@14.2 %libfabric
+    - spec: cray-mpich@8.1.32 %gcc@14.2.0 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.32/ofi/GNU/12.3
     - spec: cray-mpich@8.1.32 %nvhpc@24.11 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.32/ofi/NVIDIA/23.3
