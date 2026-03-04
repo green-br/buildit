@@ -19,7 +19,8 @@ class SpackBootstrap(rfm.RunOnlyRegressionTest):
 
     @sanity_function
     def validate(self):
-        return sn.assert_not_found(r'==> Error', self.stdout)
+        return sn.and_(sn.assert_not_found(r'==> Error', self.stderr),
+                       sn.assert_not_found(r'command not found', self.stderr))
 
 class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
     descr = 'Base class to build from Spack'
