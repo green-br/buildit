@@ -16,6 +16,10 @@ _versions = {
         "Linux-aarch64": "0699cbccb6dbee66e14e69c4bb1300b35820b4222afdd7371e50aa23fe28be48",
         "Linux-x86_64": "5e9b49588375e0ce5bc32767127cc725f5425917804042cdecdfd5c6b965ef61",
     },
+    "6.1.1": {
+        "Linux-aarch64": "927c9f165ac6ec7547d543215a5d02c662c691c1659ba5bcd3d687817e8a6757",
+        "Linux-x86_64": "a0bc1d6d2c3c00620367bbc5dbf2b3a7018abc92d1ff65f06cec46f75350b9be",
+    },
 }
 
 class Orca(Package):
@@ -46,6 +50,7 @@ class Orca(Package):
     # OpenMPI@4.1.1 has issues in pmix environments, hence 4.1.2 here
     openmpi_versions = {
         "6.0.1": "4.1.8",
+        "6.1.1": "4.1.8",
     }
 
     for orca_version, openmpi_version in openmpi_versions.items():
