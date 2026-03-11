@@ -85,7 +85,7 @@ packages:
     require:
     - "%gcc"
   openmpi:
-    variants: +cuda fabrics=ofi cuda_arch=90
+    variants: +cuda fabrics=ofi cuda_arch=90 schedulers=slurm
   mpich:
     variants: +cuda+fortran~hydra pmi=cray device=ch4 netmod=ofi cuda_arch=90
   cray-libsci:
