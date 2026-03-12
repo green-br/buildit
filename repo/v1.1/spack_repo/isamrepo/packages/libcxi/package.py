@@ -67,7 +67,7 @@ class Libcxi(AutotoolsPackage):
         )
         filter_file(
             r"$(srcdir)/../cassini-headers/include",
-            f"{self.spec['cassini-headers].prefix}/include",
+            f"{self.spec['cassini-headers'].prefix}/include",
             "Makefile.am",
             string=True,
         )
