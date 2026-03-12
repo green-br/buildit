@@ -115,6 +115,16 @@ class Libfabric(AutotoolsPackage, CudaPackage, ROCmPackage):
     variant("level_zero", default=False, description="Enable Level Zero support")
     variant("gdrcopy", default=False, when="@1.12: +cuda", description="Enable gdrcopy support")
 
+    variant(
+        "cuda_dlopen", default=False, when="+cuda", description="Enable dlopen of CUDA libraries"
+    )
+    variant(
+        "gdrcopy_dlopen",
+        default=False,
+        when="+gdrcopy",
+        description="Enable dlopen of gdr libraries",
+    )
+
     # Backporting from main for versions 2.3.x
     # The CXI provider hardcodes CXIP_FI_VERSION to FI_VERSION(2, 2).
     # Make it match the libfabric we're building
@@ -223,6 +233,8 @@ class Libfabric(AutotoolsPackage, CudaPackage, ROCmPackage):
 
     def configure_args(self):
         args = [
+            *self.enable_or_disable("cuda_dlopen"),
+            *self.enable_or_disable("gdrcopy_dlopen"),
             *self.enable_or_disable("debug"),
             *self.with_or_without("uring"),
             *self.with_or_without("cuda", activation_value="prefix"),
