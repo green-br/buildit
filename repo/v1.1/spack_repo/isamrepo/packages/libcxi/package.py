@@ -59,6 +59,19 @@ class Libcxi(AutotoolsPackage):
             "utils/cxi_dump_csrs.py",
             string=True,
         )
+        filter_file(
+            r"$(srcdir)/../cxi-driver/include",
+            f"{self.spec['cxi-driver'].prefix}/include",
+            "Makefile.am",
+            string=True,
+        )
+        filter_file(
+            r"$(srcdir)/../cassini-headers/include",
+            f"{self.spec['cassini-headers].prefix}/include",
+            "Makefile.am",
+            string=True,
+        )
+
 
     def autoreconf(self, spec, prefix):
         sh = which("sh")
