@@ -158,6 +158,10 @@ class Libfabric(AutotoolsPackage, CudaPackage, ROCmPackage):
     depends_on("autoconf", when="@main", type="build")
     depends_on("automake", when="@main", type="build")
     depends_on("libtool", when="@main", type="build")
+    depends_on("autoconf", when="@develop", type="build")
+    depends_on("automake", when="@develop", type="build")
+    depends_on("libtool", when="@develop", type="build")
+
     depends_on("json-c", when="fabrics=cxi")
     depends_on("curl", when="fabrics=cxi")
 
