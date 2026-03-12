@@ -17,7 +17,7 @@ class CxiDriver(Package):
     license("GPL-2.0")
 
     version("main", branch="main")
-    version("14.0.0", tag="release/shs-14.0.0")
+    version("14.0.0", branch="release/shs-14.0")
     version("13.0.0", tag="release/shs-13.0.0")
     version("12.0.1", tag="release/shs-12.0.1")
     version("12.0.0", tag="release/shs-12.0.0")
