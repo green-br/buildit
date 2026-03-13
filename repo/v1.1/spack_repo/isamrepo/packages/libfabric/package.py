@@ -25,7 +25,7 @@ class Libfabric(AutotoolsPackage, CudaPackage, ROCmPackage):
 
     license("GPL-2.0-or-later")
 
-    version("develop", branch="k8s_slingshot", git="https://github.com/green-br/libfabric.git")
+    version("develop", branch="k8s_slingshot_v2.1", git="https://github.com/green-br/libfabric.git")
     version("main", branch="main")
     version("2.3.1", sha256="2e939f17ce4d30a999d0445f741d3055b19dfd894eff70450e23470fe774f35a")
     version("2.3.0", sha256="1d18fce868f8fef68b42fccd1f5df2555369739e8cb7c148532a0529a308eb09")
