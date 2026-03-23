@@ -11,5 +11,6 @@ from spack.package import *
 
 
 class NcclTests(BuiltinNcclTests):
+    version("2.17.6", sha256="38974e70342150ede0e3fb8fd24bfe60ccbde90fa20241716ba8bb338e6b61a0")
     depends_on("aws-ofi-nccl", type="run")
 
