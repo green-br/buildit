@@ -22,7 +22,7 @@ packages:
           cxx: /usr/bin/g++-12
           fortran: /usr/bin/gfortran-12
         flags: {}
-    - spec: gcc@13.3.0 languages='c,c++,fortran'
+    - spec: gcc@13.3.1 languages='c,c++,fortran'
       prefix: /usr
       extra_attributes:
         compilers:
@@ -93,11 +93,11 @@ packages:
     version: [25.03.0]
     externals:
     - spec: cray-libsci@25.03.0 %gcc
-      prefix: /opt/cray/pe/libsci/25.03.0/gnu/12.3/aarch64
+      prefix: /opt/cray/pe/libsci/25.03.0/GNU/12.3/aarch64
     - spec: cray-libsci@25.03.0 %nvhpc
-      prefix: /opt/cray/pe/libsci/25.03.0/nvidia/23.11/aarch64
+      prefix: /opt/cray/pe/libsci/25.03.0/NVIDIA/23.11/aarch64
     - spec: cray-libsci@25.03.0 %cce
-      prefix: /opt/cray/pe/libsci/25.03.0/cray/17.0/aarch64
+      prefix: /opt/cray/pe/libsci/25.03.0/CRAY/17.0/aarch64
 
   cray-mpich:
     buildable: false
@@ -152,6 +152,10 @@ packages:
     - spec: python@3.11.7
       prefix: /opt/cray/pe/python/3.11.7
       modules: [cray-python/3.11.7]
+  slurm:
+    externals:
+    - spec: slurm@24.11.5
+      prefix: /usr
   autoconf:
     externals:
     - prefix: /usr

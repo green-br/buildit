@@ -61,16 +61,16 @@ site_configuration = {
         {
             'name': 'gcc-12',
             'extras' : {
-                'myrepos': 'buildit/repo/v1.0/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.0/packages.yaml',
+                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
                 'myspackcomp': 'gcc@12.3'
             }
         },
         {
             'name': 'gcc-13',
             'extras' : {
-                'myrepos': 'buildit/repo/v1.0/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.0/packages.yaml',
+                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
                 'myspackcomp': 'gcc@13.2'
             }
         },
@@ -84,8 +84,8 @@ site_configuration = {
                 'no-namd',
             ],
             'extras' : {
-                'myrepos': 'buildit/repo/v1.0/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.0/packages.yaml',
+                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
                 'myspackcomp': 'cce@18.0.0'
             }
         },
@@ -99,8 +99,8 @@ site_configuration = {
                 'no-namd',
             ],
             'extras' : {
-                'myrepos': 'buildit/repo/v1.0/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.0/packages.yaml',
+                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
                 'myspackcomp': 'arm@24.10.1'
             }
         },
@@ -113,24 +113,24 @@ site_configuration = {
                 'no-namd',
             ],
             'extras' : {
-                'myrepos': 'buildit/repo/v1.0/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.0/packages.yaml',
+                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
                 'myspackcomp': 'nvhpc@24.3'
             }
         },
         {
             'name': 'gcc-12-macs',
             'extras' : {
-                'myrepos': 'buildit/repo/v1.0/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/macs3/v1.0/packages.yaml',
+                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/macs3/v1.1/packages.yaml',
                 'myspackcomp': 'gcc@12.3'
             }
         },
         {
             'name': 'gcc-13-macs',
             'extras' : {
-                'myrepos': 'buildit/repo/v1.0/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/macs3/v1.0/packages.yaml',
+                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/macs3/v1.1/packages.yaml',
                 'myspackcomp': 'gcc@13.2'
             }
         },
@@ -144,8 +144,8 @@ site_configuration = {
                 'no-namd',
             ],
             'extras' : {
-                'myrepos': 'buildit/repo/v1.0/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/macs3/v1.0/packages.yaml',
+                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/macs3/v1.1/packages.yaml',
                 'myspackcomp': 'cce@17.0.1'
             }
         },
@@ -160,8 +160,8 @@ site_configuration = {
                 'no-openfoam',
             ],            
             'extras' : {
-                'myrepos': 'buildit/repo/v1.0/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/macs3/v1.0/packages.yaml',
+                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/macs3/v1.1/packages.yaml',
                 'myspackcomp': 'aocc@4.2'
             }
         }

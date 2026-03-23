@@ -79,16 +79,16 @@ packages:
     externals:
     - spec: cray-libsci@24.03.0 %gcc@12.3
       modules: [cray-libsci/24.03.0]
-      prefix: /opt/cray/pe/libsci/24.03.0/gnu/12.3/x86_64
+      prefix: /opt/cray/pe/libsci/24.03.0/GNU/12.3/x86_64
     - spec: cray-libsci@24.03.0 %gcc@13.2
       modules: [cray-libsci/24.03.0]
-      prefix: /opt/cray/pe/libsci/24.03.0/gnu/12.3/x86_64
+      prefix: /opt/cray/pe/libsci/24.03.0/GNU/12.3/x86_64
     - spec: cray-libsci@24.03.0 %nvhpc@24.5
       modules: [cray-libsci/24.03.0]
-      prefix: /opt/cray/pe/libsci/24.03.0/nvidia/23.3/x86_64
+      prefix: /opt/cray/pe/libsci/24.03.0/NVIDIA/23.3/x86_64
     - spec: cray-libsci@24.03.0 %cce@17.0.1
       modules: [cray-libsci/24.03.0]
-      prefix: /opt/cray/pe/libsci/24.03.0/cray/17.0/x86_64
+      prefix: /opt/cray/pe/libsci/24.03.0/CRAY/17.0/x86_64
   cray-mpich:
     buildable: false
     version: [8.1.29]

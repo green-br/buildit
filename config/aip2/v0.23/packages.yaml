@@ -103,6 +103,17 @@ packages:
     - spec: cray-pmi@6.1.15
       prefix: /opt/cray/pe/pmi/6.1.15
       modules: [cray-pmi/6.1.15]
+  python:
+    version: [3.11.7]
+    externals:
+    - spec: python@3.11.7
+      prefix: /opt/cray/pe/python/3.11.7
+      modules: [cray-python/3.11.7]
+  slurm:
+    version: [24.11.5]
+    externals:
+    - spec: slurm@24.11.5
+      prefix: /usr
   autoconf:
     externals:
     - prefix: /usr

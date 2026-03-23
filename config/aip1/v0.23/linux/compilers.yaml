@@ -13,7 +13,7 @@ compilers:
     environment: {}
     extra_rpaths: []
 - compiler:
-    spec: gcc@=13.2.0
+    spec: gcc@=13.3.1
     paths:
       cc: /usr/bin/gcc-13
       cxx: /usr/bin/g++-13
@@ -25,6 +25,20 @@ compilers:
     modules: []
     environment: {}
     extra_rpaths: []
+- compiler:
+    spec: gcc@=14.2.0
+    paths:
+      cc: /usr/bin/gcc-14
+      cxx: /usr/bin/g++-14
+      f77: /usr/bin/gfortran-14
+      fc: /usr/bin/gfortran-14
+    flags: {}
+    operating_system: sles15
+    target: aarch64
+    modules: []
+    environment: {}
+    extra_rpaths: []
+
 - compiler:
     spec: cce@=18.0.0
     paths:
@@ -39,12 +53,26 @@ compilers:
     environment: {}
     extra_rpaths: []
 - compiler:
-    spec: nvhpc@23.9
+    spec: cce@=19.0.0
     paths:
-      cc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc
-      cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvc++
-      f77: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
-      fc: /opt/nvidia/hpc_sdk/Linux_aarch64/23.9/compilers/bin/nvfortran
+      cc: /opt/cray/pe/cce/19.0.0/bin/craycc
+      cxx: /opt/cray/pe/cce/19.0.0/bin/craycxx
+      f77: /opt/cray/pe/cce/19.0.0/bin/crayftn
+      fc: /opt/cray/pe/cce/19.0.0/bin/crayftn
+    flags: {}
+    operating_system: sles15
+    target: aarch64
+    modules: []
+    environment: {}
+    extra_rpaths: []
+
+- compiler:
+    spec: nvhpc@24.11
+    paths:
+      cc: /opt/nvidia/hpc_sdk/Linux_aarch64/24.11/compilers/bin/nvc
+      cxx: /opt/nvidia/hpc_sdk/Linux_aarch64/24.11/compilers/bin/nvc++
+      f77: /opt/nvidia/hpc_sdk/Linux_aarch64/24.11/compilers/bin/nvfortran
+      fc: /opt/nvidia/hpc_sdk/Linux_aarch64/24.11/compilers/bin/nvfortran
     flags: {}
     operating_system: sles15
     target: any

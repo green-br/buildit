@@ -60,4 +60,11 @@ Or a more complicated run can focus on particular partition of a cluster and an 
 $ reframe -C config/default_i3.py -c config/spack_cp2k.py --system=i3:grace -S valid_prog_environs=gcc-12 -r
 ```
 
+If the architecture on the login node is different to the computational resource then building on the computational resource can be useful by adding 
+the argument:
+
+``bash
+-S build_locally=0
+```
+
 
