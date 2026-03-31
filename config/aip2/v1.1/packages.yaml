@@ -149,13 +149,6 @@ packages:
     - spec: python@3.11.7
       prefix: /opt/cray/pe/python/3.11.7
       modules: [cray-python/3.11.7]
-  slurm:
-    buildable: false
-    externals:
-    - spec: slurm@23.11.1
-      prefix: /tools/brics/apps/linux-sles15-neoverse_v2/gcc-12.3.0/slurm-23-11-1-1-kkhea3tkeujqt46owazayhns6gbgm6n7
-    - spec: slurm@24.11.5
-      prefix: /usr
   autoconf:
     externals:
     - prefix: /usr
