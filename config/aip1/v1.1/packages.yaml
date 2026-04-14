@@ -85,7 +85,7 @@ packages:
     require:
     - "%gcc"
   openmpi:
-    variants: +cuda fabrics=ofi cuda_arch=90
+    variants: +cuda fabrics=ofi cuda_arch=90 schedulers=slurm +pmi +legacylaunchers
   mpich:
     variants: +cuda+fortran~hydra pmi=cray device=ch4 netmod=ofi cuda_arch=90
   cray-libsci:
@@ -149,10 +149,6 @@ packages:
     - spec: python@3.11.7
       prefix: /opt/cray/pe/python/3.11.7
       modules: [cray-python/3.11.7]
-  slurm:
-    externals:
-    - spec: slurm@24.11.5
-      prefix: /usr
   autoconf:
     externals:
     - prefix: /usr
