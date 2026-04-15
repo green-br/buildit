@@ -72,7 +72,7 @@ packages:
     require:
     - "^charmpp@8.0.0 backend=ofi pmi=cray-pmi"
   openmpi:
-    variants: fabrics=ofi
+    variants: fabrics=ofi schedulers=slurm
   cray-libsci:
     buildable: false
     version: [24.03.0]
@@ -135,6 +135,10 @@ packages:
     - spec: python@3.11.7
       prefix: /opt/cray/pe/python/3.11.7
       modules: [cray-python/3.11.7]
+  slurm:
+    externals:
+    - spec: slurm@23-02-7
+      prefix: /usr
   autoconf:
     externals:
     - prefix: /usr

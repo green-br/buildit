@@ -93,7 +93,7 @@ packages:
   mpich:
     variants: +fortran~hydra pmi=cray device=ch4 netmod=ofi
   openmpi:
-    variants: fabrics=ofi
+    variants: fabrics=ofi schedulers=slurm
   cray-fftw:
     buildable: false
     version: [3.3.10.8]
@@ -157,6 +157,10 @@ packages:
     - spec: python@3.11.7
       prefix: /opt/cray/pe/python/3.11.7
       modules: [cray-python/3.11.7]
+  slurm:
+    externals:
+    - spec: slurm@23-02-07
+      prefix: /usr
   autoconf:
     externals:
     - prefix: /usr
