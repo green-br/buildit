@@ -41,10 +41,10 @@ class HwSmi(MakefilePackage):
             flags.append("-DINTEL_GPU -lze_intel_gpu")
 
         config = [
-            f"CC = {spack_cxx}",
+            f"CXX = {spack_cxx}",
             f"CXXFLAGS = {' '.join(flags)}",
             "hw-smi: src/main.cpp",
-            "\t$(CC) $< -o $@ $(CXXFLAGS)",
+            "\t$(CXX) $< -o $@ $(CXXFLAGS)",
         ]
 
         with open("Makefile", "w") as mf:
