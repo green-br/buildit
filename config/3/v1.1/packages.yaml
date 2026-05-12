@@ -104,10 +104,10 @@ packages:
     buildable: false
     version: [24.07.0]
     externals:
-    - spec: cray-libsci@24.07.0 %gcc@12.3
+    - spec: cray-libsci@24.07.0 %gcc@12.3.0
       modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/24.07.0/GNU/12.3/aarch64
-    - spec: cray-libsci@24.07.0 %gcc@13.2
+    - spec: cray-libsci@24.07.0 %gcc@13.2.0
       modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/24.07.0/GNU/12.3/aarch64
     - spec: cray-libsci@24.07.0 %nvhpc@24.3
@@ -120,9 +120,9 @@ packages:
     buildable: false
     version: [8.1.30]
     externals:
-    - spec: cray-mpich@8.1.30 %gcc@12.3 %libfabric
+    - spec: cray-mpich@8.1.30 %gcc@12.3.0 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.30/ofi/gnu/12.3
-    - spec: cray-mpich@8.1.30 %gcc@13.2 %libfabric
+    - spec: cray-mpich@8.1.30 %gcc@13.2.0 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.30/ofi/gnu/12.3
     - spec: cray-mpich@8.1.30 %cce@18.0.0 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.30/ofi/cray/17.0
