@@ -27,7 +27,7 @@ spack env activate ./myenv
 spack config add -f buildit/config/3/v1.1/packages.yaml
 spack config add view:true
 spack config add concretizer:unify:true
-oncretizer:reuse:false/g
+spack config add concretizer:reuse:false
 
 # Add local repo to environment
 spack repo add ./buildit/repo/v1.1/spack_repo/isamrepo
