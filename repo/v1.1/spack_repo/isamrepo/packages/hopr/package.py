@@ -21,7 +21,7 @@ class Hopr(CMakePackage):
 
     license("GPL-3.0-only")
 
-    version("master", commit="e54eddedc613f1cd32439b55a7e2f428ceb116ce", get_full_repo=True)
+    version("master", commit="3c44ec2a3b8a43e40d086c88c6b012d9a46c5354", get_full_repo=True)
 
     depends_on("c", type="build")  # generated
     depends_on("cxx", type="build")  # generated
@@ -34,12 +34,6 @@ class Hopr(CMakePackage):
     # See: https://github.com/CGNS/CGNS/pull/215
     #depends_on("cgns@3.4.1+fortran")
     depends_on("cmake@3.17:", type="build")
-
-    def patch(self):
-        filter_file(
-                r"EXECUTE_PROCESS\(COMMAND git ls-remote --get-url OUTPUT_VARIABLE GIT_ORIGIN\)",
-                "EXECUTE_PROCESS(COMMAND git ls-remote --get-url WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_VARIABLE GIT_ORIGIN)",
-                "CMakeListsLib.txt")
 
     def cmake_args(self):
         args = []
