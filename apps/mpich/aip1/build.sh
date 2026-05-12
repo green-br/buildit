@@ -28,7 +28,7 @@ spack config add -f buildit/config/aip1/v1.1/packages.yaml
 spack config add config:build_jobs:8
 spack config add view:true
 spack config add concretizer:unify:true
-spack config add concretizer:reuse:false
+oncretizer:reuse:false/g
 
 # Add local repo to environment
 spack repo add ./buildit/repo/v1.1/spack_repo/isamrepo
