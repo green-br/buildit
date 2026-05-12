@@ -63,7 +63,7 @@ $ reframe -C config/default_i3.py -c config/spack_cp2k.py --system=i3:grace -S v
 If the architecture on the login node is different to the computational resource then building on the computational resource can be useful by adding 
 the argument:
 
-``bash
+```bash
 -S build_locally=0
 ```
 
