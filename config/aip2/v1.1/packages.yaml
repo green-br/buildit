@@ -30,7 +30,7 @@ packages:
           cxx: /usr/bin/g++-13
           fortran: /usr/bin/gfortran-13
         flags: {}
-    - spec: gcc@14.2.0 languages='c,c++,fortran'
+    - spec: gcc@14.3.0 languages='c,c++,fortran'
       prefix: /usr
       extra_attributes:
         compilers:
@@ -95,7 +95,7 @@ packages:
       prefix: /opt/cray/pe/libsci/25.03.0/GNU/12.3/aarch64
     - spec: cray-libsci@25.03.0 %gcc@13.3.1
       prefix: /opt/cray/pe/libsci/25.03.0/GNU/12.3/aarch64
-    - spec: cray-libsci@25.03.0 %gcc@14.2.0
+    - spec: cray-libsci@25.03.0 %gcc@14.3.0
       prefix: /opt/cray/pe/libsci/25.03.0/GNU/12.3/aarch64
     - spec: cray-libsci@25.03.0 %nvhpc@24.11
       prefix: /opt/cray/pe/libsci/25.03.0/NVIDIA/23.11/aarch64
@@ -111,7 +111,7 @@ packages:
       prefix: /opt/cray/pe/mpich/8.1.32/ofi/gnu/12.3
     - spec: cray-mpich@8.1.32 %gcc@13.3.1 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.32/ofi/GNU/12.3
-    - spec: cray-mpich@8.1.32 %gcc@14.2.0 %libfabric
+    - spec: cray-mpich@8.1.32 %gcc@14.3.0 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.32/ofi/GNU/12.3
     - spec: cray-mpich@8.1.32 %nvhpc@24.11 %libfabric
       prefix: /opt/cray/pe/mpich/8.1.32/ofi/NVIDIA/23.3
