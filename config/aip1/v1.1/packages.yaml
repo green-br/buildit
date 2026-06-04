@@ -63,32 +63,20 @@ packages:
     buildable: false
     version: [26.03.0]
     externals:
-    - spec: cray-libsci@26.03.0 %gcc@12.3
-      prefix: /opt/cray/pe/libsci/26.03.0/GNU/13.2/aarch64
-    - spec: cray-libsci@26.03.0 %gcc@13.2
-      prefix: /opt/cray/pe/libsci/26.03.0/GNU/13.2/aarch64
     - spec: cray-libsci@26.03.0 %gcc@14.3
       prefix: /opt/cray/pe/libsci/26.03.0/GNU/13.2/aarch64
     - spec: cray-libsci@26.03.0 %nvhpc@25.9
       prefix: /opt/cray/pe/libsci/26.03.0/NVIDIA/25.9/aarch64
-    - spec: cray-libsci@26.03.0 %cce@20.0.0
-      prefix: /opt/cray/pe/libsci/26.03.0/CRAY/20.0/aarch64
     - spec: cray-libsci@26.03.0 %cce@21.0.0
       prefix: /opt/cray/pe/libsci/26.03.0/CRAY/20.0/aarch64
   cray-mpich:
     buildable: false
     version: [9.1.0]
     externals:
-    - spec: cray-mpich@9.1.0 %gcc@12.3 %libfabric
-      prefix: /opt/cray/pe/mpich/9.1.0/ofi/gnu/12.3
-    - spec: cray-mpich@9.1.0 %gcc@13.2 %libfabric
-      prefix: /opt/cray/pe/mpich/9.1.0/ofi/GNU/12.3
     - spec: cray-mpich@9.1.0 %gcc@14.3 %libfabric
       prefix: /opt/cray/pe/mpich/9.1.0/ofi/GNU/12.3
     - spec: cray-mpich@9.1.0 %nvhpc@25.9 %libfabric
       prefix: /opt/cray/pe/mpich/9.1.0/ofi/NVIDIA/25.9
-    - spec: cray-mpich@9.1.0 %cce@20.0.0 %libfabric
-      prefix: /opt/cray/pe/mpich/9.1.0/ofi/CRAY/20.0
     - spec: cray-mpich@9.1.0 %cce@21.0.0 %libfabric
       prefix: /opt/cray/pe/mpich/9.1.0/ofi/CRAY/20.0
   cuda:
