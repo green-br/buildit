@@ -147,7 +147,7 @@ packages:
   findutils:
     externals:
     - prefix: /usr
-      spec: findutils@4.8.0
+      spec: findutils@4.10.0
   flex:
     externals:
     - prefix: /usr
