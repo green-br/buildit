@@ -1,9 +1,9 @@
 packages:
   all:
     providers:
-      c: [gcc, nvhpc, cce, aocc]
-      cxx: [gcc, nvhpc, cce, aocc]
-      fortran: [gcc, nvhpc, cce, aocc]
+      c: [gcc, nvhpc, cce]
+      cxx: [gcc, nvhpc, cce]
+      fortran: [gcc, nvhpc, cce]
       fftw-api: [cray-fftw, fftw, nvpl-fft]
       blas: [cray-libsci, blis, openblas]
       lapack: [cray-libsci, openblas]
@@ -21,7 +21,7 @@ packages:
           cxx: /usr/bin/g++-12
           fortran: /usr/bin/gfortran-12
         flags: {}
-    - spec: gcc@13.2.1 languages='c,c++,fortran'
+    - spec: gcc@13.3.1 languages='c,c++,fortran'
       prefix: /usr
       extra_attributes:
         compilers:
@@ -29,39 +29,37 @@ packages:
           cxx: /usr/bin/g++-13
           fortran: /usr/bin/gfortran-13
         flags: {}
-  cce:
-    externals:
-    - spec: cce@17.0.1
-      prefix: /opt/cray/pe/cce/17.0.1
+    - spec: gcc@14.3.0 languages='c,c++,fortran'
+      prefix: /usr
       extra_attributes:
         compilers:
-          c: /opt/cray/pe/cce/17.0.1/bin/craycc
-          cxx: /opt/cray/pe/cce/17.0.1/bin/craycxx
-          fortran: /opt/cray/pe/cce/17.0.1/bin/crayftn
+          c: /usr/bin/gcc-14
+          cxx: /usr/bin/g++-14
+          fortran: /usr/bin/gfortran-14
+        flags: {}
+  cce:
+    externals:
+    - spec: cce@21.0.0
+      prefix: /opt/cray/pe/cce/21.0.0
+      extra_attributes:
+        compilers:
+          c: /opt/cray/pe/cce/21.0.0/bin/craycc
+          cxx: /opt/cray/pe/cce/21.0.0/bin/craycxx
+          fortran: /opt/cray/pe/cce/21.0.0/bin/crayftn
         # Not supported in archspec so specify here.
         flags: {}
   nvhpc:
     externals:
-    - spec: nvhpc@24.5
-      prefix: /opt/nvidia/hpc_sdk/Linux_x86_64/24.5/compilers
+    - spec: nvhpc@25.9
+      prefix: /opt/nvidia/hpc_sdk/Linux_x86_64/25.9/compilers
       extra_attributes:
         compilers:
-          c: /opt/nvidia/hpc_sdk/Linux_x86_64/24.5/compilers/bin/nvc
-          cxx: /opt/nvidia/hpc_sdk/Linux_x86_64/24.5/compilers/bin/nvc++
-          fortran: /opt/nvidia/hpc_sdk/Linux_x86_64/24.5/compilers/bin/nvfortran
+          c: /opt/nvidia/hpc_sdk/Linux_x86_64/25.9/compilers/bin/nvc
+          cxx: /opt/nvidia/hpc_sdk/Linux_x86_64/25.9/compilers/bin/nvc++
+          fortran: /opt/nvidia/hpc_sdk/Linux_x86_64/25.9/compilers/bin/nvfortran
         flags:
-          cflags: --gcc-toolchain=/usr/bin/gcc-13 
+          cflags: --gcc-toolchain=/usr/bin/gcc-13
           cxxflags: --gcc-toolchain=/usr/bin/gcc-13
-  aocc:
-    externals:
-    - spec: aocc@4.2.0
-      prefix: /opt/AMD/aocc-compiler-4.2.0
-      extra_attributes:
-        compilers:
-          c: /opt/AMD/aocc-compiler-4.2.0/bin/clang
-          cxx: /opt/AMD/aocc-compiler-4.2.0/bin/clang++
-          fortran: /opt/AMD/aocc-compiler-4.2.0/bin/flang
-        flags: {}
   castep:
     prefer:
     - "^openblas ^fftw"
@@ -75,66 +73,71 @@ packages:
     variants: fabrics=ofi schedulers=slurm
   cray-libsci:
     buildable: false
-    version: [24.03.0]
+    version: [26.03.0]
     externals:
-    - spec: cray-libsci@24.03.0 %gcc@12.3
-      modules: [cray-libsci/24.03.0]
-      prefix: /opt/cray/pe/libsci/24.03.0/GNU/12.3/x86_64
-    - spec: cray-libsci@24.03.0 %gcc@13.2
-      modules: [cray-libsci/24.03.0]
-      prefix: /opt/cray/pe/libsci/24.03.0/GNU/12.3/x86_64
-    - spec: cray-libsci@24.03.0 %nvhpc@24.5
-      modules: [cray-libsci/24.03.0]
-      prefix: /opt/cray/pe/libsci/24.03.0/NVIDIA/23.3/x86_64
-    - spec: cray-libsci@24.03.0 %cce@17.0.1
-      modules: [cray-libsci/24.03.0]
-      prefix: /opt/cray/pe/libsci/24.03.0/CRAY/17.0/x86_64
+    - spec: cray-libsci@26.03.0 %gcc@12.3.0
+      modules: [cray-libsci/26.03.0]
+      prefix: /opt/cray/pe/libsci/26.03.0/GNU/12/x86_64
+    - spec: cray-libsci@26.03.0 %gcc@13.3.1
+      modules: [cray-libsci/26.03.0]
+      prefix: /opt/cray/pe/libsci/26.03.0/GNU/12/x86_64
+    - spec: cray-libsci@26.03.0 %gcc@14.3.0
+      modules: [cray-libsci/26.03.0]
+      prefix: /opt/cray/pe/libsci/26.03.0/GNU/12/x86_64
+    - spec: cray-libsci@26.03.0 %nvhpc@25.9
+      modules: [cray-libsci/26.03.0]
+      prefix: /opt/cray/pe/libsci/26.03.0/NVIDIA/23.3/x86_64
+    - spec: cray-libsci@26.03.0 %cce@21.0.0
+      modules: [cray-libsci/26.03.0]
+      prefix: /opt/cray/pe/libsci/26.03.0/CRAY/20.0/x86_64
   cray-mpich:
     buildable: false
-    version: [8.1.29]
+    version: [9.1.0]
     externals:
-    - spec: cray-mpich@8.1.29 %gcc@12.3 %libfabric
-      prefix: /opt/cray/pe/mpich/8.1.29/ofi/gnu/12.3
-    - spec: cray-mpich@8.1.29 %gcc@13.2 %libfabric
-      prefix: /opt/cray/pe/mpich/8.1.29/ofi/gnu/12.3
-    - spec: cray-mpich@8.1.29 %nvhpc@24.5 %libfabric
-      prefix: /opt/cray/pe/mpich/8.1.29/ofi/nvidia/23.3
-    - spec: cray-mpich@8.1.29 %cce@17.0.1 %libfabric
-      prefix: /opt/cray/pe/mpich/8.1.29/ofi/cray/17.0
+    - spec: cray-mpich@9.1.0 %gcc@12.3.0 %libfabric
+      prefix: /opt/cray/pe/mpich/9.1.0/ofi/gnu/12.3
+    - spec: cray-mpich@9.1.0 %gcc@13.3.1 %libfabric
+      prefix: /opt/cray/pe/mpich/9.1.0/ofi/gnu/12.3
+    - spec: cray-mpich@9.1.0 %gcc@14.3.0 %libfabric
+      prefix: /opt/cray/pe/mpich/9.1.0/ofi/gnu/12.3
+    - spec: cray-mpich@9.1.0 %nvhpc@25.9 %libfabric
+      prefix: /opt/cray/pe/mpich/9.1.0/ofi/nvidia/23.3
+    - spec: cray-mpich@9.1.0 %cce@21.0.0 %libfabric
+      prefix: /opt/cray/pe/mpich/9.1.0/ofi/crayclang/20.0
   cray-pmi:
     buildable: false
-    version: [6.1.14]
+    version: [6.1.17]
     externals:
-    - spec: cray-pmi@6.1.14
-      prefix: /opt/cray/pe/pmi/6.1.14
-      modules: [cray-pmi/6.1.14]
+    - spec: cray-pmi@6.1.17
+      prefix: /opt/cray/pe/pmi/6.1.17
+      modules: [cray-pmi/6.1.17]
       extra_attributes:
         environment:
           prepend_path:
-            LIBRARY_PATH: /opt/cray/pe/pmi/6.1.14/lib 
+            LIBRARY_PATH: /opt/cray/pe/pmi/6.1.17/lib
   cuda:
     buildable: false
-    version: [12.4.0]
+    version: [13.0]
     externals:
-    - spec: cuda@12.4.0
-      prefix: /opt/nvidia/hpc_sdk/Linux_x86_64/24.5/cuda/12.4
+    - spec: cuda@13.0
+      prefix: /opt/nvidia/hpc_sdk/Linux_x86_64/25.9/cuda/13.0
   libfabric:
     buildable: false
-    version: [1.20.1]
+    version: [2.3.1]
     externals:
-    - spec: libfabric@1.20.1
-      prefix: /opt/cray
-      modules: [libfabric/1.20.1]
+    - spec: libfabric@2.3.1
+      prefix: /opt/cray/libfabric/2.3.1
+      modules: [libfabric/2.3.1]
       extra_attributes:
         environment:
           prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/lib64/
+            LD_LIBRARY_PATH: /opt/cray/libfabric/2.3.1/lib64
   python:
-    version: [3.11.7]
+    version: [3.12.12]
     externals:
-    - spec: python@3.11.7
-      prefix: /opt/cray/pe/python/3.11.7
-      modules: [cray-python/3.11.7]
+    - spec: python@3.12.12
+      prefix: /opt/cray/pe/python/3.12.12
+      modules: [cray-python/3.12.12]
   slurm:
     externals:
     - spec: slurm@23-02-7
@@ -149,10 +152,10 @@ packages:
       spec: automake@1.15.1
   binutils:
     externals:
-    - prefix: /opt/cray/pe/cce/17.0.1/binutils/x86_64/x86_64-pc-linux-gnu
+    - prefix: /opt/cray/pe/cce/21.0.0/binutils/x86_64/x86_64-pc-linux-gnu
       spec: binutils@2.40~gold~headers
     - prefix: /usr
-      spec: binutils@2.41.0~gold~headers
+      spec: binutils@2.45.0~gold~headers
   bison:
     externals:
     - prefix: /usr
@@ -160,7 +163,7 @@ packages:
   cmake:
     externals:
     - prefix: /usr
-      spec: cmake@3.20.4
+      spec: cmake@3.28.3
   coreutils:
     externals:
     - prefix: /usr
@@ -168,11 +171,7 @@ packages:
   curl:
     externals:
     - prefix: /usr
-      spec: curl@8.0.1+gssapi+ldap+nghttp2
-  cvs:
-    externals:
-    - prefix: /usr
-      spec: cvs@1.12.13
+      spec: curl@8.14.1+gssapi+ldap+nghttp2
   diffutils:
     externals:
     - prefix: /usr
@@ -180,7 +179,7 @@ packages:
   findutils:
     externals:
     - prefix: /usr
-      spec: findutils@4.8.0
+      spec: findutils@4.10.0
   flex:
     externals:
     - prefix: /usr
@@ -192,11 +191,11 @@ packages:
   gettext:
     externals:
     - prefix: /usr
-      spec: gettext@0.20.2
+      spec: gettext@0.21.1
   git:
     externals:
     - prefix: /usr
-      spec: git@2.35.3+tcltk
+      spec: git@2.51.0~tcltk
   gmake:
     externals:
     - prefix: /usr
@@ -216,11 +215,11 @@ packages:
   openssh:
     externals:
     - prefix: /usr
-      spec: openssh@8.4p1
+      spec: openssh@9.6p1
   openssl:
     externals:
     - prefix: /usr
-      spec: openssl@1.1.1l-fips
+      spec: openssl@3.2.3
   perl:
     externals:
     - prefix: /usr
@@ -232,11 +231,7 @@ packages:
   sed:
     externals:
     - prefix: /usr
-      spec: sed@4.4
-  subversion:
-    externals:
-    - prefix: /usr
-      spec: subversion@1.14.1
+      spec: sed@4.9
   tar:
     externals:
     - prefix: /usr
