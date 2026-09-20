@@ -1,0 +1,21 @@
+diff -ru code_saturne-8.1.3.orig/src/base/cs_halo.c code_saturne-8.1.3/src/base/cs_halo.c
+--- code_saturne-8.1.3.orig/src/base/cs_halo.c	2025-01-09 15:48:22.000000000 +0000
++++ code_saturne-8.1.3/src/base/cs_halo.c	2025-10-27 23:27:09.000000000 +0000
+@@ -1706,7 +1706,7 @@
+   for (int rank_id = 0; rank_id < halo->n_c_domains; rank_id++) {
+ 
+     cs_lnum_t length = (  halo->index[2*rank_id + end_shift]
+-                        - halo->index[2*rank_id]) * stride;
++                        - halo->index[2*rank_id]);
+ 
+     if (halo->c_domain_rank[rank_id] != local_rank) {
+ 
+@@ -1715,7 +1715,7 @@
+         unsigned char *dest = _val_dest + start*elt_size;
+ 
+         MPI_Irecv(dest,
+-                  length*_hs->stride,
++                  length*stride,
+                   mpi_datatype,
+                   halo->c_domain_rank[rank_id],
+                   halo->c_domain_rank[rank_id],
