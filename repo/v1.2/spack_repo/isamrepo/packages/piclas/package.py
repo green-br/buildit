@@ -48,8 +48,7 @@ class Piclas(CMakePackage):
         multi=False
     )
 
-    version("v3.5.0", commit="270572d6877088c5cf1a06b202aed04db2de058e" )
-    version("master", commit="623d8b8bc89a90399501259b25328588982096dc" )
+    version("master", branch="cmake_spack_fix_quote")
 
     depends_on("c", type="build")  # generated
     depends_on("cxx", type="build")  # generated

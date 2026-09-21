@@ -34,7 +34,7 @@ spack config add concretizer:reuse:false
 spack repo add ./buildit/repo/v1.2/spack_repo/isamrepo
 
 # Add application
-spack add swiftsim
+spack add swiftsim+fftw
 
 # Check dependencies
 spack concretize

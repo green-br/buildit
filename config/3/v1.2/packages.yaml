@@ -101,19 +101,14 @@ packages:
     version: [26.03.0]
     externals:
     - spec: cray-libsci@26.03.0 %gcc@12.3.0
-      modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/26.03.0/GNU/12/aarch64
     - spec: cray-libsci@26.03.0 %gcc@13.3.1
-      modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/26.03.0/GNU/12/aarch64
     - spec: cray-libsci@26.03.0 %gcc@14.3.0
-      modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/26.03.0/GNU/12/aarch64
     - spec: cray-libsci@26.03.0 %nvhpc@25.9
-      modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/26.03.0/NVIDIA/23.11/aarch64
     - spec: cray-libsci@26.03.0 %cce@21.0.0
-      modules: [cray-libsci]
       prefix: /opt/cray/pe/libsci/26.03.0/CRAY/20.0/aarch64
   cray-mpich:
     buildable: false
@@ -141,7 +136,6 @@ packages:
     externals:
     - spec: libfabric@2.3.1 fabrics=cxi
       prefix: /opt/cray/libfabric/2.3.1
-      modules: [libfabric/2.3.1]
       extra_attributes:
         environment:
           prepend_path:
@@ -152,12 +146,10 @@ packages:
     externals:
     - spec: cray-pmi@6.1.17
       prefix: /opt/cray/pe/pmi/6.1.17
-      modules: [cray-pmi/6.1.17]
   python:
     externals:
     - spec: python@3.12.12
       prefix: /opt/cray/pe/python/3.12.12
-      modules: [cray-python/3.12.12]
   slurm:
     externals:
     - spec: slurm@23-02-07
