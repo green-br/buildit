@@ -61,21 +61,30 @@ site_configuration = {
         {
             'name': 'gcc-12',
             'extras' : {
-                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
+                'myrepos': 'buildit/repo/v1.2/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.2/packages.yaml',
                 'myspackcomp': 'gcc@12.3'
             }
         },
         {
             'name': 'gcc-13',
             'extras' : {
-                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
+                'myrepos': 'buildit/repo/v1.2/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.2/packages.yaml',
                 'myspackcomp': 'gcc@13.2'
             }
         },
         {
-            'name': 'cce-18',
+            'name': 'gcc-14',
+            'extras' : {
+                'myrepos': 'buildit/repo/v1.2/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.2/packages.yaml',
+                'myspackcomp': 'gcc@14.3'
+            }
+        },
+
+        {
+            'name': 'cce-21',
             'features': [
                 'no-castep',
                 'no-cp2k',
@@ -84,28 +93,13 @@ site_configuration = {
                 'no-namd',
             ],
             'extras' : {
-                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
-                'myspackcomp': 'cce@18.0.0'
+                'myrepos': 'buildit/repo/v1.2/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.2/packages.yaml',
+                'myspackcomp': 'cce@21.0.0'
             }
         },
         {
-            'name': 'arm-24',
-            'features': [
-                'no-cray-mpich',
-                'no-castep',
-                'no-cp2k',
-                'no-openfoam',
-                'no-namd',
-            ],
-            'extras' : {
-                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
-                'myspackcomp': 'arm@24.10.1'
-            }
-        },
-        {
-            'name': 'nvhpc-24',
+            'name': 'nvhpc-25',
             'features': [
                 'no-castep',
                 'no-cp2k',
@@ -113,29 +107,37 @@ site_configuration = {
                 'no-namd',
             ],
             'extras' : {
-                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/3/v1.1/packages.yaml',
-                'myspackcomp': 'nvhpc@24.3'
+                'myrepos': 'buildit/repo/v1.2/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/3/v1.2/packages.yaml',
+                'myspackcomp': 'nvhpc@25.9'
             }
         },
         {
             'name': 'gcc-12-macs',
             'extras' : {
-                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/macs3/v1.1/packages.yaml',
+                'myrepos': 'buildit/repo/v1.2/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/macs3/v1.2/packages.yaml',
                 'myspackcomp': 'gcc@12.3'
             }
         },
         {
             'name': 'gcc-13-macs',
             'extras' : {
-                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/macs3/v1.1/packages.yaml',
+                'myrepos': 'buildit/repo/v1.2/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/macs3/v1.2/packages.yaml',
                 'myspackcomp': 'gcc@13.2'
             }
         },
         {
-            'name': 'cce-17-macs',
+            'name': 'gcc-14-macs',
+            'extras' : {
+                'myrepos': 'buildit/repo/v1.2/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/macs3/v1.2/packages.yaml',
+                'myspackcomp': 'gcc@14.3'
+            }
+        },
+        {
+            'name': 'cce-21-macs',
             'features': [
                 'no-castep',
                 'no-cp2k',
@@ -144,25 +146,9 @@ site_configuration = {
                 'no-namd',
             ],
             'extras' : {
-                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/macs3/v1.1/packages.yaml',
-                'myspackcomp': 'cce@17.0.1'
-            }
-        },
-        {
-            'name': 'aocc-4-macs',
-            'features': [
-                'no-cray-mpich',
-                'no-castep',
-                'no-cp2k',
-                'no-gromacs',
-                'no-namd',
-                'no-openfoam',
-            ],            
-            'extras' : {
-                'myrepos': 'buildit/repo/v1.1/spack_repo/isamrepo',
-                'mypackage': 'buildit/config/macs3/v1.1/packages.yaml',
-                'myspackcomp': 'aocc@4.2'
+                'myrepos': 'buildit/repo/v1.2/spack_repo/isamrepo',
+                'mypackage': 'buildit/config/macs3/v1.2/packages.yaml',
+                'myspackcomp': 'cce@21.0.0'
             }
         }
     ],
@@ -172,7 +158,7 @@ site_configuration = {
             'descr': 'Isambard 3 MACS Cluster',
             'hostnames': ['login05', 'login06'],
             'env_vars': [ 
-                ['MYCONFDIR','$HOME/git']
+                ['MYCONFDIR','$PWD/../../']
             ],
             'partitions': [
                 {
@@ -180,7 +166,7 @@ site_configuration = {
                     'descr': 'MACS Login nodes',
                     'scheduler': 'local',
                     'launcher': 'local',
-                    'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs']
+                    'environs': ['gcc-12-macs','gcc-13-macs', 'gcc-14-macs', 'cce-21-macs']
                 },
                 {
                     'name': 'milan',
@@ -191,7 +177,7 @@ site_configuration = {
                         '-p milan',
                         '-t 02:00:00',
                     ],
-                    'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
+                    'environs': ['gcc-12-macs','gcc-13-macs','gcc-14-macs','cce-21-macs'],
                     'resources': [
                         {
                             'name': 'memory',
@@ -215,7 +201,7 @@ site_configuration = {
                         '-p genoa',
                         '-t 02:00:00',
                     ],
-                    'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
+                    'environs': ['gcc-12-macs','gcc-13-macs','gcc-14-macs','cce-21-macs'],
                     'resources': [
                         {
                             'name': 'memory',
@@ -240,7 +226,7 @@ site_configuration = {
                         '-p berg',
                         '-t 02:00:00',
                     ],
-                    'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
+                    'environs': ['gcc-12-macs','gcc-13-macs','gcc-14-macs','cce-21-macs'],
                     'resources': [
                         {
                             'name': 'memory',
@@ -264,7 +250,7 @@ site_configuration = {
                         '-p spr',
                         '-t 02:00:00',
                     ],
-                    'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
+                    'environs': ['gcc-12-macs','gcc-13-macs','gcc-14-macs','cce-21-macs'],
                     'resources': [
                         {
                             'name': 'memory',
@@ -289,7 +275,7 @@ site_configuration = {
                         '-p sprhbm',
                         '-t 02:00:00',
                     ],
-                    'environs': ['gcc-12-macs','gcc-13-macs','cce-17-macs'],
+                    'environs': ['gcc-12-macs','gcc-13-macs','gcc-14-macs','cce-21-macs'],
                     'resources': [
                         {
                             'name': 'memory',
@@ -312,7 +298,7 @@ site_configuration = {
             'descr': 'Isambard 3 Cluster',
             'hostnames': ['login01','login02'],
             'env_vars': [ 
-                ['MYCONFDIR','$HOME/git']
+                ['MYCONFDIR','$PWD/../../']
             ],
             'partitions': [
                 {
@@ -320,7 +306,7 @@ site_configuration = {
                     'descr': 'Login nodes',
                     'scheduler': 'local',
                     'launcher': 'local',
-                    'environs': ['gcc-12','gcc-13','cce-18','arm-24','nvhpc-24']
+                    'environs': ['gcc-12','gcc-13','gcc-14','cce-21','nvhpc-25']
                 },
                 {
                     'name': 'grace',
@@ -334,7 +320,7 @@ site_configuration = {
                         '-p grace',
                         '-t 02:00:00',
                     ],
-                    'environs': ['gcc-12','gcc-13','cce-18','arm-24','nvhpc-24'],
+                    'environs': ['gcc-12','gcc-13','gcc-14','cce-21','nvhpc-25'],
                     'resources': [
                         {
                             'name': 'memory',
