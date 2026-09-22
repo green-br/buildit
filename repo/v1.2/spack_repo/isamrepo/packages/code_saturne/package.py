@@ -11,14 +11,13 @@ class CodeSaturne(AutotoolsPackage):
        by EDF for computational fluid dynamics (CFD) applications."""
 
     homepage = "https://www.code-saturne.org"
-    url = "https://github.com/code-saturne/code_saturne/archive/refs/tags/v9.0.1.tar.gz"
+    url = "https://github.com/code-saturne/code_saturne/archive/refs/tags/v9.1.0.tar.gz"
 
     maintainers("green-br")
 
     license("GPL-2.0-or-later", checked_by="green-br")
 
-    version("9.0.1", sha256="caaede6775b39d8066862ce6b6ea108fdad44d365f882c22f79b12084334f017")
-    version("8.1.3", sha256="b228a916ad2a4d620b9f0e24296cf0d27a89fab7bdc21665a35c111549e9654a")
+    version("9.1.0", sha256="1ebdc2e7fbfda3477919d28aba1b979eaeb2895e7c315da14ee2f36856d4f175")
 
     # Enable or disable options.
     variant("shared", default=False, description="Build shared libraries")
@@ -27,10 +26,11 @@ class CodeSaturne(AutotoolsPackage):
     variant("debug", default=False, description="Enable debug")
 
     # With or without options.
-    variant("salome", default=False, description="Enable SALOME")
-    variant("hdf5", default=False, description="Enable HDF5")
-    variant("med", default=False, description="Enable MED")
-    variant("mpi", default=False, description="Enable MPI")
+    variant("cgns", default=True, description="Enable CGNS")
+    variant("hdf5", default=True, description="Enable HDF5")
+    variant("med", default=True, description="Enable MED")
+    variant("scotch", default=True, description="Enable SCOTCH")
+    variant("mpi", default=True, description="Enable MPI")
 
     depends_on("c", type="build")
     depends_on("cxx", type="build")
@@ -42,11 +42,15 @@ class CodeSaturne(AutotoolsPackage):
     depends_on("m4", type="build")
 
     depends_on("mpi", when="+mpi")
-    depends_on("python")
+    depends_on("hdf5@1.12~mpi", when="+hdf5")
+    depends_on("med@5.0~mpi", when="+med")
+    depends_on("cgns@4.4~mpi+hdf5", when="+cgns+hdf5")
+    depends_on("cgns@4.4~mpi~hdf5", when="+cgns~hdf5")
+    depends_on("scotch@7.0~mpi", when="+scotch")
+    
+    conflicts("~hdf5 +med", msg="Cannot build without HDF5 and with MED support.")
 
-    patch("halo_fix.patch",
-          sha256="8628ad70ab3e3e8ff2af71b46f06def6c2de007397300f7362711be7abc228e9",
-    )
+    depends_on("python")
 
     def autoreconf(self, spec, prefix):
         autoreconf("--install", "--verbose", "--force")
@@ -57,9 +61,10 @@ class CodeSaturne(AutotoolsPackage):
         args.extend(self.enable_or_disable("gui"))
         args.extend(self.enable_or_disable("long-gnum"))
         args.extend(self.enable_or_disable("debug"))
-        args.extend(self.with_or_without("salome", activation_value="prefix"))
+        args.extend(self.with_or_without("cgns", activation_value="prefix"))
         args.extend(self.with_or_without("hdf5", activation_value="prefix"))
         args.extend(self.with_or_without("med", activation_value="prefix"))
+        args.extend(self.with_or_without("scotch", activation_value="prefix"))
         args.extend(self.with_or_without("mpi", activation_value="prefix"))
 
         return args

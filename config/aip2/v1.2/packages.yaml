@@ -131,7 +131,6 @@ packages:
     externals:
     - spec: libfabric@1.22.0
       prefix: /opt/cray/libfabric/1.22.0
-      modules: [libfabric/1.22.0]
       extra_attributes:
         environment:
           prepend_path:
@@ -142,12 +141,10 @@ packages:
     externals:
     - spec: cray-pmi@6.1.15
       prefix: /opt/cray/pe/pmi/6.1.15
-      modules: [cray-pmi/6.1.15]
   python:
     externals:
     - spec: python@3.11.7
       prefix: /opt/cray/pe/python/3.11.7
-      modules: [cray-python/3.11.7]
   slurm:
     externals:
     - spec: slurm@24.11.5
