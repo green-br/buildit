@@ -2,6 +2,19 @@ import reframe as rfm
 import reframe.utility.sanity as sn
 import os
 
+class SpackCheck(rfm.RunOnlyRegressionTest):
+    descr = 'Check Spack'
+    executable = 'spack'
+    executable_opts = [
+        '--version'
+    ]
+    local = True
+    spack_version = "1.2"
+
+    @sanity_function
+    def validate(self):
+        return sn.assert_found(rf'^{self.spack_version}', self.stdout, msg=f"Only supports Spack {self.spack_version}" )
+
 class SpackBootstrap(rfm.RunOnlyRegressionTest):
     descr = 'Bootstrap Spack'
     executable = 'spack'
@@ -9,10 +22,13 @@ class SpackBootstrap(rfm.RunOnlyRegressionTest):
         f'bootstrap', 'now'
     ]
     local = True
+    user_cache_path_prefix = f'/.reframe/opt/spack-cache'
+    spackcheck = fixture(SpackCheck, scope='session')
 
     @run_before('run')
     def set_bootstrap_vars(self):
-        user_cache_path = os.getenv('HOME') + f'/.reframe/opt/spack-cache-1.1'
+        spack_version = self.spackcheck.spack_version
+        user_cache_path = os.getenv('HOME') + f'{self.user_cache_path_prefix}-{spack_version}'
         os.makedirs(user_cache_path, exist_ok=True)
         self.env_vars['SPACK_CACHE_PATH'] = user_cache_path
         self.env_vars['SPACK_DISABLE_LOCAL_CONFIG'] = "true"
@@ -83,10 +99,12 @@ class SpackCompileOnlyBase(rfm.CompileOnlyRegressionTest):
             spec = f"{self.env_spackspec[self.current_environ.name]['spec']}"
             deps = f"{self.env_spackspec[self.current_environ.name].get('deps','')}"
 
-        user_cache_path = os.getenv('HOME') + f'/.reframe/opt/spack-cache-1.1'
+        spack_version = self.spackbootstrap.spackcheck.spack_version
+        user_cache_path_prefix = self.spackbootstrap.user_cache_path_prefix
+        user_cache_path = os.getenv('HOME') + f'{user_cache_path_prefix}-{spack_version}'
         self.prebuild_cmds = ['export SPACK_DISABLE_LOCAL_CONFIG=true',
                               f'export SPACK_USER_CACHE_PATH="{user_cache_path}"']
-        self.build_system.install_tree = os.getenv('HOME') + f'/.reframe/opt/spack-1.1/'
+        self.build_system.install_tree = os.getenv('HOME') + f'/.reframe/opt/spack-{spack_version}/'
 
         self.build_system.config_opts = [f'repos:[{myrepos}]',
                                          f'config:build_jobs:8',
